@@ -7,7 +7,6 @@ export type SessionPayload = {
 
 export type SessionType = {
   userId?: string;
-  username?: string;
   isAuth: boolean;
 };
 

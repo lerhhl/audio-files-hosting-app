@@ -42,7 +42,7 @@ export async function decrypt(
       algorithms: ["HS256"],
     });
 
-    if (!payload?.userId) {
+    if (!payload?.userId || !payload?.username) {
       return invalidSession;
     }
 

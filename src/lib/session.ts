@@ -1,6 +1,7 @@
 import { SECRET_KEY } from "@/app/config";
 import { SESSION_EXPIRATION_TIME } from "@/app/constants";
-import { encrypt } from "@/lib/utils";
+import { SessionType } from "@/lib/types";
+import { decrypt, encrypt } from "@/lib/utils";
 import { cookies } from "next/headers";
 import "server-only";
 
@@ -23,4 +24,15 @@ export async function createSession(userId: string, username: string) {
     sameSite: "lax",
     path: "/",
   });
+}
+
+export async function verifySession(): Promise<SessionType> {
+  const cookie = (await cookies()).get("session")?.value;
+  const session = await decrypt(encodedKey, cookie);
+
+  if (!session?.userId) {
+    return { isAuth: false, userId: undefined };
+  }
+
+  return { isAuth: true, userId: session.userId };
 }
