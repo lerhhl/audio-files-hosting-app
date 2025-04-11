@@ -23,3 +23,18 @@ export async function findUserByUsername(username: string) {
 export async function getAllUsers() {
   return await db.user.findMany();
 }
+
+export async function createUser({
+  username,
+  hashedPassword,
+}: {
+  username: string;
+  hashedPassword: string;
+}) {
+  return await db.user.create({
+    data: {
+      username,
+      password: hashedPassword,
+    },
+  });
+}

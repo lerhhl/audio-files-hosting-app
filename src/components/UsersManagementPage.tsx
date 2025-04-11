@@ -1,5 +1,6 @@
 "use client";
 
+import CreateUserForm from "@/components/CreateUserForm";
 import LogoutButton from "@/components/LogoutButton";
 import { CommonComponentProps, User } from "@/components/types";
 import { use } from "react";
@@ -22,6 +23,11 @@ export default function UsersManagementPage({
         Welcome to Users Management Page
       </h1>
       <div className="w-full max-w-4xl">
+        <div className="flex justify-end mb-1">
+          <div>
+            <CreateUserForm />
+          </div>
+        </div>
         <table className="table-auto w-full border-collapse border border-gray-300">
           <thead>
             <tr className="bg-gray-200">

@@ -11,3 +11,13 @@ export type User = {
   isAdmin: boolean;
   createdAt: Date;
 };
+
+export type CreateUserFormState = {
+  errors?: {
+    username?: string[];
+    password?: string[];
+    server?: string;
+  };
+  message?: string;
+  success?: boolean;
+};

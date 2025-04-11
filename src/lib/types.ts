@@ -16,12 +16,8 @@ export type SessionType = {
   isAdmin: boolean;
 };
 
-export type FormState =
+export type LoginFormState =
   | {
-      errors?: {
-        username?: string[];
-        password?: string[];
-      };
       message?: string;
       success?: boolean;
     }
