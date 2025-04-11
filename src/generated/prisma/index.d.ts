@@ -18,6 +18,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  * 
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
+/**
+ * Model AudioFile
+ * 
+ */
+export type AudioFile = $Result.DefaultSelection<Prisma.$AudioFilePayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -153,6 +158,16 @@ export class PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.audioFile`: Exposes CRUD operations for the **AudioFile** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AudioFiles
+    * const audioFiles = await prisma.audioFile.findMany()
+    * ```
+    */
+  get audioFile(): Prisma.AudioFileDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -593,7 +608,8 @@ export namespace Prisma {
 
 
   export const ModelName: {
-    User: 'User'
+    User: 'User',
+    AudioFile: 'AudioFile'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -612,7 +628,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user"
+      modelProps: "user" | "audioFile"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -687,6 +703,80 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
+          }
+        }
+      }
+      AudioFile: {
+        payload: Prisma.$AudioFilePayload<ExtArgs>
+        fields: Prisma.AudioFileFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AudioFileFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AudioFilePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AudioFileFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AudioFilePayload>
+          }
+          findFirst: {
+            args: Prisma.AudioFileFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AudioFilePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AudioFileFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AudioFilePayload>
+          }
+          findMany: {
+            args: Prisma.AudioFileFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AudioFilePayload>[]
+          }
+          create: {
+            args: Prisma.AudioFileCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AudioFilePayload>
+          }
+          createMany: {
+            args: Prisma.AudioFileCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AudioFileCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AudioFilePayload>[]
+          }
+          delete: {
+            args: Prisma.AudioFileDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AudioFilePayload>
+          }
+          update: {
+            args: Prisma.AudioFileUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AudioFilePayload>
+          }
+          deleteMany: {
+            args: Prisma.AudioFileDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AudioFileUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AudioFileUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AudioFilePayload>[]
+          }
+          upsert: {
+            args: Prisma.AudioFileUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AudioFilePayload>
+          }
+          aggregate: {
+            args: Prisma.AudioFileAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAudioFile>
+          }
+          groupBy: {
+            args: Prisma.AudioFileGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AudioFileGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AudioFileCountArgs<ExtArgs>
+            result: $Utils.Optional<AudioFileCountAggregateOutputType> | number
           }
         }
       }
@@ -775,6 +865,7 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     user?: UserOmit
+    audioFile?: AudioFileOmit
   }
 
   /* Types for Logging */
@@ -863,6 +954,36 @@ export namespace Prisma {
    * Count Types
    */
 
+
+  /**
+   * Count Type UserCountOutputType
+   */
+
+  export type UserCountOutputType = {
+    AudioFile: number
+  }
+
+  export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    AudioFile?: boolean | UserCountOutputTypeCountAudioFileArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCountOutputType
+     */
+    select?: UserCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountAudioFileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AudioFileWhereInput
+  }
 
 
   /**
@@ -1075,6 +1196,8 @@ export namespace Prisma {
     isAdmin?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    AudioFile?: boolean | User$AudioFileArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1105,10 +1228,18 @@ export namespace Prisma {
   }
 
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "password" | "isAdmin" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    AudioFile?: boolean | User$AudioFileArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
-    objects: {}
+    objects: {
+      AudioFile: Prisma.$AudioFilePayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       username: string
@@ -1510,6 +1641,7 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    AudioFile<T extends User$AudioFileArgs<ExtArgs> = {}>(args?: Subset<T, User$AudioFileArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AudioFilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1562,6 +1694,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where: UserWhereUniqueInput
@@ -1580,6 +1716,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where: UserWhereUniqueInput
@@ -1597,6 +1737,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * Filter, which User to fetch.
      */
@@ -1646,6 +1790,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where?: UserWhereInput
@@ -1694,6 +1842,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which Users to fetch.
      */
     where?: UserWhereInput
@@ -1736,6 +1888,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * The data needed to create a User.
      */
@@ -1784,6 +1940,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * The data needed to update a User.
      */
@@ -1851,6 +2011,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * The filter to search for the User to update in case it exists.
      */
     where: UserWhereUniqueInput
@@ -1877,6 +2041,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter which User to delete.
      */
     where: UserWhereUniqueInput
@@ -1897,6 +2065,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.AudioFile
+   */
+  export type User$AudioFileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AudioFile
+     */
+    select?: AudioFileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AudioFile
+     */
+    omit?: AudioFileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AudioFileInclude<ExtArgs> | null
+    where?: AudioFileWhereInput
+    orderBy?: AudioFileOrderByWithRelationInput | AudioFileOrderByWithRelationInput[]
+    cursor?: AudioFileWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AudioFileScalarFieldEnum | AudioFileScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1908,6 +2100,1128 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AudioFile
+   */
+
+  export type AggregateAudioFile = {
+    _count: AudioFileCountAggregateOutputType | null
+    _avg: AudioFileAvgAggregateOutputType | null
+    _sum: AudioFileSumAggregateOutputType | null
+    _min: AudioFileMinAggregateOutputType | null
+    _max: AudioFileMaxAggregateOutputType | null
+  }
+
+  export type AudioFileAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type AudioFileSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type AudioFileMinAggregateOutputType = {
+    id: number | null
+    filePath: string | null
+    description: string | null
+    codec: string | null
+    createdBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AudioFileMaxAggregateOutputType = {
+    id: number | null
+    filePath: string | null
+    description: string | null
+    codec: string | null
+    createdBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AudioFileCountAggregateOutputType = {
+    id: number
+    filePath: number
+    description: number
+    codec: number
+    createdBy: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AudioFileAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type AudioFileSumAggregateInputType = {
+    id?: true
+  }
+
+  export type AudioFileMinAggregateInputType = {
+    id?: true
+    filePath?: true
+    description?: true
+    codec?: true
+    createdBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AudioFileMaxAggregateInputType = {
+    id?: true
+    filePath?: true
+    description?: true
+    codec?: true
+    createdBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AudioFileCountAggregateInputType = {
+    id?: true
+    filePath?: true
+    description?: true
+    codec?: true
+    createdBy?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AudioFileAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AudioFile to aggregate.
+     */
+    where?: AudioFileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AudioFiles to fetch.
+     */
+    orderBy?: AudioFileOrderByWithRelationInput | AudioFileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AudioFileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AudioFiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AudioFiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AudioFiles
+    **/
+    _count?: true | AudioFileCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AudioFileAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AudioFileSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AudioFileMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AudioFileMaxAggregateInputType
+  }
+
+  export type GetAudioFileAggregateType<T extends AudioFileAggregateArgs> = {
+        [P in keyof T & keyof AggregateAudioFile]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAudioFile[P]>
+      : GetScalarType<T[P], AggregateAudioFile[P]>
+  }
+
+
+
+
+  export type AudioFileGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AudioFileWhereInput
+    orderBy?: AudioFileOrderByWithAggregationInput | AudioFileOrderByWithAggregationInput[]
+    by: AudioFileScalarFieldEnum[] | AudioFileScalarFieldEnum
+    having?: AudioFileScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AudioFileCountAggregateInputType | true
+    _avg?: AudioFileAvgAggregateInputType
+    _sum?: AudioFileSumAggregateInputType
+    _min?: AudioFileMinAggregateInputType
+    _max?: AudioFileMaxAggregateInputType
+  }
+
+  export type AudioFileGroupByOutputType = {
+    id: number
+    filePath: string
+    description: string
+    codec: string
+    createdBy: string
+    createdAt: Date
+    updatedAt: Date
+    _count: AudioFileCountAggregateOutputType | null
+    _avg: AudioFileAvgAggregateOutputType | null
+    _sum: AudioFileSumAggregateOutputType | null
+    _min: AudioFileMinAggregateOutputType | null
+    _max: AudioFileMaxAggregateOutputType | null
+  }
+
+  type GetAudioFileGroupByPayload<T extends AudioFileGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AudioFileGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AudioFileGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AudioFileGroupByOutputType[P]>
+            : GetScalarType<T[P], AudioFileGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AudioFileSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    filePath?: boolean
+    description?: boolean
+    codec?: boolean
+    createdBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["audioFile"]>
+
+  export type AudioFileSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    filePath?: boolean
+    description?: boolean
+    codec?: boolean
+    createdBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["audioFile"]>
+
+  export type AudioFileSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    filePath?: boolean
+    description?: boolean
+    codec?: boolean
+    createdBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["audioFile"]>
+
+  export type AudioFileSelectScalar = {
+    id?: boolean
+    filePath?: boolean
+    description?: boolean
+    codec?: boolean
+    createdBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type AudioFileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "filePath" | "description" | "codec" | "createdBy" | "createdAt" | "updatedAt", ExtArgs["result"]["audioFile"]>
+  export type AudioFileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type AudioFileIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type AudioFileIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $AudioFilePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AudioFile"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      filePath: string
+      description: string
+      codec: string
+      createdBy: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["audioFile"]>
+    composites: {}
+  }
+
+  type AudioFileGetPayload<S extends boolean | null | undefined | AudioFileDefaultArgs> = $Result.GetResult<Prisma.$AudioFilePayload, S>
+
+  type AudioFileCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AudioFileFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AudioFileCountAggregateInputType | true
+    }
+
+  export interface AudioFileDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AudioFile'], meta: { name: 'AudioFile' } }
+    /**
+     * Find zero or one AudioFile that matches the filter.
+     * @param {AudioFileFindUniqueArgs} args - Arguments to find a AudioFile
+     * @example
+     * // Get one AudioFile
+     * const audioFile = await prisma.audioFile.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AudioFileFindUniqueArgs>(args: SelectSubset<T, AudioFileFindUniqueArgs<ExtArgs>>): Prisma__AudioFileClient<$Result.GetResult<Prisma.$AudioFilePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AudioFile that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AudioFileFindUniqueOrThrowArgs} args - Arguments to find a AudioFile
+     * @example
+     * // Get one AudioFile
+     * const audioFile = await prisma.audioFile.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AudioFileFindUniqueOrThrowArgs>(args: SelectSubset<T, AudioFileFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AudioFileClient<$Result.GetResult<Prisma.$AudioFilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AudioFile that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AudioFileFindFirstArgs} args - Arguments to find a AudioFile
+     * @example
+     * // Get one AudioFile
+     * const audioFile = await prisma.audioFile.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AudioFileFindFirstArgs>(args?: SelectSubset<T, AudioFileFindFirstArgs<ExtArgs>>): Prisma__AudioFileClient<$Result.GetResult<Prisma.$AudioFilePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AudioFile that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AudioFileFindFirstOrThrowArgs} args - Arguments to find a AudioFile
+     * @example
+     * // Get one AudioFile
+     * const audioFile = await prisma.audioFile.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AudioFileFindFirstOrThrowArgs>(args?: SelectSubset<T, AudioFileFindFirstOrThrowArgs<ExtArgs>>): Prisma__AudioFileClient<$Result.GetResult<Prisma.$AudioFilePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AudioFiles that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AudioFileFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AudioFiles
+     * const audioFiles = await prisma.audioFile.findMany()
+     * 
+     * // Get first 10 AudioFiles
+     * const audioFiles = await prisma.audioFile.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const audioFileWithIdOnly = await prisma.audioFile.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AudioFileFindManyArgs>(args?: SelectSubset<T, AudioFileFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AudioFilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AudioFile.
+     * @param {AudioFileCreateArgs} args - Arguments to create a AudioFile.
+     * @example
+     * // Create one AudioFile
+     * const AudioFile = await prisma.audioFile.create({
+     *   data: {
+     *     // ... data to create a AudioFile
+     *   }
+     * })
+     * 
+     */
+    create<T extends AudioFileCreateArgs>(args: SelectSubset<T, AudioFileCreateArgs<ExtArgs>>): Prisma__AudioFileClient<$Result.GetResult<Prisma.$AudioFilePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AudioFiles.
+     * @param {AudioFileCreateManyArgs} args - Arguments to create many AudioFiles.
+     * @example
+     * // Create many AudioFiles
+     * const audioFile = await prisma.audioFile.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AudioFileCreateManyArgs>(args?: SelectSubset<T, AudioFileCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AudioFiles and returns the data saved in the database.
+     * @param {AudioFileCreateManyAndReturnArgs} args - Arguments to create many AudioFiles.
+     * @example
+     * // Create many AudioFiles
+     * const audioFile = await prisma.audioFile.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AudioFiles and only return the `id`
+     * const audioFileWithIdOnly = await prisma.audioFile.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AudioFileCreateManyAndReturnArgs>(args?: SelectSubset<T, AudioFileCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AudioFilePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AudioFile.
+     * @param {AudioFileDeleteArgs} args - Arguments to delete one AudioFile.
+     * @example
+     * // Delete one AudioFile
+     * const AudioFile = await prisma.audioFile.delete({
+     *   where: {
+     *     // ... filter to delete one AudioFile
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AudioFileDeleteArgs>(args: SelectSubset<T, AudioFileDeleteArgs<ExtArgs>>): Prisma__AudioFileClient<$Result.GetResult<Prisma.$AudioFilePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AudioFile.
+     * @param {AudioFileUpdateArgs} args - Arguments to update one AudioFile.
+     * @example
+     * // Update one AudioFile
+     * const audioFile = await prisma.audioFile.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AudioFileUpdateArgs>(args: SelectSubset<T, AudioFileUpdateArgs<ExtArgs>>): Prisma__AudioFileClient<$Result.GetResult<Prisma.$AudioFilePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AudioFiles.
+     * @param {AudioFileDeleteManyArgs} args - Arguments to filter AudioFiles to delete.
+     * @example
+     * // Delete a few AudioFiles
+     * const { count } = await prisma.audioFile.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AudioFileDeleteManyArgs>(args?: SelectSubset<T, AudioFileDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AudioFiles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AudioFileUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AudioFiles
+     * const audioFile = await prisma.audioFile.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AudioFileUpdateManyArgs>(args: SelectSubset<T, AudioFileUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AudioFiles and returns the data updated in the database.
+     * @param {AudioFileUpdateManyAndReturnArgs} args - Arguments to update many AudioFiles.
+     * @example
+     * // Update many AudioFiles
+     * const audioFile = await prisma.audioFile.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AudioFiles and only return the `id`
+     * const audioFileWithIdOnly = await prisma.audioFile.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AudioFileUpdateManyAndReturnArgs>(args: SelectSubset<T, AudioFileUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AudioFilePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AudioFile.
+     * @param {AudioFileUpsertArgs} args - Arguments to update or create a AudioFile.
+     * @example
+     * // Update or create a AudioFile
+     * const audioFile = await prisma.audioFile.upsert({
+     *   create: {
+     *     // ... data to create a AudioFile
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AudioFile we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AudioFileUpsertArgs>(args: SelectSubset<T, AudioFileUpsertArgs<ExtArgs>>): Prisma__AudioFileClient<$Result.GetResult<Prisma.$AudioFilePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AudioFiles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AudioFileCountArgs} args - Arguments to filter AudioFiles to count.
+     * @example
+     * // Count the number of AudioFiles
+     * const count = await prisma.audioFile.count({
+     *   where: {
+     *     // ... the filter for the AudioFiles we want to count
+     *   }
+     * })
+    **/
+    count<T extends AudioFileCountArgs>(
+      args?: Subset<T, AudioFileCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AudioFileCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AudioFile.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AudioFileAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AudioFileAggregateArgs>(args: Subset<T, AudioFileAggregateArgs>): Prisma.PrismaPromise<GetAudioFileAggregateType<T>>
+
+    /**
+     * Group by AudioFile.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AudioFileGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AudioFileGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AudioFileGroupByArgs['orderBy'] }
+        : { orderBy?: AudioFileGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AudioFileGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAudioFileGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AudioFile model
+   */
+  readonly fields: AudioFileFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AudioFile.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AudioFileClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AudioFile model
+   */
+  interface AudioFileFieldRefs {
+    readonly id: FieldRef<"AudioFile", 'Int'>
+    readonly filePath: FieldRef<"AudioFile", 'String'>
+    readonly description: FieldRef<"AudioFile", 'String'>
+    readonly codec: FieldRef<"AudioFile", 'String'>
+    readonly createdBy: FieldRef<"AudioFile", 'String'>
+    readonly createdAt: FieldRef<"AudioFile", 'DateTime'>
+    readonly updatedAt: FieldRef<"AudioFile", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AudioFile findUnique
+   */
+  export type AudioFileFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AudioFile
+     */
+    select?: AudioFileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AudioFile
+     */
+    omit?: AudioFileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AudioFileInclude<ExtArgs> | null
+    /**
+     * Filter, which AudioFile to fetch.
+     */
+    where: AudioFileWhereUniqueInput
+  }
+
+  /**
+   * AudioFile findUniqueOrThrow
+   */
+  export type AudioFileFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AudioFile
+     */
+    select?: AudioFileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AudioFile
+     */
+    omit?: AudioFileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AudioFileInclude<ExtArgs> | null
+    /**
+     * Filter, which AudioFile to fetch.
+     */
+    where: AudioFileWhereUniqueInput
+  }
+
+  /**
+   * AudioFile findFirst
+   */
+  export type AudioFileFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AudioFile
+     */
+    select?: AudioFileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AudioFile
+     */
+    omit?: AudioFileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AudioFileInclude<ExtArgs> | null
+    /**
+     * Filter, which AudioFile to fetch.
+     */
+    where?: AudioFileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AudioFiles to fetch.
+     */
+    orderBy?: AudioFileOrderByWithRelationInput | AudioFileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AudioFiles.
+     */
+    cursor?: AudioFileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AudioFiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AudioFiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AudioFiles.
+     */
+    distinct?: AudioFileScalarFieldEnum | AudioFileScalarFieldEnum[]
+  }
+
+  /**
+   * AudioFile findFirstOrThrow
+   */
+  export type AudioFileFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AudioFile
+     */
+    select?: AudioFileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AudioFile
+     */
+    omit?: AudioFileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AudioFileInclude<ExtArgs> | null
+    /**
+     * Filter, which AudioFile to fetch.
+     */
+    where?: AudioFileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AudioFiles to fetch.
+     */
+    orderBy?: AudioFileOrderByWithRelationInput | AudioFileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AudioFiles.
+     */
+    cursor?: AudioFileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AudioFiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AudioFiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AudioFiles.
+     */
+    distinct?: AudioFileScalarFieldEnum | AudioFileScalarFieldEnum[]
+  }
+
+  /**
+   * AudioFile findMany
+   */
+  export type AudioFileFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AudioFile
+     */
+    select?: AudioFileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AudioFile
+     */
+    omit?: AudioFileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AudioFileInclude<ExtArgs> | null
+    /**
+     * Filter, which AudioFiles to fetch.
+     */
+    where?: AudioFileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AudioFiles to fetch.
+     */
+    orderBy?: AudioFileOrderByWithRelationInput | AudioFileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AudioFiles.
+     */
+    cursor?: AudioFileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AudioFiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AudioFiles.
+     */
+    skip?: number
+    distinct?: AudioFileScalarFieldEnum | AudioFileScalarFieldEnum[]
+  }
+
+  /**
+   * AudioFile create
+   */
+  export type AudioFileCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AudioFile
+     */
+    select?: AudioFileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AudioFile
+     */
+    omit?: AudioFileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AudioFileInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AudioFile.
+     */
+    data: XOR<AudioFileCreateInput, AudioFileUncheckedCreateInput>
+  }
+
+  /**
+   * AudioFile createMany
+   */
+  export type AudioFileCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AudioFiles.
+     */
+    data: AudioFileCreateManyInput | AudioFileCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AudioFile createManyAndReturn
+   */
+  export type AudioFileCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AudioFile
+     */
+    select?: AudioFileSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AudioFile
+     */
+    omit?: AudioFileOmit<ExtArgs> | null
+    /**
+     * The data used to create many AudioFiles.
+     */
+    data: AudioFileCreateManyInput | AudioFileCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AudioFileIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AudioFile update
+   */
+  export type AudioFileUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AudioFile
+     */
+    select?: AudioFileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AudioFile
+     */
+    omit?: AudioFileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AudioFileInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AudioFile.
+     */
+    data: XOR<AudioFileUpdateInput, AudioFileUncheckedUpdateInput>
+    /**
+     * Choose, which AudioFile to update.
+     */
+    where: AudioFileWhereUniqueInput
+  }
+
+  /**
+   * AudioFile updateMany
+   */
+  export type AudioFileUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AudioFiles.
+     */
+    data: XOR<AudioFileUpdateManyMutationInput, AudioFileUncheckedUpdateManyInput>
+    /**
+     * Filter which AudioFiles to update
+     */
+    where?: AudioFileWhereInput
+    /**
+     * Limit how many AudioFiles to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AudioFile updateManyAndReturn
+   */
+  export type AudioFileUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AudioFile
+     */
+    select?: AudioFileSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AudioFile
+     */
+    omit?: AudioFileOmit<ExtArgs> | null
+    /**
+     * The data used to update AudioFiles.
+     */
+    data: XOR<AudioFileUpdateManyMutationInput, AudioFileUncheckedUpdateManyInput>
+    /**
+     * Filter which AudioFiles to update
+     */
+    where?: AudioFileWhereInput
+    /**
+     * Limit how many AudioFiles to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AudioFileIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AudioFile upsert
+   */
+  export type AudioFileUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AudioFile
+     */
+    select?: AudioFileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AudioFile
+     */
+    omit?: AudioFileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AudioFileInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AudioFile to update in case it exists.
+     */
+    where: AudioFileWhereUniqueInput
+    /**
+     * In case the AudioFile found by the `where` argument doesn't exist, create a new AudioFile with this data.
+     */
+    create: XOR<AudioFileCreateInput, AudioFileUncheckedCreateInput>
+    /**
+     * In case the AudioFile was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AudioFileUpdateInput, AudioFileUncheckedUpdateInput>
+  }
+
+  /**
+   * AudioFile delete
+   */
+  export type AudioFileDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AudioFile
+     */
+    select?: AudioFileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AudioFile
+     */
+    omit?: AudioFileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AudioFileInclude<ExtArgs> | null
+    /**
+     * Filter which AudioFile to delete.
+     */
+    where: AudioFileWhereUniqueInput
+  }
+
+  /**
+   * AudioFile deleteMany
+   */
+  export type AudioFileDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AudioFiles to delete
+     */
+    where?: AudioFileWhereInput
+    /**
+     * Limit how many AudioFiles to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AudioFile without action
+   */
+  export type AudioFileDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AudioFile
+     */
+    select?: AudioFileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AudioFile
+     */
+    omit?: AudioFileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AudioFileInclude<ExtArgs> | null
   }
 
 
@@ -1935,6 +3249,19 @@ export namespace Prisma {
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+  export const AudioFileScalarFieldEnum: {
+    id: 'id',
+    filePath: 'filePath',
+    description: 'description',
+    codec: 'codec',
+    createdBy: 'createdBy',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AudioFileScalarFieldEnum = (typeof AudioFileScalarFieldEnum)[keyof typeof AudioFileScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -2034,6 +3361,7 @@ export namespace Prisma {
     isAdmin?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    AudioFile?: AudioFileListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -2043,6 +3371,7 @@ export namespace Prisma {
     isAdmin?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    AudioFile?: AudioFileOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -2055,6 +3384,7 @@ export namespace Prisma {
     isAdmin?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    AudioFile?: AudioFileListRelationFilter
   }, "id" | "username">
 
   export type UserOrderByWithAggregationInput = {
@@ -2083,12 +3413,80 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
 
+  export type AudioFileWhereInput = {
+    AND?: AudioFileWhereInput | AudioFileWhereInput[]
+    OR?: AudioFileWhereInput[]
+    NOT?: AudioFileWhereInput | AudioFileWhereInput[]
+    id?: IntFilter<"AudioFile"> | number
+    filePath?: StringFilter<"AudioFile"> | string
+    description?: StringFilter<"AudioFile"> | string
+    codec?: StringFilter<"AudioFile"> | string
+    createdBy?: StringFilter<"AudioFile"> | string
+    createdAt?: DateTimeFilter<"AudioFile"> | Date | string
+    updatedAt?: DateTimeFilter<"AudioFile"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type AudioFileOrderByWithRelationInput = {
+    id?: SortOrder
+    filePath?: SortOrder
+    description?: SortOrder
+    codec?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type AudioFileWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: AudioFileWhereInput | AudioFileWhereInput[]
+    OR?: AudioFileWhereInput[]
+    NOT?: AudioFileWhereInput | AudioFileWhereInput[]
+    filePath?: StringFilter<"AudioFile"> | string
+    description?: StringFilter<"AudioFile"> | string
+    codec?: StringFilter<"AudioFile"> | string
+    createdBy?: StringFilter<"AudioFile"> | string
+    createdAt?: DateTimeFilter<"AudioFile"> | Date | string
+    updatedAt?: DateTimeFilter<"AudioFile"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type AudioFileOrderByWithAggregationInput = {
+    id?: SortOrder
+    filePath?: SortOrder
+    description?: SortOrder
+    codec?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AudioFileCountOrderByAggregateInput
+    _avg?: AudioFileAvgOrderByAggregateInput
+    _max?: AudioFileMaxOrderByAggregateInput
+    _min?: AudioFileMinOrderByAggregateInput
+    _sum?: AudioFileSumOrderByAggregateInput
+  }
+
+  export type AudioFileScalarWhereWithAggregatesInput = {
+    AND?: AudioFileScalarWhereWithAggregatesInput | AudioFileScalarWhereWithAggregatesInput[]
+    OR?: AudioFileScalarWhereWithAggregatesInput[]
+    NOT?: AudioFileScalarWhereWithAggregatesInput | AudioFileScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"AudioFile"> | number
+    filePath?: StringWithAggregatesFilter<"AudioFile"> | string
+    description?: StringWithAggregatesFilter<"AudioFile"> | string
+    codec?: StringWithAggregatesFilter<"AudioFile"> | string
+    createdBy?: StringWithAggregatesFilter<"AudioFile"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"AudioFile"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"AudioFile"> | Date | string
+  }
+
   export type UserCreateInput = {
     username: string
     password: string
     isAdmin?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    AudioFile?: AudioFileCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -2098,6 +3496,7 @@ export namespace Prisma {
     isAdmin?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    AudioFile?: AudioFileUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -2106,6 +3505,7 @@ export namespace Prisma {
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    AudioFile?: AudioFileUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -2115,6 +3515,7 @@ export namespace Prisma {
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    AudioFile?: AudioFileUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -2139,6 +3540,72 @@ export namespace Prisma {
     username?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AudioFileCreateInput = {
+    filePath: string
+    description: string
+    codec: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutAudioFileInput
+  }
+
+  export type AudioFileUncheckedCreateInput = {
+    id?: number
+    filePath: string
+    description: string
+    codec: string
+    createdBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AudioFileUpdateInput = {
+    filePath?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    codec?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutAudioFileNestedInput
+  }
+
+  export type AudioFileUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    filePath?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    codec?: StringFieldUpdateOperationsInput | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AudioFileCreateManyInput = {
+    id?: number
+    filePath: string
+    description: string
+    codec: string
+    createdBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AudioFileUpdateManyMutationInput = {
+    filePath?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    codec?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AudioFileUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    filePath?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    codec?: StringFieldUpdateOperationsInput | string
+    createdBy?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -2183,6 +3650,16 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
+  export type AudioFileListRelationFilter = {
+    every?: AudioFileWhereInput
+    some?: AudioFileWhereInput
+    none?: AudioFileWhereInput
+  }
+
+  export type AudioFileOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type UserCountOrderByAggregateInput = {
@@ -2276,6 +3753,63 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
+  export type AudioFileCountOrderByAggregateInput = {
+    id?: SortOrder
+    filePath?: SortOrder
+    description?: SortOrder
+    codec?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AudioFileAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type AudioFileMaxOrderByAggregateInput = {
+    id?: SortOrder
+    filePath?: SortOrder
+    description?: SortOrder
+    codec?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AudioFileMinOrderByAggregateInput = {
+    id?: SortOrder
+    filePath?: SortOrder
+    description?: SortOrder
+    codec?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AudioFileSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type AudioFileCreateNestedManyWithoutUserInput = {
+    create?: XOR<AudioFileCreateWithoutUserInput, AudioFileUncheckedCreateWithoutUserInput> | AudioFileCreateWithoutUserInput[] | AudioFileUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AudioFileCreateOrConnectWithoutUserInput | AudioFileCreateOrConnectWithoutUserInput[]
+    createMany?: AudioFileCreateManyUserInputEnvelope
+    connect?: AudioFileWhereUniqueInput | AudioFileWhereUniqueInput[]
+  }
+
+  export type AudioFileUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<AudioFileCreateWithoutUserInput, AudioFileUncheckedCreateWithoutUserInput> | AudioFileCreateWithoutUserInput[] | AudioFileUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AudioFileCreateOrConnectWithoutUserInput | AudioFileCreateOrConnectWithoutUserInput[]
+    createMany?: AudioFileCreateManyUserInputEnvelope
+    connect?: AudioFileWhereUniqueInput | AudioFileWhereUniqueInput[]
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -2288,12 +3822,54 @@ export namespace Prisma {
     set?: Date | string
   }
 
+  export type AudioFileUpdateManyWithoutUserNestedInput = {
+    create?: XOR<AudioFileCreateWithoutUserInput, AudioFileUncheckedCreateWithoutUserInput> | AudioFileCreateWithoutUserInput[] | AudioFileUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AudioFileCreateOrConnectWithoutUserInput | AudioFileCreateOrConnectWithoutUserInput[]
+    upsert?: AudioFileUpsertWithWhereUniqueWithoutUserInput | AudioFileUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: AudioFileCreateManyUserInputEnvelope
+    set?: AudioFileWhereUniqueInput | AudioFileWhereUniqueInput[]
+    disconnect?: AudioFileWhereUniqueInput | AudioFileWhereUniqueInput[]
+    delete?: AudioFileWhereUniqueInput | AudioFileWhereUniqueInput[]
+    connect?: AudioFileWhereUniqueInput | AudioFileWhereUniqueInput[]
+    update?: AudioFileUpdateWithWhereUniqueWithoutUserInput | AudioFileUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: AudioFileUpdateManyWithWhereWithoutUserInput | AudioFileUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: AudioFileScalarWhereInput | AudioFileScalarWhereInput[]
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type AudioFileUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<AudioFileCreateWithoutUserInput, AudioFileUncheckedCreateWithoutUserInput> | AudioFileCreateWithoutUserInput[] | AudioFileUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AudioFileCreateOrConnectWithoutUserInput | AudioFileCreateOrConnectWithoutUserInput[]
+    upsert?: AudioFileUpsertWithWhereUniqueWithoutUserInput | AudioFileUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: AudioFileCreateManyUserInputEnvelope
+    set?: AudioFileWhereUniqueInput | AudioFileWhereUniqueInput[]
+    disconnect?: AudioFileWhereUniqueInput | AudioFileWhereUniqueInput[]
+    delete?: AudioFileWhereUniqueInput | AudioFileWhereUniqueInput[]
+    connect?: AudioFileWhereUniqueInput | AudioFileWhereUniqueInput[]
+    update?: AudioFileUpdateWithWhereUniqueWithoutUserInput | AudioFileUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: AudioFileUpdateManyWithWhereWithoutUserInput | AudioFileUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: AudioFileScalarWhereInput | AudioFileScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutAudioFileInput = {
+    create?: XOR<UserCreateWithoutAudioFileInput, UserUncheckedCreateWithoutAudioFileInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAudioFileInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutAudioFileNestedInput = {
+    create?: XOR<UserCreateWithoutAudioFileInput, UserUncheckedCreateWithoutAudioFileInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAudioFileInput
+    upsert?: UserUpsertWithoutAudioFileInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAudioFileInput, UserUpdateWithoutAudioFileInput>, UserUncheckedUpdateWithoutAudioFileInput>
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -2401,6 +3977,147 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type AudioFileCreateWithoutUserInput = {
+    filePath: string
+    description: string
+    codec: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AudioFileUncheckedCreateWithoutUserInput = {
+    id?: number
+    filePath: string
+    description: string
+    codec: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AudioFileCreateOrConnectWithoutUserInput = {
+    where: AudioFileWhereUniqueInput
+    create: XOR<AudioFileCreateWithoutUserInput, AudioFileUncheckedCreateWithoutUserInput>
+  }
+
+  export type AudioFileCreateManyUserInputEnvelope = {
+    data: AudioFileCreateManyUserInput | AudioFileCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AudioFileUpsertWithWhereUniqueWithoutUserInput = {
+    where: AudioFileWhereUniqueInput
+    update: XOR<AudioFileUpdateWithoutUserInput, AudioFileUncheckedUpdateWithoutUserInput>
+    create: XOR<AudioFileCreateWithoutUserInput, AudioFileUncheckedCreateWithoutUserInput>
+  }
+
+  export type AudioFileUpdateWithWhereUniqueWithoutUserInput = {
+    where: AudioFileWhereUniqueInput
+    data: XOR<AudioFileUpdateWithoutUserInput, AudioFileUncheckedUpdateWithoutUserInput>
+  }
+
+  export type AudioFileUpdateManyWithWhereWithoutUserInput = {
+    where: AudioFileScalarWhereInput
+    data: XOR<AudioFileUpdateManyMutationInput, AudioFileUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type AudioFileScalarWhereInput = {
+    AND?: AudioFileScalarWhereInput | AudioFileScalarWhereInput[]
+    OR?: AudioFileScalarWhereInput[]
+    NOT?: AudioFileScalarWhereInput | AudioFileScalarWhereInput[]
+    id?: IntFilter<"AudioFile"> | number
+    filePath?: StringFilter<"AudioFile"> | string
+    description?: StringFilter<"AudioFile"> | string
+    codec?: StringFilter<"AudioFile"> | string
+    createdBy?: StringFilter<"AudioFile"> | string
+    createdAt?: DateTimeFilter<"AudioFile"> | Date | string
+    updatedAt?: DateTimeFilter<"AudioFile"> | Date | string
+  }
+
+  export type UserCreateWithoutAudioFileInput = {
+    username: string
+    password: string
+    isAdmin?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserUncheckedCreateWithoutAudioFileInput = {
+    id?: number
+    username: string
+    password: string
+    isAdmin?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserCreateOrConnectWithoutAudioFileInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutAudioFileInput, UserUncheckedCreateWithoutAudioFileInput>
+  }
+
+  export type UserUpsertWithoutAudioFileInput = {
+    update: XOR<UserUpdateWithoutAudioFileInput, UserUncheckedUpdateWithoutAudioFileInput>
+    create: XOR<UserCreateWithoutAudioFileInput, UserUncheckedCreateWithoutAudioFileInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutAudioFileInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutAudioFileInput, UserUncheckedUpdateWithoutAudioFileInput>
+  }
+
+  export type UserUpdateWithoutAudioFileInput = {
+    username?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUncheckedUpdateWithoutAudioFileInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    username?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AudioFileCreateManyUserInput = {
+    id?: number
+    filePath: string
+    description: string
+    codec: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AudioFileUpdateWithoutUserInput = {
+    filePath?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    codec?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AudioFileUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    filePath?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    codec?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AudioFileUncheckedUpdateManyWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    filePath?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    codec?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 
