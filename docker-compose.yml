@@ -1,0 +1,36 @@
+services:
+  postgresdb:
+    image: postgres
+    container_name: audio-file-hosting-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"
+    expose:
+      - "5432"
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+  audio-file-hosting-app:
+    build:
+      context: .
+      dockerfile: ./local/Dockerfile
+    container_name: audio-file-hosting-app
+    ports:
+      - "3000:3000"
+    expose:
+      - "3000"
+    depends_on:
+      - postgresdb
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    environment:
+      DATABASE_URL: postgres://postgres:mysecretpassword@postgresdb:5432/mydb
+      NEXTAUTH_URL: http://localhost:3000
+      SESSION_SECRET: AyyGr/xZAFtoSvfefRTR1PhZuzraP5+5hnV/ZoQwa4I=
+    command: >
+      sh -c "npm run db:seed && npm run start"
