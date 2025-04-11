@@ -21,7 +21,14 @@ export async function findUserByUsername(username: string) {
 }
 
 export async function getAllUsers() {
-  return await db.user.findMany();
+  return await db.user.findMany({
+    select: {
+      id: true,
+      username: true,
+      createdAt: true,
+      isAdmin: true,
+    },
+  });
 }
 
 export async function createUser({
@@ -42,5 +49,17 @@ export async function createUser({
 export async function deleteUser(username: string) {
   return await db.user.delete({
     where: { username },
+  });
+}
+
+export async function getAllAudioFilesByUsername(username: string) {
+  return await db.audioFile.findMany({
+    where: { createdBy: username },
+    select: {
+      id: true,
+      description: true,
+      codec: true,
+      createdAt: true,
+    },
   });
 }

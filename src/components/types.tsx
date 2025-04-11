@@ -21,3 +21,10 @@ export type CreateUserFormState = {
   message?: string;
   success?: boolean;
 };
+
+export type AudioFiles = {
+  id: number;
+  description: string;
+  codec: string;
+  createdAt: Date;
+};
