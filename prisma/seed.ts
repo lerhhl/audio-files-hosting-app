@@ -1,4 +1,4 @@
-import { passwordEncoder } from "@/lib/passwordEncoder";
+import { encodePassword } from "@/lib/utils";
 import { Prisma, PrismaClient } from "../src/generated/prisma";
 
 export async function main() {
@@ -13,7 +13,7 @@ export async function main() {
     return;
   }
 
-  const encodedPassword = await passwordEncoder("admin123");
+  const encodedPassword = await encodePassword("admin123");
   const userData: Prisma.UserCreateInput = {
     username: "admin",
     password: encodedPassword,
