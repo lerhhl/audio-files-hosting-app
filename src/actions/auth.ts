@@ -4,7 +4,7 @@ import { INVALID_USERNAME_OR_PASSWORD, LOGIN_PATH } from "@/app/constants";
 import { findUserByUsername } from "@/lib/database";
 import { createSession, verifySession } from "@/lib/session";
 import { FormState } from "@/lib/types";
-import { encodePassword } from "@/lib/utils";
+import { hashPassword } from "@/lib/utils";
 import { redirect } from "next/navigation";
 
 export async function login(
@@ -34,7 +34,7 @@ export async function login(
     }
 
     // Verify the password
-    const hashedPassword = await encodePassword(password as string);
+    const hashedPassword = await hashPassword(password as string);
     if (user.password !== hashedPassword) {
       console.log("Password mismatch for user:", username);
       return {

@@ -1,7 +1,15 @@
 import { SessionPayload, SessionType } from "@/lib/types";
 import { SignJWT, jwtVerify } from "jose";
 
-export async function encodePassword(password: string) {
+/**
+ *  Hashes the password using SHA-256 algorithm.
+ *  This is a one-way hashing function and is not reversible.
+ *  It is used to securely store passwords.
+ *  @param password - The password to be hashed.
+ *  @returns The hashed password as a string.
+ *  @throws Error if the hashing process fails.
+ */
+export async function hashPassword(password: string) {
   const encoder = new TextEncoder();
   const encodedPassword = encoder.encode(password);
   const hashBuffer = await crypto.subtle.digest("SHA-256", encodedPassword);
@@ -12,6 +20,13 @@ export async function encodePassword(password: string) {
   return hashedPassword;
 }
 
+/**
+ * Encrypts the payload using the provided key and expiration time.
+ * @param encodedKey - The key used for encryption.
+ * @param expirationTimeInDays - The expiration time in days for the token.
+ * @param payload - The payload to be encrypted.
+ * @returns A promise resolving to the encrypted token as a string.
+ */
 export async function encrypt(
   encodedKey: Uint8Array<ArrayBufferLike>,
   expirationTimeInDays: number,
@@ -24,6 +39,13 @@ export async function encrypt(
     .sign(encodedKey);
 }
 
+/**
+ * Decrypts the session using the provided key and session string.
+ * Returns a SessionType object indicating the user's authentication status.
+ * @param encodedKey - The key used for decryption.
+ * @param session - The session string to decrypt.
+ * @returns A promise resolving to a SessionType object.
+ */
 export async function decrypt(
   encodedKey: Uint8Array<ArrayBufferLike>,
   session: string = ""
