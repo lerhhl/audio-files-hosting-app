@@ -45,7 +45,6 @@ export async function login(
 
     console.log("user", user);
     await createSession({
-      userId: user.userId,
       username: user.username,
       isAdmin: user.isAdmin ?? false,
     });

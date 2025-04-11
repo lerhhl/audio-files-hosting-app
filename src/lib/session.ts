@@ -8,13 +8,11 @@ import "server-only";
 export const encodedKey = new TextEncoder().encode(SECRET_KEY);
 
 export async function createSession({
-  userId,
   username,
   isAdmin = false,
 }: CreateSessionPayload) {
   const expiresAt = new Date(Date.now() + SESSION_EXPIRATION_TIME.milliseconds);
   const jwtToken = await encrypt(encodedKey, SESSION_EXPIRATION_TIME.days, {
-    userId,
     username,
     isAdmin,
     iat: Math.floor(Date.now() / 1000),
@@ -35,9 +33,9 @@ export async function verifySession(): Promise<SessionType> {
   const cookie = (await cookies()).get("session")?.value;
   const session = await decrypt(encodedKey, cookie);
 
-  if (!session?.userId) {
-    return { isAuth: false, userId: undefined, isAdmin: false };
+  if (!session?.username) {
+    return { isAuth: false, username: undefined, isAdmin: false };
   }
 
-  return { isAuth: true, userId: session.userId, isAdmin: session.isAdmin };
+  return { isAuth: true, username: session.username, isAdmin: session.isAdmin };
 }

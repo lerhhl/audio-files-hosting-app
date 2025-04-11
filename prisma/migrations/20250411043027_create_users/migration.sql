@@ -4,7 +4,6 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 -- CreateTable
 CREATE TABLE users (
     id SERIAL NOT NULL,
-    "userId" UUID NOT NULL DEFAULT gen_random_uuid(),
     username TEXT NOT NULL,
     password TEXT NOT NULL,
     "isAdmin" BOOLEAN NOT NULL DEFAULT false,

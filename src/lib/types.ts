@@ -1,7 +1,6 @@
 import { JWTPayload } from "jose";
 
 export interface CreateSessionPayload {
-  userId: string;
   username: string;
   isAdmin: boolean;
 }
@@ -12,7 +11,7 @@ export interface SessionPayload extends CreateSessionPayload, JWTPayload {
 }
 
 export type SessionType = {
-  userId?: string;
+  username?: string;
   isAuth: boolean;
   isAdmin: boolean;
 };

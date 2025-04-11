@@ -51,7 +51,7 @@ export async function decrypt(
   session: string = ""
 ): Promise<SessionType> {
   const invalidSession = {
-    userId: undefined,
+    username: undefined,
     isAuth: false,
     isAdmin: false,
   };
@@ -65,12 +65,12 @@ export async function decrypt(
       algorithms: ["HS256"],
     });
 
-    if (!payload?.userId || !payload?.username) {
+    if (!payload?.username) {
       return invalidSession;
     }
 
     return {
-      userId: payload.userId,
+      username: payload.username,
       isAuth: true,
       isAdmin: payload.isAdmin ?? false,
     };
