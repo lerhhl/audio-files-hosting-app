@@ -1,8 +1,8 @@
 import { redirectToLoginIfSessionNotFound } from "@/actions/auth";
-import HomePage from "@/components/HomePage";
+import AudioFilesPage from "@/components/AudioFilesPage";
 
 export default async function HomePageWrapper() {
   await redirectToLoginIfSessionNotFound();
 
-  return <HomePage />;
+  return <AudioFilesPage />;
 }

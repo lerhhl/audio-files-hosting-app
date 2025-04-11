@@ -17,7 +17,7 @@ export default function LoginPage() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-8 sm:p-20 bg-gray-100">
-      <h1 className="text-2xl font-bold mb-8">
+      <h1 className="text-2xl font-bold mb-8 text-center text-gray-800">
         Welcome to Audio File Hosting App
       </h1>
       <form
@@ -35,7 +35,7 @@ export default function LoginPage() {
             id="username"
             name="username"
             type="string"
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900"
             required
           />
         </div>
@@ -50,7 +50,7 @@ export default function LoginPage() {
             id="password"
             name="password"
             type="password"
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900"
             required
           />
         </div>

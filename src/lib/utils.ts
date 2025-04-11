@@ -53,6 +53,7 @@ export async function decrypt(
   const invalidSession = {
     userId: undefined,
     isAuth: false,
+    isAdmin: false,
   };
 
   if (!session) {
@@ -71,6 +72,7 @@ export async function decrypt(
     return {
       userId: payload.userId,
       isAuth: true,
+      isAdmin: payload.isAdmin ?? false,
     };
   } catch (error) {
     console.error("Session decryption failed:", error);
