@@ -2,7 +2,12 @@
 
 import { USERS_MANAGEMENT_PATH } from "@/app/constants";
 import { CreateUserFormState } from "@/components/types";
-import { createUser, findUserByUsername, getAllUsers } from "@/lib/database";
+import {
+  createUser,
+  deleteUser,
+  findUserByUsername,
+  getAllUsers,
+} from "@/lib/database";
 import { CreateUserFormSchema } from "@/lib/formDefinitions";
 import { revalidatePath } from "next/cache";
 
@@ -93,5 +98,28 @@ export async function createUserAction(
         server: "An error occurred while creating the user. Please try again.",
       },
     } as CreateUserFormState;
+  }
+}
+
+export async function deleteUserAction(username: string) {
+  try {
+    console.log("Deleting user:", username);
+
+    await deleteUser(username);
+
+    console.log(`User ${username} deleted`);
+
+    revalidatePath(USERS_MANAGEMENT_PATH);
+
+    return {
+      success: false,
+      message: `User ${username} deleted successfully`,
+    };
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    return {
+      success: false,
+      message: `Failed to delete user ${username}`,
+    };
   }
 }

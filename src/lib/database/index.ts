@@ -38,3 +38,9 @@ export async function createUser({
     },
   });
 }
+
+export async function deleteUser(username: string) {
+  return await db.user.delete({
+    where: { username },
+  });
+}

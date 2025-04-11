@@ -1,5 +1,6 @@
 "use client";
 
+import ConfirmUserDeleteDialog from "@/components/ConfirmUserDeleteDialog";
 import CreateUserForm from "@/components/CreateUserForm";
 import LogoutButton from "@/components/LogoutButton";
 import { CommonComponentProps, User } from "@/components/types";
@@ -24,16 +25,15 @@ export default function UsersManagementPage({
       </h1>
       <div className="w-full max-w-4xl">
         <div className="flex justify-end mb-1">
-          <div>
-            <CreateUserForm />
-          </div>
+          <CreateUserForm />
         </div>
         <table className="table-auto w-full border-collapse border border-gray-300">
           <thead>
             <tr className="bg-gray-200">
-              <th className="border border-gray-300 px-4 py-2">Username</th>
-              <th className="border border-gray-300 px-4 py-2">Is Admin</th>
-              <th className="border border-gray-300 px-4 py-2">Created At</th>
+              <th className="border border-gray-300 px-1 py-2">Username</th>
+              <th className="border border-gray-300 px-1 py-2">Is Admin</th>
+              <th className="border border-gray-300 px-1 py-2">Created At</th>
+              <th className="border border-gray-300 px-1 py-2">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -47,6 +47,12 @@ export default function UsersManagementPage({
                 </td>
                 <td className="border border-gray-300 px-4 py-2">
                   {user.createdAt.toLocaleDateString()}
+                </td>
+                <td className="border border-gray-300 px-4 py-2 ">
+                  <ConfirmUserDeleteDialog
+                    username={user.username}
+                    isAdmin={user.isAdmin}
+                  />
                 </td>
               </tr>
             ))}
