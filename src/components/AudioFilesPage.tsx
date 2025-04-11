@@ -1,9 +1,13 @@
+"use client";
+
 import LogoutButton from "@/components/LogoutButton";
-import { verifySession } from "@/lib/session";
+import { CommonComponentProps } from "@/components/types";
 
-export default async function AudioFilesPage() {
-  const { isAuth } = await verifySession();
+interface AudioFilesProps extends Omit<CommonComponentProps, "isAdmin"> {
+  readonly isAuth: boolean;
+}
 
+export default function AudioFilesPage({ isAuth }: AudioFilesProps) {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-8 sm:p-20 bg-gray-100">
       {isAuth && <LogoutButton />}

@@ -1,5 +1,7 @@
 export const LOGIN_PATH = "/login";
 export const DEFAULT_HOME_PATH = "/home";
+export const AUDIO_FILES_PATH = "/audio-files";
+export const USERS_MANAGEMENT_PATH = "/users-management";
 
 export const SESSION_EXPIRATION_TIME = {
   days: 1,
