@@ -2,6 +2,7 @@
 
 import ConfirmUserDeleteDialog from "@/components/ConfirmUserDeleteDialog";
 import CreateUserForm from "@/components/CreateUserForm";
+import HomeButton from "@/components/HomeButton";
 import LogoutButton from "@/components/LogoutButton";
 import { CommonComponentProps, User } from "@/components/types";
 import { use } from "react";
@@ -19,9 +20,10 @@ export default function UsersManagementPage({
 
   return (
     <div className="flex flex-col items-center justify-start min-h-screen p-8 sm:p-20 bg-gray-100">
+      <HomeButton />
       {isAuth && <LogoutButton />}
       <h1 className="text-2xl font-bold mb-8 text-center text-gray-800">
-        Welcome to Users Management Page
+        Users Management Page
       </h1>
       <div className="w-full max-w-4xl">
         <div className="flex justify-end mb-1">
