@@ -19,3 +19,7 @@ export async function findUserByUsername(username: string) {
     where: { username },
   });
 }
+
+export async function getAllUsers() {
+  return await db.user.findMany();
+}
