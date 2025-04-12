@@ -26,6 +26,14 @@ export const ALLOWABLE_AUDIO_CODECS = [
   "mpeg",
   "mp4",
 ];
+export const ALLOWABLE_AUDIO_CATEGORIES = [
+  "music",
+  "podcast",
+  "audiobook",
+  "sound_effect",
+  "voice_recording",
+  "other",
+];
 
 // Error messages
 export const INVALID_USERNAME_OR_PASSWORD_ERROR =

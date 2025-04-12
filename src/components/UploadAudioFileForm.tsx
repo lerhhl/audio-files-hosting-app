@@ -1,6 +1,7 @@
 "use client";
 
 import { createAudioFileRecordAction } from "@/actions/audioFiles";
+import { ALLOWABLE_AUDIO_CATEGORIES } from "@/app/constants";
 import { UploadVideoFormState } from "@/components/types";
 import { useActionState, useEffect, useState } from "react";
 
@@ -76,46 +77,54 @@ export default function CreateAudioFileRecordForm() {
                 >
                   Category
                 </label>
-                <input
+                <select
                   id="category"
                   name="category"
-                  type="string"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                   required
-                />
+                >
+                  <option value="" disabled selected>
+                    Select a category
+                  </option>
+                  {ALLOWABLE_AUDIO_CATEGORIES.map((category) => (
+                    <option key={category} value={category}>
+                      {category}
+                    </option>
+                  ))}
+                </select>
                 {state?.errors?.category && (
                   <p className="text-red-500 text-sm mt-1">
                     {state.errors.category}
                   </p>
                 )}
+              </div>
 
-                <div className="mb-4">
-                  <label
-                    htmlFor="file"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Audio File
-                  </label>
-                  <input
-                    id="file"
-                    name="file"
-                    type="file"
-                    accept="audio/*"
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    required
-                    onChange={(e) => {
-                      if (e.target.files && e.target.files.length > 1) {
-                        alert("Please select only one audio file.");
-                        e.target.value = ""; // Clear the invalid selection
-                      }
-                    }}
-                  />
-                  {state?.errors?.file && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {state.errors.file}
-                    </p>
-                  )}
-                </div>
+              <div className="mb-4">
+                <label
+                  htmlFor="file"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Audio File
+                </label>
+                <input
+                  id="file"
+                  name="file"
+                  type="file"
+                  accept="audio/*"
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                  required
+                  onChange={(e) => {
+                    if (e.target.files && e.target.files.length > 1) {
+                      alert("Please select only one audio file.");
+                      e.target.value = ""; // Clear the invalid selection
+                    }
+                  }}
+                />
+                {state?.errors?.file && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {state.errors.file}
+                  </p>
+                )}
               </div>
 
               <button
