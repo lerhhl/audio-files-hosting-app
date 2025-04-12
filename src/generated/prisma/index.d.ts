@@ -2131,7 +2131,8 @@ export namespace Prisma {
     id: number | null
     filePath: string | null
     description: string | null
-    codec: string | null
+    category: string | null
+    mimeType: string | null
     createdBy: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -2141,7 +2142,8 @@ export namespace Prisma {
     id: number | null
     filePath: string | null
     description: string | null
-    codec: string | null
+    category: string | null
+    mimeType: string | null
     createdBy: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -2151,7 +2153,8 @@ export namespace Prisma {
     id: number
     filePath: number
     description: number
-    codec: number
+    category: number
+    mimeType: number
     createdBy: number
     createdAt: number
     updatedAt: number
@@ -2171,7 +2174,8 @@ export namespace Prisma {
     id?: true
     filePath?: true
     description?: true
-    codec?: true
+    category?: true
+    mimeType?: true
     createdBy?: true
     createdAt?: true
     updatedAt?: true
@@ -2181,7 +2185,8 @@ export namespace Prisma {
     id?: true
     filePath?: true
     description?: true
-    codec?: true
+    category?: true
+    mimeType?: true
     createdBy?: true
     createdAt?: true
     updatedAt?: true
@@ -2191,7 +2196,8 @@ export namespace Prisma {
     id?: true
     filePath?: true
     description?: true
-    codec?: true
+    category?: true
+    mimeType?: true
     createdBy?: true
     createdAt?: true
     updatedAt?: true
@@ -2288,7 +2294,8 @@ export namespace Prisma {
     id: number
     filePath: string
     description: string
-    codec: string
+    category: string
+    mimeType: string
     createdBy: string
     createdAt: Date
     updatedAt: Date
@@ -2317,7 +2324,8 @@ export namespace Prisma {
     id?: boolean
     filePath?: boolean
     description?: boolean
-    codec?: boolean
+    category?: boolean
+    mimeType?: boolean
     createdBy?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -2328,7 +2336,8 @@ export namespace Prisma {
     id?: boolean
     filePath?: boolean
     description?: boolean
-    codec?: boolean
+    category?: boolean
+    mimeType?: boolean
     createdBy?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -2339,7 +2348,8 @@ export namespace Prisma {
     id?: boolean
     filePath?: boolean
     description?: boolean
-    codec?: boolean
+    category?: boolean
+    mimeType?: boolean
     createdBy?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -2350,13 +2360,14 @@ export namespace Prisma {
     id?: boolean
     filePath?: boolean
     description?: boolean
-    codec?: boolean
+    category?: boolean
+    mimeType?: boolean
     createdBy?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type AudioFileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "filePath" | "description" | "codec" | "createdBy" | "createdAt" | "updatedAt", ExtArgs["result"]["audioFile"]>
+  export type AudioFileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "filePath" | "description" | "category" | "mimeType" | "createdBy" | "createdAt" | "updatedAt", ExtArgs["result"]["audioFile"]>
   export type AudioFileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -2376,7 +2387,8 @@ export namespace Prisma {
       id: number
       filePath: string
       description: string
-      codec: string
+      category: string
+      mimeType: string
       createdBy: string
       createdAt: Date
       updatedAt: Date
@@ -2807,7 +2819,8 @@ export namespace Prisma {
     readonly id: FieldRef<"AudioFile", 'Int'>
     readonly filePath: FieldRef<"AudioFile", 'String'>
     readonly description: FieldRef<"AudioFile", 'String'>
-    readonly codec: FieldRef<"AudioFile", 'String'>
+    readonly category: FieldRef<"AudioFile", 'String'>
+    readonly mimeType: FieldRef<"AudioFile", 'String'>
     readonly createdBy: FieldRef<"AudioFile", 'String'>
     readonly createdAt: FieldRef<"AudioFile", 'DateTime'>
     readonly updatedAt: FieldRef<"AudioFile", 'DateTime'>
@@ -3255,7 +3268,8 @@ export namespace Prisma {
     id: 'id',
     filePath: 'filePath',
     description: 'description',
-    codec: 'codec',
+    category: 'category',
+    mimeType: 'mimeType',
     createdBy: 'createdBy',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -3420,7 +3434,8 @@ export namespace Prisma {
     id?: IntFilter<"AudioFile"> | number
     filePath?: StringFilter<"AudioFile"> | string
     description?: StringFilter<"AudioFile"> | string
-    codec?: StringFilter<"AudioFile"> | string
+    category?: StringFilter<"AudioFile"> | string
+    mimeType?: StringFilter<"AudioFile"> | string
     createdBy?: StringFilter<"AudioFile"> | string
     createdAt?: DateTimeFilter<"AudioFile"> | Date | string
     updatedAt?: DateTimeFilter<"AudioFile"> | Date | string
@@ -3431,7 +3446,8 @@ export namespace Prisma {
     id?: SortOrder
     filePath?: SortOrder
     description?: SortOrder
-    codec?: SortOrder
+    category?: SortOrder
+    mimeType?: SortOrder
     createdBy?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -3445,7 +3461,8 @@ export namespace Prisma {
     NOT?: AudioFileWhereInput | AudioFileWhereInput[]
     filePath?: StringFilter<"AudioFile"> | string
     description?: StringFilter<"AudioFile"> | string
-    codec?: StringFilter<"AudioFile"> | string
+    category?: StringFilter<"AudioFile"> | string
+    mimeType?: StringFilter<"AudioFile"> | string
     createdBy?: StringFilter<"AudioFile"> | string
     createdAt?: DateTimeFilter<"AudioFile"> | Date | string
     updatedAt?: DateTimeFilter<"AudioFile"> | Date | string
@@ -3456,7 +3473,8 @@ export namespace Prisma {
     id?: SortOrder
     filePath?: SortOrder
     description?: SortOrder
-    codec?: SortOrder
+    category?: SortOrder
+    mimeType?: SortOrder
     createdBy?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -3474,7 +3492,8 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"AudioFile"> | number
     filePath?: StringWithAggregatesFilter<"AudioFile"> | string
     description?: StringWithAggregatesFilter<"AudioFile"> | string
-    codec?: StringWithAggregatesFilter<"AudioFile"> | string
+    category?: StringWithAggregatesFilter<"AudioFile"> | string
+    mimeType?: StringWithAggregatesFilter<"AudioFile"> | string
     createdBy?: StringWithAggregatesFilter<"AudioFile"> | string
     createdAt?: DateTimeWithAggregatesFilter<"AudioFile"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"AudioFile"> | Date | string
@@ -3547,7 +3566,8 @@ export namespace Prisma {
   export type AudioFileCreateInput = {
     filePath: string
     description: string
-    codec: string
+    category: string
+    mimeType: string
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutAudioFileInput
@@ -3557,7 +3577,8 @@ export namespace Prisma {
     id?: number
     filePath: string
     description: string
-    codec: string
+    category: string
+    mimeType: string
     createdBy: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -3566,7 +3587,8 @@ export namespace Prisma {
   export type AudioFileUpdateInput = {
     filePath?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    codec?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutAudioFileNestedInput
@@ -3576,7 +3598,8 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     filePath?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    codec?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
     createdBy?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -3586,7 +3609,8 @@ export namespace Prisma {
     id?: number
     filePath: string
     description: string
-    codec: string
+    category: string
+    mimeType: string
     createdBy: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -3595,7 +3619,8 @@ export namespace Prisma {
   export type AudioFileUpdateManyMutationInput = {
     filePath?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    codec?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -3604,7 +3629,8 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     filePath?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    codec?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
     createdBy?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -3762,7 +3788,8 @@ export namespace Prisma {
     id?: SortOrder
     filePath?: SortOrder
     description?: SortOrder
-    codec?: SortOrder
+    category?: SortOrder
+    mimeType?: SortOrder
     createdBy?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -3776,7 +3803,8 @@ export namespace Prisma {
     id?: SortOrder
     filePath?: SortOrder
     description?: SortOrder
-    codec?: SortOrder
+    category?: SortOrder
+    mimeType?: SortOrder
     createdBy?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -3786,7 +3814,8 @@ export namespace Prisma {
     id?: SortOrder
     filePath?: SortOrder
     description?: SortOrder
-    codec?: SortOrder
+    category?: SortOrder
+    mimeType?: SortOrder
     createdBy?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -3982,7 +4011,8 @@ export namespace Prisma {
   export type AudioFileCreateWithoutUserInput = {
     filePath: string
     description: string
-    codec: string
+    category: string
+    mimeType: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -3991,7 +4021,8 @@ export namespace Prisma {
     id?: number
     filePath: string
     description: string
-    codec: string
+    category: string
+    mimeType: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -4029,7 +4060,8 @@ export namespace Prisma {
     id?: IntFilter<"AudioFile"> | number
     filePath?: StringFilter<"AudioFile"> | string
     description?: StringFilter<"AudioFile"> | string
-    codec?: StringFilter<"AudioFile"> | string
+    category?: StringFilter<"AudioFile"> | string
+    mimeType?: StringFilter<"AudioFile"> | string
     createdBy?: StringFilter<"AudioFile"> | string
     createdAt?: DateTimeFilter<"AudioFile"> | Date | string
     updatedAt?: DateTimeFilter<"AudioFile"> | Date | string
@@ -4089,7 +4121,8 @@ export namespace Prisma {
     id?: number
     filePath: string
     description: string
-    codec: string
+    category: string
+    mimeType: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -4097,7 +4130,8 @@ export namespace Prisma {
   export type AudioFileUpdateWithoutUserInput = {
     filePath?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    codec?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -4106,7 +4140,8 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     filePath?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    codec?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -4115,7 +4150,8 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     filePath?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    codec?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

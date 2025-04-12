@@ -130,7 +130,8 @@ exports.Prisma.AudioFileScalarFieldEnum = {
   id: 'id',
   filePath: 'filePath',
   description: 'description',
-  codec: 'codec',
+  category: 'category',
+  mimeType: 'mimeType',
   createdBy: 'createdBy',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

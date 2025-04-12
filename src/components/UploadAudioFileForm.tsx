@@ -71,21 +71,21 @@ export default function CreateAudioFileRecordForm() {
 
               <div className="mb-4">
                 <label
-                  htmlFor="codec"
+                  htmlFor="category"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Codec
+                  Category
                 </label>
                 <input
-                  id="codec"
-                  name="codec"
+                  id="category"
+                  name="category"
                   type="string"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                   required
                 />
-                {state?.errors?.codec && (
+                {state?.errors?.category && (
                   <p className="text-red-500 text-sm mt-1">
-                    {state.errors.codec}
+                    {state.errors.category}
                   </p>
                 )}
 

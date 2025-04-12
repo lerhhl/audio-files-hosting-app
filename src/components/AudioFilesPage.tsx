@@ -1,10 +1,10 @@
 "use client";
 
+import AudioPlayer from "@/components/AudioPlayer";
 import HomeButton from "@/components/HomeButton";
 import LogoutButton from "@/components/LogoutButton";
 import { AudioFiles, CommonComponentProps } from "@/components/types";
 import UploadAudioFileForm from "@/components/UploadAudioFileForm";
-import { PlayCircleIcon } from "@heroicons/react/24/solid";
 import { use } from "react";
 
 interface AudioFilesProps extends Omit<CommonComponentProps, "isAdmin"> {
@@ -17,11 +17,6 @@ export default function AudioFilesPage({
   audioFiles,
 }: AudioFilesProps) {
   const audioFilesList = use(audioFiles);
-
-  const handlePlayAudioFile = () => {
-    // Implement the logic to play the audio file
-    console.log("Playing audio file...");
-  };
 
   return (
     <div className="flex flex-col items-center justify-start min-h-screen p-8 sm:p-20 bg-gray-100">
@@ -38,6 +33,8 @@ export default function AudioFilesPage({
           <thead>
             <tr className="bg-gray-200">
               <th className="border border-gray-300 px-1 py-2">Description</th>
+              <th className="border border-gray-300 px-1 py-2">Category</th>
+              <th className="border border-gray-300 px-1 py-2">Mime Type</th>
               <th className="border border-gray-300 px-1 py-2">Created At</th>
               <th className="border border-gray-300 px-1 py-2">Actions</th>
             </tr>
@@ -47,7 +44,7 @@ export default function AudioFilesPage({
               // If empty, display a message
               <tr>
                 <td
-                  colSpan={3}
+                  colSpan={4}
                   className="border border-gray-300 px-4 py-2 text-center"
                 >
                   No audio files found.
@@ -61,12 +58,16 @@ export default function AudioFilesPage({
                     {audioFile.description}
                   </td>
                   <td className="border border-gray-300 px-4 py-2">
+                    {audioFile.category}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {audioFile.mimeType}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
                     {audioFile.createdAt.toLocaleDateString()}
                   </td>
                   <td className="border border-gray-300 px-4 py-2">
-                    <button onClick={handlePlayAudioFile}>
-                      <PlayCircleIcon className="size-5 text-gray-400 cursor-pointer" />
-                    </button>
+                    <AudioPlayer fileId={audioFile.id} />
                   </td>
                 </tr>
               ))

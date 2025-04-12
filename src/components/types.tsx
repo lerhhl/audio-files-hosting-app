@@ -25,14 +25,15 @@ export type CreateUserFormState = {
 export type AudioFiles = {
   id: number;
   description: string;
-  codec: string;
+  category: string;
+  mimeType: string;
   createdAt: Date;
 };
 
 export type UploadVideoFormState = {
   errors?: {
     description?: string[];
-    codec?: string[];
+    category?: string[];
     file?: string[];
     server?: string;
   };

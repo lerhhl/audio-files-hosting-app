@@ -24,7 +24,8 @@ model AudioFile {
   id          Int      @id @default(autoincrement())
   filePath    String
   description String
-  codec       String
+  category    String
+  mimeType    String
   createdBy   String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

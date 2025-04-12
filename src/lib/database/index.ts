@@ -1,5 +1,6 @@
 import { POSTGRES_CONNECTION_STRING } from "@/app/config";
 import { PrismaClient } from "@/generated/prisma/client";
+import { CreateAudioFileInput } from "@/lib/types";
 import "server-only";
 
 if (!POSTGRES_CONNECTION_STRING) {
@@ -58,7 +59,8 @@ export async function getAllAudioFilesByUsername(username: string) {
     select: {
       id: true,
       description: true,
-      codec: true,
+      category: true,
+      mimeType: true,
       createdAt: true,
     },
   });
@@ -66,21 +68,33 @@ export async function getAllAudioFilesByUsername(username: string) {
 
 export async function createAudioFileRecord({
   description,
-  codec,
+  category,
+  mimeType,
   filePath,
   username,
-}: {
-  description: string;
-  codec: string;
-  filePath: string;
-  username: string;
-}) {
+}: CreateAudioFileInput) {
   return await db.audioFile.create({
     data: {
       description,
-      codec,
+      category,
+      mimeType,
       filePath,
       createdBy: username,
+    },
+  });
+}
+
+export async function getAudioFileById(id: number) {
+  return await db.audioFile.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      description: true,
+      category: true,
+      mimeType: true,
+      filePath: true,
+      createdBy: true,
+      createdAt: true,
     },
   });
 }

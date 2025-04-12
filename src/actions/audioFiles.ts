@@ -12,6 +12,7 @@ import {
 } from "@/lib/database";
 import { createAudioFileRecordFormSchema } from "@/lib/formDefinitions";
 import { verifySession } from "@/lib/session";
+import { CreateAudioFileInput } from "@/lib/types";
 import fs from "fs";
 import { revalidatePath } from "next/cache";
 import path from "path";
@@ -52,7 +53,7 @@ export async function createAudioFileRecordAction(
 
     const validatedFields = createAudioFileRecordFormSchema.safeParse({
       description: formData.get("description"),
-      codec: formData.get("codec"),
+      category: formData.get("category"),
       file: formData.get("file"),
     });
 
@@ -64,7 +65,7 @@ export async function createAudioFileRecordAction(
       };
     }
 
-    const { description, codec } = validatedFields.data;
+    const { description, category } = validatedFields.data;
     const file = formData.get("file") as File;
 
     if (!file) {
@@ -76,7 +77,6 @@ export async function createAudioFileRecordAction(
       };
     }
 
-    const audioCodec = file.type.split("/")[1];
     const fileBuffer = Buffer.from(await file.arrayBuffer());
     const { name, size: fileSize, type: fileType } = file;
     const fileName = `${Date.now()}-${name}`;
@@ -85,9 +85,7 @@ export async function createAudioFileRecordAction(
 
     console.log("saving audio file to server:", {
       filePathToSave,
-      fileName,
       fileSize,
-      fileType,
     });
 
     if (!fs.existsSync(fileDir)) {
@@ -98,31 +96,22 @@ export async function createAudioFileRecordAction(
 
     console.log("saved audio file to server:", {
       filePathToSave,
-      fileName,
       fileSize,
-      fileType,
     });
 
-    console.log("inserting audio file into database:", {
+    const createAudioFileInput: CreateAudioFileInput = {
       username,
       description,
-      codec: audioCodec,
+      category,
+      mimeType: fileType,
       filePath: filePathToSave,
-    });
+    };
 
-    await createAudioFileRecord({
-      username,
-      description,
-      codec: audioCodec,
-      filePath: filePathToSave,
-    });
+    console.log("inserting audio file into database:", createAudioFileInput);
 
-    console.log("inserted audio file into database", {
-      username,
-      description,
-      codec: audioCodec,
-      filePath: filePathToSave,
-    });
+    await createAudioFileRecord(createAudioFileInput);
+
+    console.log("inserted audio file into database", createAudioFileInput);
 
     revalidatePath(AUDIO_FILES_PATH);
 

@@ -22,3 +22,11 @@ export type LoginFormState =
       success?: boolean;
     }
   | undefined;
+
+export type CreateAudioFileInput = {
+  description: string;
+  category: string;
+  mimeType: string;
+  filePath: string;
+  username: string;
+};
