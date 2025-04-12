@@ -44,7 +44,7 @@ export default function AudioFilesPage({
               // If empty, display a message
               <tr>
                 <td
-                  colSpan={4}
+                  colSpan={5}
                   className="border border-gray-300 px-4 py-2 text-center"
                 >
                   No audio files found.

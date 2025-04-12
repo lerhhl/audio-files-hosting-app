@@ -55,7 +55,7 @@ export default function ConfirmUserDeleteDialog({
           <div className="bg-white p-6 rounded shadow-lg">
             <h2 className="text-lg font-bold mb-4">Confirm Deletion</h2>
             <p className="mb-4">
-              Are you sure you want to delete user "{username}"?
+              Are you sure you want to delete user &quot;{username}&quot;?
             </p>
             <div className="flex justify-end space-x-4">
               <button

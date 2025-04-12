@@ -83,6 +83,7 @@ export async function GET(req: NextRequest) {
         );
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return new Response(fileStream as any, {
         status: 206,
         headers: {
@@ -95,6 +96,7 @@ export async function GET(req: NextRequest) {
     } else {
       const fileStream = fs.createReadStream(filePath);
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return new Response(fileStream as any, {
         status: 200,
         headers: {
