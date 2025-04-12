@@ -21,9 +21,8 @@ export default function CreateAudioFileRecordForm() {
     setPending(true);
     setErrors(undefined);
     const formData = new FormData(e.currentTarget);
-
-    // Check if the file input is empty
     const fileInput = formData.get("file") as File;
+
     if (fileInput?.size > MAX_FILE_UPLOAD_SIZE.bytes) {
       setErrors((prev) => ({
         ...prev,
@@ -34,11 +33,13 @@ export default function CreateAudioFileRecordForm() {
     }
 
     const response = await createAudioFileRecordAction(formData);
+
     if (!response.success) {
       setErrors(response.errors);
       setPending(false);
     } else {
-      console.log("Audio file uploaded successfully");
+      setPending(false);
+      setErrors(undefined);
       closeDialog();
     }
   };

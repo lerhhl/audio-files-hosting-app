@@ -22,24 +22,18 @@ export const MAX_FILE_UPLOAD_SIZE = {
 
 export const AUDIO_UPLOAD_FOLDER = "./audio_uploads";
 export const ALLOWABLE_AUDIO_CODECS = [
-  "aac",
-  "ac3",
-  "flac",
-  "mp3",
-  "ogg",
-  "opus",
-  "wav",
-  "wma",
-  "webm",
-  "mpeg",
-  "mp4",
+  "audio/mp3",
+  "audio/ogg",
+  "audio/mpeg",
+  "audio/wav",
+  "audio/aac",
 ];
 export const ALLOWABLE_AUDIO_CATEGORIES = [
   "music",
   "podcast",
   "audiobook",
-  "sound_effect",
-  "voice_recording",
+  "sound effect",
+  "voice recording",
   "other",
 ];
 

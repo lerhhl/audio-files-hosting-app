@@ -89,17 +89,14 @@ export const createAudioFileRecordFormSchema = z.object({
     .refine((file) => file.size <= MAX_FILE_UPLOAD_SIZE.bytes, {
       message: `File size must be less than ${MAX_FILE_UPLOAD_SIZE.mb}MB.`,
     })
-    .refine(
-      (file) => {
-        const fileExtension = file.name?.split(".").pop()?.toLowerCase();
-        return (
-          !fileExtension ||
-          !ALLOWABLE_AUDIO_CODECS.includes(`.${fileExtension}`)
-        );
-      },
-      {
-        message: "File must be an audio file.",
-      }
-    )
-    .refine((file) => file.type),
+    .refine((file) => file.type, {
+      message: "File type must be specified.",
+    })
+    .refine((file) => ALLOWABLE_AUDIO_CODECS.includes(file.type), {
+      message: `File type must be one of the following: ${ALLOWABLE_AUDIO_CODECS.map(
+        (codec) => {
+          return codec.split("/")[1];
+        }
+      ).join(", ")}`,
+    }),
 });
