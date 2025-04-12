@@ -5,25 +5,37 @@ import {
 } from "@/app/constants";
 import { z } from "zod";
 
+const generateLengthErrorMessage = (
+  field: string,
+  value: number,
+  type: "min" | "max"
+) => {
+  if (type === "min") {
+    return `${field} must be at least ${value} characters long.`;
+  } else {
+    return `${field} must be at most ${value} characters long.`;
+  }
+};
+
 const usernameSpec = {
   min: {
     value: 3,
-    message: "Name must be at least 3 characters long.",
+    message: generateLengthErrorMessage("Name", 3, "min"),
   },
   max: {
     value: 10,
-    message: "Name must be at most 10 characters long.",
+    message: generateLengthErrorMessage("Name", 10, "max"),
   },
 };
 
 const passwordSpec = {
   min: {
     value: 3,
-    message: "Password must be at least 3 characters long.",
+    message: generateLengthErrorMessage("Password", 3, "min"),
   },
   max: {
     value: 20,
-    message: "Password must be at most 20 characters long.",
+    message: generateLengthErrorMessage("Password", 20, "max"),
   },
 };
 
@@ -31,11 +43,11 @@ const audioFileSpec = {
   description: {
     min: {
       value: 3,
-      message: "Description must be at least 3 characters long.",
+      message: generateLengthErrorMessage("Description", 3, "min"),
     },
     max: {
       value: 100,
-      message: "Description must be at most 100 characters long.",
+      message: generateLengthErrorMessage("Description", 100, "max"),
     },
   },
 };

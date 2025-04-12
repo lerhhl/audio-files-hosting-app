@@ -42,12 +42,7 @@ export default function CreateAudioFileRecordForm() {
             >
               &times;
             </button>
-            <form
-              className="flex flex-col gap-4"
-              action={action}
-              method="post"
-              encType="multipart/form-data" // Ensure file data is properly encoded
-            >
+            <form className="flex flex-col gap-4" action={action}>
               <div className="mb-4">
                 <label
                   htmlFor="description"
@@ -82,8 +77,9 @@ export default function CreateAudioFileRecordForm() {
                   name="category"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                   required
+                  defaultValue=""
                 >
-                  <option value="" disabled selected>
+                  <option value="" disabled>
                     Select a category
                   </option>
                   {ALLOWABLE_AUDIO_CATEGORIES.map((category) => (
