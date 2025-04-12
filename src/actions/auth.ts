@@ -1,6 +1,9 @@
 "use server";
 
-import { INVALID_USERNAME_OR_PASSWORD, LOGIN_PATH } from "@/app/constants";
+import {
+  INVALID_USERNAME_OR_PASSWORD_ERROR,
+  LOGIN_PATH,
+} from "@/app/constants";
 import { findUserByUsername } from "@/lib/database";
 import { createSession, verifySession } from "@/lib/session";
 import { LoginFormState } from "@/lib/types";
@@ -19,7 +22,7 @@ export async function login(
       console.log("Username or password is empty");
       return {
         success: false,
-        message: INVALID_USERNAME_OR_PASSWORD,
+        message: INVALID_USERNAME_OR_PASSWORD_ERROR,
       };
     }
 
@@ -29,7 +32,7 @@ export async function login(
       console.log("User not found by:", username);
       return {
         success: false,
-        message: INVALID_USERNAME_OR_PASSWORD,
+        message: INVALID_USERNAME_OR_PASSWORD_ERROR,
       };
     }
 
@@ -39,7 +42,7 @@ export async function login(
       console.log("Password mismatch for user:", username);
       return {
         success: false,
-        message: INVALID_USERNAME_OR_PASSWORD,
+        message: INVALID_USERNAME_OR_PASSWORD_ERROR,
       };
     }
 
@@ -57,7 +60,7 @@ export async function login(
     console.error("Error during login:", error);
     return {
       success: false,
-      message: INVALID_USERNAME_OR_PASSWORD,
+      message: INVALID_USERNAME_OR_PASSWORD_ERROR,
     };
   }
 }

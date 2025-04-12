@@ -1,14 +1,13 @@
 "use client";
 
-import { createUserAction } from "@/actions/user";
-import LoadingSpinner from "@/components/LoadingSpinner";
-import { CreateUserFormState } from "@/components/types";
+import { createAudioFileRecordAction } from "@/actions/audioFiles";
+import { UploadVideoFormState } from "@/components/types";
 import { useActionState, useEffect, useState } from "react";
 
-export default function CreateUserForm() {
-  const [state, action, pending] = useActionState<CreateUserFormState>(
+export default function CreateAudioFileRecordForm() {
+  const [state, action, pending] = useActionState<UploadVideoFormState>(
     // @ts-expect-error ignore type error
-    createUserAction,
+    createAudioFileRecordAction,
     { errors: undefined }
   );
   const [isOpen, setIsOpen] = useState(false);
@@ -27,7 +26,7 @@ export default function CreateUserForm() {
         onClick={openDialog}
         className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
       >
-        Add User
+        Upload Audio File
       </button>
 
       {isOpen && (
@@ -42,54 +41,88 @@ export default function CreateUserForm() {
             >
               &times;
             </button>
-            <form className="flex flex-col gap-4" action={action}>
+            <form
+              className="flex flex-col gap-4"
+              action={action}
+              method="post"
+              encType="multipart/form-data" // Ensure file data is properly encoded
+            >
               <div className="mb-4">
                 <label
-                  htmlFor="username"
+                  htmlFor="description"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Username
+                  Description (max. 100 characters)
                 </label>
-                <input
-                  id="username"
-                  name="username"
-                  type="string"
+                <textarea
+                  id="description"
+                  name="description"
+                  maxLength={100}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                  rows={4}
                   required
                 />
-                {state?.errors?.username && (
+                {state?.errors?.description && (
                   <p className="text-red-500 text-sm mt-1">
-                    {state.errors.username}
+                    {state.errors.description}
                   </p>
                 )}
               </div>
 
               <div className="mb-4">
                 <label
-                  htmlFor="password"
+                  htmlFor="codec"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Password
+                  Codec
                 </label>
                 <input
-                  id="password"
-                  name="password"
-                  type="password"
+                  id="codec"
+                  name="codec"
+                  type="string"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                   required
                 />
-                {state?.errors?.password && (
+                {state?.errors?.codec && (
                   <p className="text-red-500 text-sm mt-1">
-                    {state.errors.password}
+                    {state.errors.codec}
                   </p>
                 )}
+
+                <div className="mb-4">
+                  <label
+                    htmlFor="file"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Audio File
+                  </label>
+                  <input
+                    id="file"
+                    name="file"
+                    type="file"
+                    accept="audio/*"
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    required
+                    onChange={(e) => {
+                      if (e.target.files && e.target.files.length > 1) {
+                        alert("Please select only one audio file.");
+                        e.target.value = ""; // Clear the invalid selection
+                      }
+                    }}
+                  />
+                  {state?.errors?.file && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {state.errors.file}
+                    </p>
+                  )}
+                </div>
               </div>
 
               <button
                 type="submit"
                 className="bg-blue-500 text-white rounded-lg p-2 hover:bg-blue-600 disabled:opacity-50"
               >
-                {pending ? <LoadingSpinner /> : "Create User"}
+                {pending ? "Uploading..." : "Upload Audio File"}
               </button>
               {state?.errors?.server && (
                 <p className="text-red-500 text-sm">{state?.errors?.server}</p>

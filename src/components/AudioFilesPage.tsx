@@ -3,6 +3,8 @@
 import HomeButton from "@/components/HomeButton";
 import LogoutButton from "@/components/LogoutButton";
 import { AudioFiles, CommonComponentProps } from "@/components/types";
+import UploadAudioFileForm from "@/components/UploadAudioFileForm";
+import { PlayCircleIcon } from "@heroicons/react/24/solid";
 import { use } from "react";
 
 interface AudioFilesProps extends Omit<CommonComponentProps, "isAdmin"> {
@@ -16,6 +18,11 @@ export default function AudioFilesPage({
 }: AudioFilesProps) {
   const audioFilesList = use(audioFiles);
 
+  const handlePlayAudioFile = () => {
+    // Implement the logic to play the audio file
+    console.log("Playing audio file...");
+  };
+
   return (
     <div className="flex flex-col items-center justify-start min-h-screen p-8 sm:p-20 bg-gray-100">
       <HomeButton />
@@ -24,6 +31,9 @@ export default function AudioFilesPage({
         Audio Files List
       </h1>
       <div className="w-full max-w-4xl">
+        <div className="flex justify-end mb-1">
+          <UploadAudioFileForm />
+        </div>
         <table className="table-auto w-full border-collapse border border-gray-300">
           <thead>
             <tr className="bg-gray-200">
@@ -45,7 +55,7 @@ export default function AudioFilesPage({
               </tr>
             ) : (
               // If not empty, map through the audioFilesList and display each audio file
-              audioFilesList.map((audioFile, index) => (
+              audioFilesList.map((audioFile) => (
                 <tr key={audioFile.id} className="text-center">
                   <td className="border border-gray-300 px-4 py-2">
                     {audioFile.description}
@@ -53,12 +63,11 @@ export default function AudioFilesPage({
                   <td className="border border-gray-300 px-4 py-2">
                     {audioFile.createdAt.toLocaleDateString()}
                   </td>
-                  {/* <td className="border border-gray-300 px-4 py-2 ">
-                  <ConfirmUserDeleteDialog
-                    username={user.username}
-                    isAdmin={user.isAdmin}
-                  />
-                </td> */}
+                  <td className="border border-gray-300 px-4 py-2">
+                    <button onClick={handlePlayAudioFile}>
+                      <PlayCircleIcon className="size-5 text-gray-400 cursor-pointer" />
+                    </button>
+                  </td>
                 </tr>
               ))
             )}

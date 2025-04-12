@@ -28,3 +28,14 @@ export type AudioFiles = {
   codec: string;
   createdAt: Date;
 };
+
+export type UploadVideoFormState = {
+  errors?: {
+    description?: string[];
+    codec?: string[];
+    file?: string[];
+    server?: string;
+  };
+  message?: string;
+  success?: boolean;
+};

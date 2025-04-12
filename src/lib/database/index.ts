@@ -63,3 +63,24 @@ export async function getAllAudioFilesByUsername(username: string) {
     },
   });
 }
+
+export async function createAudioFileRecord({
+  description,
+  codec,
+  filePath,
+  username,
+}: {
+  description: string;
+  codec: string;
+  filePath: string;
+  username: string;
+}) {
+  return await db.audioFile.create({
+    data: {
+      description,
+      codec,
+      filePath,
+      createdBy: username,
+    },
+  });
+}

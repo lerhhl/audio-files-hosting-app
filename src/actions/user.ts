@@ -9,6 +9,7 @@ import {
   getAllUsers,
 } from "@/lib/database";
 import { CreateUserFormSchema } from "@/lib/formDefinitions";
+import { hashPassword } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 
 export async function getAllUsersAction() {
@@ -42,7 +43,7 @@ export async function createUserAction(
       };
     }
 
-    // 2. Prepare data for insertion into database
+    // Prepare data for insertion into database
     const { username, password } = validatedFields.data;
 
     // Check if the user already exists
@@ -56,13 +57,7 @@ export async function createUserAction(
       } as CreateUserFormState;
     }
 
-    // e.g. Hash the user's password before storing it
-    const encoder = new TextEncoder();
-    const encodedPassword = encoder.encode(password);
-    const hashBuffer = await crypto.subtle.digest("SHA-256", encodedPassword);
-    const hashedPassword = Array.from(new Uint8Array(hashBuffer))
-      .map((byte) => byte.toString(16).padStart(2, "0"))
-      .join("");
+    const hashedPassword = await hashPassword(password);
 
     console.log("Inserting user into database:", {
       username,
@@ -71,10 +66,10 @@ export async function createUserAction(
     // 3. Insert the user into the database
     const newUser = await createUser({
       username,
-      hashedPassword: hashedPassword,
+      hashedPassword,
     });
 
-    console.log("New user created");
+    console.log("New user created", username);
 
     if (!newUser) {
       return {

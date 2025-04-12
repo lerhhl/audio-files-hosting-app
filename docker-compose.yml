@@ -34,3 +34,5 @@ services:
       SESSION_SECRET: AyyGr/xZAFtoSvfefRTR1PhZuzraP5+5hnV/ZoQwa4I=
     command: >
       sh -c "npm run db:seed && npm run start"
+    volumes:
+      - ./audio-files:/app/audio-files
