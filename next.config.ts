@@ -1,9 +1,10 @@
 import type { NextConfig } from "next";
+import { MAX_FILE_UPLOAD_SIZE } from "./src/app/constants";
 
 const nextConfig: NextConfig = {
   experimental: {
     serverActions: {
-      bodySizeLimit: "10mb", // Increase the limit to 10 MB (or adjust as needed)
+      bodySizeLimit: `${MAX_FILE_UPLOAD_SIZE.mb}mb`,
     },
   },
 };

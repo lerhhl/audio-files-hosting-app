@@ -1,25 +1,47 @@
 "use client";
 
 import { createAudioFileRecordAction } from "@/actions/audioFiles";
-import { ALLOWABLE_AUDIO_CATEGORIES } from "@/app/constants";
+import {
+  ALLOWABLE_AUDIO_CATEGORIES,
+  MAX_FILE_UPLOAD_SIZE,
+} from "@/app/constants";
 import { UploadVideoFormState } from "@/components/types";
-import { useActionState, useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function CreateAudioFileRecordForm() {
-  const [state, action, pending] = useActionState<UploadVideoFormState>(
-    // @ts-expect-error ignore type error
-    createAudioFileRecordAction,
-    { errors: undefined }
-  );
   const [isOpen, setIsOpen] = useState(false);
   const openDialog = () => setIsOpen(true);
   const closeDialog = () => setIsOpen(false);
+  const [errors, setErrors] =
+    useState<UploadVideoFormState["errors"]>(undefined);
+  const [pending, setPending] = useState(false);
 
-  useEffect(() => {
-    if (state?.success) {
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setPending(true);
+    setErrors(undefined);
+    const formData = new FormData(e.currentTarget);
+
+    // Check if the file input is empty
+    const fileInput = formData.get("file") as File;
+    if (fileInput?.size > MAX_FILE_UPLOAD_SIZE.bytes) {
+      setErrors((prev) => ({
+        ...prev,
+        file: [`File size must be less than ${MAX_FILE_UPLOAD_SIZE.mb}MB.`],
+      }));
+      setPending(false);
+      return;
+    }
+
+    const response = await createAudioFileRecordAction(formData);
+    if (!response.success) {
+      setErrors(response.errors);
+      setPending(false);
+    } else {
+      console.log("Audio file uploaded successfully");
       closeDialog();
     }
-  }, [state]);
+  };
 
   return (
     <>
@@ -42,7 +64,7 @@ export default function CreateAudioFileRecordForm() {
             >
               &times;
             </button>
-            <form className="flex flex-col gap-4" action={action}>
+            <form className="flex flex-col gap-4" onSubmit={handleFormSubmit}>
               <div className="mb-4">
                 <label
                   htmlFor="description"
@@ -58,9 +80,9 @@ export default function CreateAudioFileRecordForm() {
                   rows={4}
                   required
                 />
-                {state?.errors?.description && (
+                {errors?.description && (
                   <p className="text-red-500 text-sm mt-1">
-                    {state.errors.description}
+                    {errors.description}
                   </p>
                 )}
               </div>
@@ -88,10 +110,8 @@ export default function CreateAudioFileRecordForm() {
                     </option>
                   ))}
                 </select>
-                {state?.errors?.category && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {state.errors.category}
-                  </p>
+                {errors?.category && (
+                  <p className="text-red-500 text-sm mt-1">{errors.category}</p>
                 )}
               </div>
 
@@ -109,17 +129,9 @@ export default function CreateAudioFileRecordForm() {
                   accept="audio/*"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                   required
-                  onChange={(e) => {
-                    if (e.target.files && e.target.files.length > 1) {
-                      alert("Please select only one audio file.");
-                      e.target.value = ""; // Clear the invalid selection
-                    }
-                  }}
                 />
-                {state?.errors?.file && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {state.errors.file}
-                  </p>
+                {errors?.file && (
+                  <p className="text-red-500 text-sm mt-1">{errors.file}</p>
                 )}
               </div>
 
@@ -129,8 +141,8 @@ export default function CreateAudioFileRecordForm() {
               >
                 {pending ? "Uploading..." : "Upload Audio File"}
               </button>
-              {state?.errors?.server && (
-                <p className="text-red-500 text-sm">{state?.errors?.server}</p>
+              {errors?.server && (
+                <p className="text-red-500 text-sm">{errors?.server}</p>
               )}
             </form>
           </div>

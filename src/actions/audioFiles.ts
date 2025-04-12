@@ -35,7 +35,6 @@ export async function getAllAudioFilesByUsernameAction() {
 }
 
 export async function createAudioFileRecordAction(
-  _state: UploadVideoFormState,
   formData: FormData
 ): Promise<UploadVideoFormState> {
   const { isAuth, username } = await verifySession();

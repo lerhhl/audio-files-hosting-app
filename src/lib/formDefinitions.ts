@@ -1,7 +1,7 @@
 import {
   ALLOWABLE_AUDIO_CATEGORIES,
   ALLOWABLE_AUDIO_CODECS,
-  MAX_FILE_SIZE,
+  MAX_FILE_UPLOAD_SIZE,
 } from "@/app/constants";
 import { z } from "zod";
 
@@ -86,8 +86,8 @@ export const createAudioFileRecordFormSchema = z.object({
     .refine((file) => file.size > 0, {
       message: "File must not be empty.",
     })
-    .refine((file) => file.size <= MAX_FILE_SIZE, {
-      message: "File size must be less than 10MB.",
+    .refine((file) => file.size <= MAX_FILE_UPLOAD_SIZE.bytes, {
+      message: `File size must be less than ${MAX_FILE_UPLOAD_SIZE.mb}MB.`,
     })
     .refine(
       (file) => {

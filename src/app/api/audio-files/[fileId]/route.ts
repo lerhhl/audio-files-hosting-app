@@ -1,4 +1,4 @@
-import { MAX_FILE_SIZE } from "@/app/constants";
+import { MAX_FILE_UPLOAD_SIZE } from "@/app/constants";
 import { getAudioFileById } from "@/lib/database";
 import { verifySession } from "@/lib/session";
 import fs from "fs";
@@ -76,7 +76,7 @@ export async function GET(req: NextRequest) {
         );
       }
 
-      if (chunkSize > MAX_FILE_SIZE) {
+      if (chunkSize > MAX_FILE_UPLOAD_SIZE.bytes) {
         return NextResponse.json(
           { error: "Chunk size too large" },
           { status: 416, headers: { "Content-Type": "application/json" } }
