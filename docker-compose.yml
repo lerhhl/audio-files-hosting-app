@@ -28,10 +28,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    environment:
-      DATABASE_URL: postgres://postgres:mysecretpassword@postgresdb:5432/mydb
-      NEXTAUTH_URL: http://localhost:3000
-      SESSION_SECRET: AyyGr/xZAFtoSvfefRTR1PhZuzraP5+5hnV/ZoQwa4I=
+    env_file:
+      - .env
     command: >
       sh -c "npm run db:seed && npm run start"
     volumes:
