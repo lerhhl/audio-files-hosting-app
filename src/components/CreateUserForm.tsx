@@ -2,7 +2,7 @@
 
 import { createUserAction } from "@/actions/user";
 import { CreateUserFormState } from "@/components/types";
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useCallback, useEffect, useState } from "react";
 
 export default function CreateUserForm() {
   const [state, action, pending] = useActionState<CreateUserFormState>(
@@ -16,16 +16,16 @@ export default function CreateUserForm() {
     setIsOpen(true);
   };
 
-  const closeDialog = () => {
+  const closeDialog = useCallback(() => {
     state.errors = undefined;
     setIsOpen(false);
-  };
+  }, [state]);
 
   useEffect(() => {
     if (state?.success) {
       closeDialog();
     }
-  }, [state]);
+  }, [state, closeDialog]);
 
   return (
     <>

@@ -1,7 +1,7 @@
 import { updateUserAction } from "@/actions/user";
 import { UpdateUserFormState, User } from "@/components/types";
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useCallback, useEffect, useState } from "react";
 
 type UpdateUserDialogProps = {
   readonly user: Omit<User, "createdAt">;
@@ -18,16 +18,17 @@ export default function UpdateUserDialog({ user }: UpdateUserDialogProps) {
   const openDialog = () => {
     setIsOpen(true);
   };
-  const closeDialog = () => {
+
+  const closeDialog = useCallback(() => {
     state.errors = undefined;
     setIsOpen(false);
-  };
+  }, [state]);
 
   useEffect(() => {
     if (state?.success) {
       closeDialog();
     }
-  }, [state]);
+  }, [state, closeDialog]);
 
   return (
     <>

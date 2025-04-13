@@ -64,7 +64,7 @@ export async function updateUser({
   newUsername,
   newPassword,
 }: UpdateUserInput) {
-  const data: any = {};
+  const data: { password?: string; username?: string } = {};
 
   if (newPassword) {
     data.password = newPassword;
