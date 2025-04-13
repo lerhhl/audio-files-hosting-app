@@ -10,11 +10,19 @@ import { useState } from "react";
 
 export default function CreateAudioFileRecordForm() {
   const [isOpen, setIsOpen] = useState(false);
-  const openDialog = () => setIsOpen(true);
-  const closeDialog = () => setIsOpen(false);
   const [errors, setErrors] =
     useState<UploadVideoFormState["errors"]>(undefined);
   const [pending, setPending] = useState(false);
+
+  const openDialog = () => {
+    setIsOpen(true);
+  };
+
+  const closeDialog = () => {
+    setErrors(undefined);
+    setPending(false);
+    setIsOpen(false);
+  };
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -38,8 +46,6 @@ export default function CreateAudioFileRecordForm() {
       setErrors(response.errors);
       setPending(false);
     } else {
-      setPending(false);
-      setErrors(undefined);
       closeDialog();
     }
   };

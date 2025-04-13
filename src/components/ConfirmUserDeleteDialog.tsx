@@ -20,6 +20,8 @@ export default function ConfirmUserDeleteDialog({
   };
 
   const closeDialog = () => {
+    setDeleteUserError(null);
+    setIsDeleting(false);
     setIsOpen(false);
   };
 

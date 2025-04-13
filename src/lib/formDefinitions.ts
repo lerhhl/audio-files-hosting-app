@@ -17,7 +17,7 @@ const generateLengthErrorMessage = (
   }
 };
 
-const usernameSpec = {
+export const USERNAME_SPEC = {
   min: {
     value: 3,
     message: generateLengthErrorMessage("Name", 3, "min"),
@@ -28,7 +28,7 @@ const usernameSpec = {
   },
 };
 
-const passwordSpec = {
+export const PASSWORD_SPEC = {
   min: {
     value: 3,
     message: generateLengthErrorMessage("Password", 3, "min"),
@@ -39,7 +39,7 @@ const passwordSpec = {
   },
 };
 
-const audioFileSpec = {
+const AUDIO_FILE_SPEC = {
   description: {
     min: {
       value: 3,
@@ -52,29 +52,50 @@ const audioFileSpec = {
   },
 };
 
-export const CreateUserFormSchema = z.object({
+export const createUserFormSchema = z.object({
   username: z
     .string()
-    .min(usernameSpec.min.value, { message: usernameSpec.min.message })
-    .max(usernameSpec.max.value, { message: usernameSpec.max.message })
-    .trim(),
+    .trim()
+    .min(USERNAME_SPEC.min.value, { message: USERNAME_SPEC.min.message })
+    .max(USERNAME_SPEC.max.value, { message: USERNAME_SPEC.max.message }),
   password: z
     .string()
-    .min(passwordSpec.min.value, { message: passwordSpec.min.message })
-    .max(passwordSpec.max.value, { message: passwordSpec.max.message })
-    .trim(),
+    .trim()
+    .min(PASSWORD_SPEC.min.value, { message: PASSWORD_SPEC.min.message })
+    .max(PASSWORD_SPEC.max.value, { message: PASSWORD_SPEC.max.message }),
+});
+
+export const updateUserFormSchema = z.object({
+  username: z
+    .string()
+    .trim()
+    .min(USERNAME_SPEC.min.value, { message: USERNAME_SPEC.min.message })
+    .max(USERNAME_SPEC.max.value, { message: USERNAME_SPEC.max.message }),
+  newPassword: z
+    .string()
+    .trim()
+    .optional()
+    .refine(
+      (value) =>
+        !value ||
+        (value.length >= PASSWORD_SPEC.min.value &&
+          value.length <= PASSWORD_SPEC.max.value),
+      {
+        message: `New password must be between ${PASSWORD_SPEC.min.value} and ${PASSWORD_SPEC.max.value} characters long.`,
+      }
+    ),
 });
 
 export const createAudioFileRecordFormSchema = z.object({
   description: z
     .string()
-    .min(audioFileSpec.description.min.value, {
-      message: audioFileSpec.description.min.message,
+    .trim()
+    .min(AUDIO_FILE_SPEC.description.min.value, {
+      message: AUDIO_FILE_SPEC.description.min.message,
     })
-    .max(audioFileSpec.description.max.value, {
-      message: audioFileSpec.description.max.message,
-    })
-    .trim(),
+    .max(AUDIO_FILE_SPEC.description.max.value, {
+      message: AUDIO_FILE_SPEC.description.max.message,
+    }),
   category: z
     .string()
     .trim()

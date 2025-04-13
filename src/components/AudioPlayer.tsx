@@ -44,7 +44,7 @@ export default function AudioPlayer({ fileId }: AudioPlayerProps) {
   return (
     <>
       <button onClick={handlePlayAudioFile}>
-        <PlayCircleIcon className="size-5 text-gray-400 cursor-pointer" />
+        <PlayCircleIcon className="size-5 text-green-400 cursor-pointer" />
       </button>
 
       {isPlaying && (

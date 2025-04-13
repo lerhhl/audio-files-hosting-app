@@ -6,6 +6,7 @@ import HomeButton from "@/components/HomeButton";
 import LogoutButton from "@/components/LogoutButton";
 import { CommonComponentProps, User } from "@/components/types";
 import { use } from "react";
+import UpdateUserDialog from "./UpdateUserDialog";
 
 interface UsersManagementProps extends Omit<CommonComponentProps, "isAdmin"> {
   readonly isAuth: boolean;
@@ -41,20 +42,23 @@ export default function UsersManagementPage({
           <tbody>
             {usersList.map((user) => (
               <tr key={user.username} className="text-center">
-                <td className="border border-gray-300 px-4 py-2">
+                <td className="border border-gray-300 px-1 py-2">
                   {user.username}
                 </td>
-                <td className="border border-gray-300 px-4 py-2">
+                <td className="border border-gray-300 px-1 py-2">
                   {user.isAdmin ? "Yes" : "No"}
                 </td>
-                <td className="border border-gray-300 px-4 py-2">
+                <td className="border border-gray-300 px-1 py-2">
                   {user.createdAt.toLocaleDateString()}
                 </td>
-                <td className="border border-gray-300 px-4 py-2 ">
-                  <ConfirmUserDeleteDialog
-                    username={user.username}
-                    isAdmin={user.isAdmin}
-                  />
+                <td className="border border-gray-300 px-1 py-2 ">
+                  <div className="flex justify-center space-x-8">
+                    <UpdateUserDialog user={user} />
+                    <ConfirmUserDeleteDialog
+                      username={user.username}
+                      isAdmin={user.isAdmin}
+                    />
+                  </div>
                 </td>
               </tr>
             ))}

@@ -1,6 +1,6 @@
 import { POSTGRES_CONNECTION_STRING } from "@/app/config";
 import { PrismaClient } from "@/generated/prisma/client";
-import { CreateAudioFileInput } from "@/lib/types";
+import { CreateAudioFileInput, UpdateUserInput } from "@/lib/types";
 import "server-only";
 
 if (!POSTGRES_CONNECTION_STRING) {
@@ -18,6 +18,12 @@ export const db = new PrismaClient({
 export async function findUserByUsername(username: string) {
   return await db.user.findFirst({
     where: { username },
+  });
+}
+
+export async function findUserById(id: number) {
+  return await db.user.findUnique({
+    where: { id },
   });
 }
 
@@ -50,6 +56,27 @@ export async function createUser({
 export async function deleteUser(username: string) {
   return await db.user.delete({
     where: { username },
+  });
+}
+
+export async function updateUser({
+  userId,
+  newUsername,
+  newPassword,
+}: UpdateUserInput) {
+  const data: any = {};
+
+  if (newPassword) {
+    data.password = newPassword;
+  }
+
+  if (newUsername) {
+    data.username = newUsername;
+  }
+
+  return await db.user.update({
+    where: { id: userId },
+    data,
   });
 }
 

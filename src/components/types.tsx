@@ -22,6 +22,17 @@ export type CreateUserFormState = {
   success?: boolean;
 };
 
+export type UpdateUserFormState = {
+  errors?: {
+    username?: string[];
+    currentPassword?: string[];
+    newPassword?: string[];
+    server?: string;
+  };
+  message?: string;
+  success?: boolean;
+};
+
 export type AudioFiles = {
   id: number;
   description: string;

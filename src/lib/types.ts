@@ -23,6 +23,12 @@ export type LoginFormState =
     }
   | undefined;
 
+export type UpdateUserInput = {
+  userId: number;
+  newUsername?: string;
+  newPassword?: string;
+};
+
 export type CreateAudioFileInput = {
   description: string;
   category: string;

@@ -1,13 +1,16 @@
-"use client";
-
-import { createUserAction } from "@/actions/user";
-import { CreateUserFormState } from "@/components/types";
+import { updateUserAction } from "@/actions/user";
+import { UpdateUserFormState, User } from "@/components/types";
+import { PencilIcon } from "@heroicons/react/24/solid";
 import { useActionState, useEffect, useState } from "react";
 
-export default function CreateUserForm() {
-  const [state, action, pending] = useActionState<CreateUserFormState>(
+type UpdateUserDialogProps = {
+  readonly user: Omit<User, "createdAt">;
+};
+
+export default function UpdateUserDialog({ user }: UpdateUserDialogProps) {
+  const [state, action, pending] = useActionState<UpdateUserFormState>(
     // @ts-expect-error ignore type error
-    createUserAction,
+    updateUserAction,
     { errors: undefined }
   );
   const [isOpen, setIsOpen] = useState(false);
@@ -15,7 +18,6 @@ export default function CreateUserForm() {
   const openDialog = () => {
     setIsOpen(true);
   };
-
   const closeDialog = () => {
     state.errors = undefined;
     setIsOpen(false);
@@ -33,12 +35,12 @@ export default function CreateUserForm() {
         onClick={openDialog}
         className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
       >
-        Add User
+        <PencilIcon className="size-4 cursor-pointer" />
       </button>
 
       {isOpen && (
         <div
-          className="fixed inset-0 flex justify-center items-center z-50"
+          className="fixed inset-0 flex justify-center items-center z-50 text-left"
           style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
         >
           <div className="relative bg-white opacity-100 rounded-lg p-6 w-full max-w-md z-10">
@@ -50,6 +52,14 @@ export default function CreateUserForm() {
             </button>
             <form className="flex flex-col gap-4" action={action}>
               <div className="mb-4">
+                <input
+                  id="userId"
+                  name="userId"
+                  type="string"
+                  defaultValue={user.id}
+                  hidden
+                />
+
                 <label
                   htmlFor="username"
                   className="block text-sm font-medium text-gray-700"
@@ -60,6 +70,7 @@ export default function CreateUserForm() {
                   id="username"
                   name="username"
                   type="string"
+                  defaultValue={user.username}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                   required
                 />
@@ -72,21 +83,40 @@ export default function CreateUserForm() {
 
               <div className="mb-4">
                 <label
-                  htmlFor="password"
+                  htmlFor="currentPassword"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Password
+                  Current Password
                 </label>
                 <input
-                  id="password"
-                  name="password"
+                  id="currentPassword"
+                  name="currentPassword"
                   type="password"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                  required
                 />
-                {state?.errors?.password && (
+                {state?.errors?.currentPassword && (
                   <p className="text-red-500 text-sm mt-1">
-                    {state.errors.password}
+                    {state.errors.currentPassword}
+                  </p>
+                )}
+              </div>
+
+              <div className="mb-4">
+                <label
+                  htmlFor="newPassword"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  New Password
+                </label>
+                <input
+                  id="newPassword"
+                  name="newPassword"
+                  type="password"
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                />
+                {state?.errors?.newPassword && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {state.errors.newPassword}
                   </p>
                 )}
               </div>
@@ -95,7 +125,7 @@ export default function CreateUserForm() {
                 type="submit"
                 className="bg-blue-500 text-white rounded-lg p-2 hover:bg-blue-600 disabled:opacity-50"
               >
-                {pending ? "Creating User" : "Create User"}
+                {pending ? "Updating user..." : "Update User"}
               </button>
               {state?.errors?.server && (
                 <p className="text-red-500 text-sm">{state?.errors?.server}</p>
