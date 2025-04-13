@@ -14,6 +14,7 @@ import {
   createUserFormSchema,
   updateUserFormSchema,
 } from "@/lib/formDefinitions";
+import { logger } from "@/lib/logger";
 import { UpdateUserInput } from "@/lib/types";
 import { hashPassword } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
@@ -23,7 +24,7 @@ export async function getAllUsersAction() {
     const users = await getAllUsers();
     return users;
   } catch (error) {
-    console.error("Error fetching users:", error);
+    logger.error(error, "Error fetching users:");
     return [];
   }
 }
@@ -33,7 +34,7 @@ export async function createUserAction(
   formData: FormData
 ): Promise<CreateUserFormState> {
   try {
-    console.log("creating user...");
+    logger.info("creating user...");
     // Validate form fields
     const validatedFields = createUserFormSchema.safeParse({
       username: formData.get("username"),
@@ -65,9 +66,7 @@ export async function createUserAction(
 
     const hashedPassword = await hashPassword(password);
 
-    console.log("Inserting user into database:", {
-      username,
-    });
+    logger.info({ username }, "Inserting user into database:");
 
     // 3. Insert the user into the database
     const newUser = await createUser({
@@ -75,7 +74,7 @@ export async function createUserAction(
       hashedPassword,
     });
 
-    console.log("New user created", username);
+    logger.info({ username }, "New user created");
 
     if (!newUser) {
       return {
@@ -91,7 +90,7 @@ export async function createUserAction(
       message: "User created successfully",
     };
   } catch (error) {
-    console.error("Error creating user:", error);
+    logger.error(error, "Error creating user:");
 
     return {
       success: false,
@@ -104,11 +103,11 @@ export async function createUserAction(
 
 export async function deleteUserAction(username: string) {
   try {
-    console.log("Deleting user:", username);
+    logger.info({ username }, "Deleting user:");
 
     await deleteUser(username);
 
-    console.log(`User ${username} deleted`);
+    logger.info({ username }, "Deleted user:");
 
     revalidatePath(USERS_MANAGEMENT_PATH);
 
@@ -117,7 +116,7 @@ export async function deleteUserAction(username: string) {
       message: `User ${username} deleted successfully`,
     };
   } catch (error) {
-    console.error("Error deleting user:", error);
+    logger.error(error, "Error deleting user:");
     return {
       success: false,
       message: `Failed to delete user ${username}`,
@@ -130,10 +129,9 @@ export async function updateUserAction(
   formData: FormData
 ): Promise<UpdateUserFormState> {
   try {
-    console.log("updating user...");
-    console.log("formData", formData);
-
     const userId = parseInt((formData.get("userId") as string) || "");
+
+    logger.info({ userId }, "updating user...");
 
     if (!userId) {
       throw new Error("User ID is required");
@@ -197,9 +195,7 @@ export async function updateUserAction(
 
     const hashedPassword = await hashPassword(newPassword);
 
-    console.log("Updating user into database:", {
-      userId,
-    });
+    logger.info({ userId }, "Updating user into database:");
 
     if (!isNewUsername && !newPassword) {
       throw new Error("Either new username or new password is required");
@@ -214,7 +210,7 @@ export async function updateUserAction(
     // 3. Insert the user into the database
     const newUser = await updateUser(updateUserInput);
 
-    console.log("Updated user:", userId);
+    logger.info({ userId }, "Updated user:");
 
     if (!newUser) {
       return {
@@ -230,7 +226,7 @@ export async function updateUserAction(
       message: "User updated successfully",
     };
   } catch (error) {
-    console.error("Error updating user:", error);
+    logger.error(error, "Error updating user:");
 
     return {
       success: false,

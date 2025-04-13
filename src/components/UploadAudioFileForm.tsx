@@ -6,6 +6,7 @@ import {
   MAX_FILE_UPLOAD_SIZE,
 } from "@/app/constants";
 import { UploadVideoFormState } from "@/components/types";
+import { AUDIO_FILE_SPEC } from "@/lib/formDefinitions";
 import { useState } from "react";
 
 export default function CreateAudioFileRecordForm() {
@@ -77,12 +78,11 @@ export default function CreateAudioFileRecordForm() {
                   htmlFor="description"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Description (max. 100 characters)
+                  {`Description (max. ${AUDIO_FILE_SPEC.description.max.value} characters)`}
                 </label>
                 <textarea
                   id="description"
                   name="description"
-                  maxLength={100}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                   rows={4}
                   required

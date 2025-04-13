@@ -5,6 +5,7 @@ import {
   LOGIN_PATH,
 } from "@/app/constants";
 import { findUserByUsername } from "@/lib/database";
+import { logger } from "@/lib/logger";
 import { createSession, verifySession } from "@/lib/session";
 import { LoginFormState } from "@/lib/types";
 import { hashPassword } from "@/lib/utils";
@@ -19,7 +20,7 @@ export async function login(
     const password = formData.get("password") || "";
 
     if (!username || !password) {
-      console.log("Username or password is empty");
+      logger.info("Username or password is empty");
       return {
         success: false,
         message: INVALID_USERNAME_OR_PASSWORD_ERROR,
@@ -29,7 +30,7 @@ export async function login(
     // Check if the user exists in the database
     const user = await findUserByUsername(username as string);
     if (!user) {
-      console.log("User not found by:", username);
+      logger.info({ username }, "User not found by:");
       return {
         success: false,
         message: INVALID_USERNAME_OR_PASSWORD_ERROR,
@@ -39,14 +40,13 @@ export async function login(
     // Verify the password
     const hashedPassword = await hashPassword(password as string);
     if (user.password !== hashedPassword) {
-      console.log("Password mismatch for user:", username);
+      logger.info({ username }, "Password mismatch for user:");
       return {
         success: false,
         message: INVALID_USERNAME_OR_PASSWORD_ERROR,
       };
     }
 
-    console.log("user", user);
     await createSession({
       username: user.username,
       isAdmin: user.isAdmin ?? false,
@@ -57,7 +57,7 @@ export async function login(
       message: "Login successful",
     };
   } catch (error) {
-    console.error("Error during login:", error);
+    logger.error(error, "Error during login:");
     return {
       success: false,
       message: INVALID_USERNAME_OR_PASSWORD_ERROR,

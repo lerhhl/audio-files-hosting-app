@@ -1,6 +1,6 @@
 import { updateUserAction } from "@/actions/user";
 import { UpdateUserFormState, User } from "@/components/types";
-import { PencilIcon } from "@heroicons/react/24/solid";
+import { PencilSquareIcon } from "@heroicons/react/24/solid";
 import { useActionState, useEffect, useState } from "react";
 
 type UpdateUserDialogProps = {
@@ -31,11 +31,8 @@ export default function UpdateUserDialog({ user }: UpdateUserDialogProps) {
 
   return (
     <>
-      <button
-        onClick={openDialog}
-        className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
-      >
-        <PencilIcon className="size-4 cursor-pointer" />
+      <button onClick={openDialog}>
+        <PencilSquareIcon className="size-5 cursor-pointer text-blue-400 hover:text-blue-500" />
       </button>
 
       {isOpen && (

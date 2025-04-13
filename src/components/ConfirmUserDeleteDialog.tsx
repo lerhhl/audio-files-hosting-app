@@ -45,7 +45,9 @@ export default function ConfirmUserDeleteDialog({
       <button onClick={openDialog} disabled={isAdmin}>
         <TrashIcon
           className={`size-5 ${
-            isAdmin ? "text-gray-400" : "text-red-500 cursor-pointer"
+            isAdmin
+              ? "text-gray-400"
+              : "text-red-400 hover:text-red-500 cursor-pointer"
           }`}
         />
       </button>

@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { SessionPayload, SessionType } from "@/lib/types";
 import { SignJWT, jwtVerify } from "jose";
 
@@ -75,7 +76,7 @@ export async function decrypt(
       isAdmin: payload.isAdmin ?? false,
     };
   } catch (error) {
-    console.error("Session decryption failed:", error);
+    logger.error(error, "Session decryption failed:");
     return invalidSession;
   }
 }

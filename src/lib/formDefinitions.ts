@@ -39,7 +39,7 @@ export const PASSWORD_SPEC = {
   },
 };
 
-const AUDIO_FILE_SPEC = {
+export const AUDIO_FILE_SPEC = {
   description: {
     min: {
       value: 3,

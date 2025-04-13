@@ -11,6 +11,7 @@ import {
   getAllAudioFilesByUsername,
 } from "@/lib/database";
 import { createAudioFileRecordFormSchema } from "@/lib/formDefinitions";
+import { logger } from "@/lib/logger";
 import { verifySession } from "@/lib/session";
 import { CreateAudioFileInput } from "@/lib/types";
 import fs from "fs";
@@ -21,7 +22,7 @@ export async function getAllAudioFilesByUsernameAction() {
   const { username } = await verifySession();
 
   if (!username) {
-    console.error("No username found in session.");
+    logger.error("No username found in session.");
     return [];
   }
 
@@ -29,7 +30,7 @@ export async function getAllAudioFilesByUsernameAction() {
     const audioFiles = await getAllAudioFilesByUsername(username);
     return audioFiles;
   } catch (error) {
-    console.error("Error fetching audio files:", error);
+    logger.error(error, "Error fetching audio files:");
     return [];
   }
 }
@@ -48,7 +49,7 @@ export async function createAudioFileRecordAction(
   }
 
   try {
-    console.log("validating the audio file...");
+    logger.info("Validating the audio file...");
 
     const validatedFields = createAudioFileRecordFormSchema.safeParse({
       description: formData.get("description"),
@@ -82,10 +83,7 @@ export async function createAudioFileRecordAction(
     const filePathToSave = `./${AUDIO_UPLOAD_FOLDER}/${username}/${fileName}`;
     const fileDir = path.dirname(filePathToSave);
 
-    console.log("saving audio file to server:", {
-      filePathToSave,
-      fileSize,
-    });
+    logger.info({ filePathToSave, fileSize }, "Saving audio file to server:");
 
     if (!fs.existsSync(fileDir)) {
       fs.mkdirSync(fileDir, { recursive: true });
@@ -93,10 +91,7 @@ export async function createAudioFileRecordAction(
 
     fs.writeFileSync(filePathToSave, fileBuffer);
 
-    console.log("saved audio file to server:", {
-      filePathToSave,
-      fileSize,
-    });
+    logger.info({ filePathToSave, fileSize }, "Saved audio file to server:");
 
     const createAudioFileInput: CreateAudioFileInput = {
       username,
@@ -106,17 +101,17 @@ export async function createAudioFileRecordAction(
       filePath: filePathToSave,
     };
 
-    console.log("inserting audio file into database:", createAudioFileInput);
+    logger.info(createAudioFileInput, "Inserting audio file into database:");
 
     await createAudioFileRecord(createAudioFileInput);
 
-    console.log("inserted audio file into database", createAudioFileInput);
+    logger.info(createAudioFileInput, "Inserted audio file into database");
 
     revalidatePath(AUDIO_FILES_PATH);
 
-    return { success: true, message: "Audio file uploaded successfully" };
+    return { success: true, message: "Uploaded audio file successfully" };
   } catch (error) {
-    console.error("Error uploading audio file:", error);
+    logger.error(error, "Error uploading audio file:");
     return { success: false, message: "Failed to upload audio file" };
   }
 }

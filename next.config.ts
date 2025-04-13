@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
       bodySizeLimit: `${MAX_FILE_UPLOAD_SIZE.mb}mb`,
     },
   },
+  serverExternalPackages: ["pino", "pino-pretty"],
 };
 
 export default nextConfig;
