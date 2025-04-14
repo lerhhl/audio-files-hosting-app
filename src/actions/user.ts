@@ -7,7 +7,6 @@ import {
   deleteUser,
   findUserById,
   findUserByUsername,
-  getAllUsers,
   updateUser,
 } from "@/lib/database";
 import {
@@ -18,16 +17,6 @@ import { logger } from "@/lib/logger";
 import { UpdateUserInput } from "@/lib/types";
 import { hashPassword } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
-
-export async function getAllUsersAction() {
-  try {
-    const users = await getAllUsers();
-    return users;
-  } catch (error) {
-    logger.error(error, "Error fetching users:");
-    return [];
-  }
-}
 
 export async function createUserAction(
   _state: CreateUserFormState,

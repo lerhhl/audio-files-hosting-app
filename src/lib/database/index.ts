@@ -27,8 +27,11 @@ export async function findUserById(id: number) {
   });
 }
 
-export async function getAllUsers() {
-  return await db.user.findMany({
+export async function getAllUsers(offset = 0, limit = 20) {
+  const users = await db.user.findMany({
+    orderBy: { id: "asc" },
+    skip: offset,
+    take: limit,
     select: {
       id: true,
       username: true,
@@ -36,6 +39,13 @@ export async function getAllUsers() {
       isAdmin: true,
     },
   });
+
+  const totalUsers = await db.user.count({});
+
+  return {
+    items: users,
+    totalCount: totalUsers,
+  };
 }
 
 export async function createUser({

@@ -8,13 +8,13 @@ import UploadAudioFileForm from "@/components/UploadAudioFileForm";
 import { calculateTotalPages, generateHeaders } from "@/components/utils";
 import { useCallback, useEffect, useState } from "react";
 
-export default function AudioFilesPage() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
-  const [audioFiles, setAudioFiles] = useState<AudioFiles[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+export default function AudioFilesList() {
   const itemsPerPage = 10;
+  const [totalPages, setTotalPages] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [error, setError] = useState<string | null>(null);
+  const [audioFiles, setAudioFiles] = useState<AudioFiles[]>([]);
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
@@ -42,12 +42,17 @@ export default function AudioFilesPage() {
         }
       );
       const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error();
+      }
+
       setAudioFiles(data.items ?? []);
       setTotalPages(calculateTotalPages(data.totalCount, itemsPerPage));
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       setAudioFiles([]);
-      setTotalPages(0);
+      setTotalPages(1);
       setError("Failed to fetch audio files. Please try again later.");
       return;
     } finally {

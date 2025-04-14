@@ -18,7 +18,7 @@ export function generateHeaders() {
 
 export function calculateTotalPages(totalCount: number, itemsPerPage: number) {
   if (totalCount === 0) {
-    return 0;
+    return 1;
   }
 
   return Math.ceil(totalCount / itemsPerPage);
