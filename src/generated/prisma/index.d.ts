@@ -2121,10 +2121,12 @@ export namespace Prisma {
 
   export type AudioFileAvgAggregateOutputType = {
     id: number | null
+    createdBy: number | null
   }
 
   export type AudioFileSumAggregateOutputType = {
     id: number | null
+    createdBy: number | null
   }
 
   export type AudioFileMinAggregateOutputType = {
@@ -2133,7 +2135,7 @@ export namespace Prisma {
     description: string | null
     category: string | null
     mimeType: string | null
-    createdBy: string | null
+    createdBy: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2144,7 +2146,7 @@ export namespace Prisma {
     description: string | null
     category: string | null
     mimeType: string | null
-    createdBy: string | null
+    createdBy: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2164,10 +2166,12 @@ export namespace Prisma {
 
   export type AudioFileAvgAggregateInputType = {
     id?: true
+    createdBy?: true
   }
 
   export type AudioFileSumAggregateInputType = {
     id?: true
+    createdBy?: true
   }
 
   export type AudioFileMinAggregateInputType = {
@@ -2296,7 +2300,7 @@ export namespace Prisma {
     description: string
     category: string
     mimeType: string
-    createdBy: string
+    createdBy: number
     createdAt: Date
     updatedAt: Date
     _count: AudioFileCountAggregateOutputType | null
@@ -2389,7 +2393,7 @@ export namespace Prisma {
       description: string
       category: string
       mimeType: string
-      createdBy: string
+      createdBy: number
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["audioFile"]>
@@ -2821,7 +2825,7 @@ export namespace Prisma {
     readonly description: FieldRef<"AudioFile", 'String'>
     readonly category: FieldRef<"AudioFile", 'String'>
     readonly mimeType: FieldRef<"AudioFile", 'String'>
-    readonly createdBy: FieldRef<"AudioFile", 'String'>
+    readonly createdBy: FieldRef<"AudioFile", 'Int'>
     readonly createdAt: FieldRef<"AudioFile", 'DateTime'>
     readonly updatedAt: FieldRef<"AudioFile", 'DateTime'>
   }
@@ -3436,7 +3440,7 @@ export namespace Prisma {
     description?: StringFilter<"AudioFile"> | string
     category?: StringFilter<"AudioFile"> | string
     mimeType?: StringFilter<"AudioFile"> | string
-    createdBy?: StringFilter<"AudioFile"> | string
+    createdBy?: IntFilter<"AudioFile"> | number
     createdAt?: DateTimeFilter<"AudioFile"> | Date | string
     updatedAt?: DateTimeFilter<"AudioFile"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -3463,7 +3467,7 @@ export namespace Prisma {
     description?: StringFilter<"AudioFile"> | string
     category?: StringFilter<"AudioFile"> | string
     mimeType?: StringFilter<"AudioFile"> | string
-    createdBy?: StringFilter<"AudioFile"> | string
+    createdBy?: IntFilter<"AudioFile"> | number
     createdAt?: DateTimeFilter<"AudioFile"> | Date | string
     updatedAt?: DateTimeFilter<"AudioFile"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -3494,7 +3498,7 @@ export namespace Prisma {
     description?: StringWithAggregatesFilter<"AudioFile"> | string
     category?: StringWithAggregatesFilter<"AudioFile"> | string
     mimeType?: StringWithAggregatesFilter<"AudioFile"> | string
-    createdBy?: StringWithAggregatesFilter<"AudioFile"> | string
+    createdBy?: IntWithAggregatesFilter<"AudioFile"> | number
     createdAt?: DateTimeWithAggregatesFilter<"AudioFile"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"AudioFile"> | Date | string
   }
@@ -3579,7 +3583,7 @@ export namespace Prisma {
     description: string
     category: string
     mimeType: string
-    createdBy: string
+    createdBy: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -3600,7 +3604,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
     mimeType?: StringFieldUpdateOperationsInput | string
-    createdBy?: StringFieldUpdateOperationsInput | string
+    createdBy?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -3611,7 +3615,7 @@ export namespace Prisma {
     description: string
     category: string
     mimeType: string
-    createdBy: string
+    createdBy: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -3631,7 +3635,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
     mimeType?: StringFieldUpdateOperationsInput | string
-    createdBy?: StringFieldUpdateOperationsInput | string
+    createdBy?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -3797,6 +3801,7 @@ export namespace Prisma {
 
   export type AudioFileAvgOrderByAggregateInput = {
     id?: SortOrder
+    createdBy?: SortOrder
   }
 
   export type AudioFileMaxOrderByAggregateInput = {
@@ -3823,6 +3828,7 @@ export namespace Prisma {
 
   export type AudioFileSumOrderByAggregateInput = {
     id?: SortOrder
+    createdBy?: SortOrder
   }
 
   export type AudioFileCreateNestedManyWithoutUserInput = {
@@ -4062,7 +4068,7 @@ export namespace Prisma {
     description?: StringFilter<"AudioFile"> | string
     category?: StringFilter<"AudioFile"> | string
     mimeType?: StringFilter<"AudioFile"> | string
-    createdBy?: StringFilter<"AudioFile"> | string
+    createdBy?: IntFilter<"AudioFile"> | number
     createdAt?: DateTimeFilter<"AudioFile"> | Date | string
     updatedAt?: DateTimeFilter<"AudioFile"> | Date | string
   }

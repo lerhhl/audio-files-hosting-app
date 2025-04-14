@@ -5,8 +5,8 @@ import fs from "fs";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
-  const { username, isAuth } = await verifySession();
-  if (!isAuth || !username) {
+  const { userId, isAuth } = await verifySession();
+  if (!isAuth || !userId) {
     return NextResponse.json(
       { error: "Session expired" },
       { status: 401, headers: { "Content-Type": "application/json" } }
@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
 
   const { createdBy, filePath, mimeType: fileType } = audioFile;
 
-  if (createdBy !== username) {
+  if (createdBy !== userId) {
     return NextResponse.json(
       { error: "Unauthorized" },
       { status: 403, headers: { "Content-Type": "application/json" } }

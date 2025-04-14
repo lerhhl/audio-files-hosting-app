@@ -80,9 +80,9 @@ export async function updateUser({
   });
 }
 
-export async function getAllAudioFilesByUsername(username: string) {
+export async function getAllAudioFilesByUsername(userId: number) {
   return await db.audioFile.findMany({
-    where: { createdBy: username },
+    where: { createdBy: userId },
     select: {
       id: true,
       description: true,
@@ -98,7 +98,7 @@ export async function createAudioFileRecord({
   category,
   mimeType,
   filePath,
-  username,
+  userId,
 }: CreateAudioFileInput) {
   return await db.audioFile.create({
     data: {
@@ -106,7 +106,7 @@ export async function createAudioFileRecord({
       category,
       mimeType,
       filePath,
-      createdBy: username,
+      createdBy: userId,
     },
   });
 }

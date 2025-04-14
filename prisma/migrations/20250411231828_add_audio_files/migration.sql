@@ -5,7 +5,7 @@ CREATE TABLE "audio_files" (
     "description" TEXT NOT NULL,
     "category" TEXT NOT NULL,
     "mimeType" TEXT NOT NULL,
-    "createdBy" TEXT NOT NULL,
+    "createdBy" INT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -13,7 +13,7 @@ CREATE TABLE "audio_files" (
 );
 
 -- AddForeignKey
-ALTER TABLE "audio_files" ADD CONSTRAINT "audio_files_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "users"("username") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "audio_files" ADD CONSTRAINT "audio_files_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- CreateIndex
 CREATE INDEX "audio_files_createdBy_index" ON "audio_files"("createdBy");

@@ -26,11 +26,11 @@ model AudioFile {
   description String
   category    String
   mimeType    String
-  createdBy   String
+  createdBy   Int
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  user User @relation(fields: [createdBy], references: [username])
+  user User @relation(fields: [createdBy], references: [id])
 
   @@map("audio_files")
 }

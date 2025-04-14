@@ -20,7 +20,7 @@ describe("hashPassword", () => {
     const password = "testPassword";
     const hashedPassword = await hashPassword(password);
     expect(hashedPassword).toBe(
-      "373436353733373435303631373337333737366637323634"
+      "fd5cb51bafd60f6fdbedde6e62c473da6f247db271633e15919bab78a02ee9eb"
     );
   });
 
@@ -38,6 +38,7 @@ describe("encrypt", () => {
     const invalidKey = new TextEncoder().encode("invalidKey");
     const expirationTimeInDays = 1;
     const payload = {
+      userId: 1,
       username: "testUser",
       isAdmin: false,
       iat: 1234567890,

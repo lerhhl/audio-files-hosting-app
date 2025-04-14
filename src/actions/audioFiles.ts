@@ -19,15 +19,15 @@ import { revalidatePath } from "next/cache";
 import path from "path";
 
 export async function getAllAudioFilesByUsernameAction() {
-  const { username } = await verifySession();
+  const { userId } = await verifySession();
 
-  if (!username) {
-    logger.error("No username found in session.");
+  if (!userId) {
+    logger.error("No userId found in session.");
     return [];
   }
 
   try {
-    const audioFiles = await getAllAudioFilesByUsername(username);
+    const audioFiles = await getAllAudioFilesByUsername(userId);
     return audioFiles;
   } catch (error) {
     logger.error(error, "Error fetching audio files:");
@@ -38,8 +38,8 @@ export async function getAllAudioFilesByUsernameAction() {
 export async function createAudioFileRecordAction(
   formData: FormData
 ): Promise<UploadVideoFormState> {
-  const { isAuth, username } = await verifySession();
-  if (!isAuth || !username) {
+  const { isAuth, userId } = await verifySession();
+  if (!isAuth || !userId) {
     return {
       success: false,
       errors: {
@@ -80,7 +80,7 @@ export async function createAudioFileRecordAction(
     const fileBuffer = Buffer.from(await file.arrayBuffer());
     const { name, size: fileSize, type: fileType } = file;
     const fileName = `${Date.now()}-${name}`;
-    const filePathToSave = `./${AUDIO_UPLOAD_FOLDER}/${username}/${fileName}`;
+    const filePathToSave = `./${AUDIO_UPLOAD_FOLDER}/${userId}/${fileName}`;
     const fileDir = path.dirname(filePathToSave);
 
     logger.info({ filePathToSave, fileSize }, "Saving audio file to server:");
@@ -94,7 +94,7 @@ export async function createAudioFileRecordAction(
     logger.info({ filePathToSave, fileSize }, "Saved audio file to server:");
 
     const createAudioFileInput: CreateAudioFileInput = {
-      username,
+      userId,
       description,
       category,
       mimeType: fileType,

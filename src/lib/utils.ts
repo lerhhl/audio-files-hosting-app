@@ -1,6 +1,7 @@
 import { logger } from "@/lib/logger";
 import { SessionPayload, SessionType } from "@/lib/types";
 import { SignJWT, jwtVerify } from "jose";
+import crypto from "node:crypto";
 
 /**
  *  Hashes the password using SHA-256 algorithm.

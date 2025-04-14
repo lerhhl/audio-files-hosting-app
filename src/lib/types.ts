@@ -36,5 +36,5 @@ export type CreateAudioFileInput = {
   category: string;
   mimeType: string;
   filePath: string;
-  username: string;
+  userId: number;
 };
