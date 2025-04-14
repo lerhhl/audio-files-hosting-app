@@ -6,10 +6,7 @@ import {
   SESSION_EXPIRED_ERROR,
 } from "@/app/constants";
 import { UploadVideoFormState } from "@/components/types";
-import {
-  createAudioFileRecord,
-  getAllAudioFilesByUsername,
-} from "@/lib/database";
+import { createAudioFileRecord } from "@/lib/database";
 import { createAudioFileRecordFormSchema } from "@/lib/formDefinitions";
 import { logger } from "@/lib/logger";
 import { verifySession } from "@/lib/session";
@@ -17,23 +14,6 @@ import { CreateAudioFileInput } from "@/lib/types";
 import fs from "fs";
 import { revalidatePath } from "next/cache";
 import path from "path";
-
-export async function getAllAudioFilesByUsernameAction() {
-  const { userId } = await verifySession();
-
-  if (!userId) {
-    logger.error("No userId found in session.");
-    return [];
-  }
-
-  try {
-    const audioFiles = await getAllAudioFilesByUsername(userId);
-    return audioFiles;
-  } catch (error) {
-    logger.error(error, "Error fetching audio files:");
-    return [];
-  }
-}
 
 export async function createAudioFileRecordAction(
   formData: FormData

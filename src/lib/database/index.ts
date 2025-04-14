@@ -80,9 +80,16 @@ export async function updateUser({
   });
 }
 
-export async function getAllAudioFilesByUsername(userId: number) {
-  return await db.audioFile.findMany({
+export async function getAllAudioFilesByUserid(
+  userId: number,
+  offset = 0,
+  limit = 20
+) {
+  const audioFiles = await db.audioFile.findMany({
     where: { createdBy: userId },
+    orderBy: { id: "asc" },
+    skip: offset,
+    take: limit,
     select: {
       id: true,
       description: true,
@@ -91,6 +98,15 @@ export async function getAllAudioFilesByUsername(userId: number) {
       createdAt: true,
     },
   });
+
+  const totalAudioFiles = await db.audioFile.count({
+    where: { createdBy: userId },
+  });
+
+  return {
+    items: audioFiles,
+    totalCount: totalAudioFiles,
+  };
 }
 
 export async function createAudioFileRecord({

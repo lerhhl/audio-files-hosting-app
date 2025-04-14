@@ -9,7 +9,13 @@ import { UploadVideoFormState } from "@/components/types";
 import { AUDIO_FILE_SPEC } from "@/lib/formDefinitions";
 import { useState } from "react";
 
-export default function CreateAudioFileRecordForm() {
+type CreateAudioFileRecordFormProps = {
+  readonly onSuccess: () => void;
+};
+
+export default function CreateAudioFileRecordForm({
+  onSuccess,
+}: CreateAudioFileRecordFormProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [errors, setErrors] =
     useState<UploadVideoFormState["errors"]>(undefined);
@@ -48,6 +54,7 @@ export default function CreateAudioFileRecordForm() {
       setPending(false);
     } else {
       closeDialog();
+      onSuccess();
     }
   };
 
