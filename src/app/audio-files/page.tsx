@@ -1,18 +1,22 @@
 import { getAllAudioFilesByUsernameAction } from "@/actions/audioFiles";
 import { redirectToLoginIfSessionNotFound } from "@/actions/auth";
-import AudioFilesPage from "@/components/AudioFilesPage";
+import AudioFilesList from "@/components/AudioFilesList";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import TopNavigationBarProps from "@/components/TopNavigationBar";
 import { verifySession } from "@/lib/session";
 import { Suspense } from "react";
 
 export default async function AudioFilesWrapper() {
   await redirectToLoginIfSessionNotFound();
-  const { isAuth } = await verifySession();
+  const session = await verifySession();
   const audioFiles = getAllAudioFilesByUsernameAction();
 
   return (
-    <Suspense fallback={<LoadingSpinner />}>
-      <AudioFilesPage isAuth={isAuth} audioFiles={audioFiles} />;
-    </Suspense>
+    <>
+      <TopNavigationBarProps session={session} />
+      <Suspense fallback={<LoadingSpinner />}>
+        <AudioFilesList audioFiles={audioFiles} />;
+      </Suspense>
+    </>
   );
 }

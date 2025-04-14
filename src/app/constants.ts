@@ -1,6 +1,6 @@
 export const LOGIN_PATH = "/login";
-export const DEFAULT_HOME_PATH = "/home";
 export const AUDIO_FILES_PATH = "/audio-files";
+export const DEFAULT_HOME_PATH = AUDIO_FILES_PATH;
 export const USERS_MANAGEMENT_PATH = "/users-management";
 
 // The session expiration time is set to 1 day

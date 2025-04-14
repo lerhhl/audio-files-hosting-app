@@ -2,27 +2,19 @@
 
 import ConfirmUserDeleteDialog from "@/components/ConfirmUserDeleteDialog";
 import CreateUserForm from "@/components/CreateUserForm";
-import HomeButton from "@/components/HomeButton";
-import LogoutButton from "@/components/LogoutButton";
-import { CommonComponentProps, User } from "@/components/types";
+import { User } from "@/components/types";
 import { use } from "react";
 import UpdateUserDialog from "./UpdateUserDialog";
 
-interface UsersManagementProps extends Omit<CommonComponentProps, "isAdmin"> {
-  readonly isAuth: boolean;
+interface UsersManagementProps {
   readonly users: Promise<User[]>;
 }
 
-export default function UsersManagementPage({
-  isAuth,
-  users,
-}: UsersManagementProps) {
+export default function UsersManagementPage({ users }: UsersManagementProps) {
   const usersList = use(users);
 
   return (
     <div className="flex flex-col items-center justify-start min-h-screen p-8 sm:p-20 bg-gray-100">
-      <HomeButton />
-      {isAuth && <LogoutButton />}
       <h1 className="text-2xl font-bold mb-8 text-center text-gray-800">
         Users Management Page
       </h1>

@@ -1,27 +1,19 @@
 "use client";
 
 import AudioPlayer from "@/components/AudioPlayer";
-import HomeButton from "@/components/HomeButton";
-import LogoutButton from "@/components/LogoutButton";
-import { AudioFiles, CommonComponentProps } from "@/components/types";
+import { AudioFiles } from "@/components/types";
 import UploadAudioFileForm from "@/components/UploadAudioFileForm";
 import { use } from "react";
 
-interface AudioFilesProps extends Omit<CommonComponentProps, "isAdmin"> {
-  readonly isAuth: boolean;
+interface AudioFilesProps {
   readonly audioFiles: Promise<AudioFiles[]>;
 }
 
-export default function AudioFilesPage({
-  isAuth,
-  audioFiles,
-}: AudioFilesProps) {
+export default function AudioFilesPage({ audioFiles }: AudioFilesProps) {
   const audioFilesList = use(audioFiles);
 
   return (
-    <div className="flex flex-col items-center justify-start min-h-screen p-8 sm:p-20 bg-gray-100">
-      <HomeButton />
-      {isAuth && <LogoutButton />}
+    <div className="flex flex-col items-center justify-start bg-gray-100 min-h-screen p-4">
       <h1 className="text-2xl font-bold mb-8 text-center text-gray-800">
         Audio Files List
       </h1>
