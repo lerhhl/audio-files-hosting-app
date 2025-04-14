@@ -101,7 +101,7 @@ export async function deleteUserAction(userId: number) {
     revalidatePath(USERS_MANAGEMENT_PATH);
 
     return {
-      success: false,
+      success: true,
       message: `User ${userId} deleted successfully`,
     };
   } catch (error) {

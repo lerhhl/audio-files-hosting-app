@@ -80,7 +80,7 @@ export default function UsersManagementPage() {
       {!isLoading && (
         <div className="w-full max-w-4xl">
           <div className="flex justify-end mb-1">
-            <CreateUserForm />
+            <CreateUserForm onSuccess={fetchUsers} />
           </div>
           <table className="table-auto w-full border-collapse border border-gray-300">
             <thead>
@@ -122,11 +122,13 @@ export default function UsersManagementPage() {
                             username: user.username,
                           }}
                           iconButton={true}
+                          onSuccess={fetchUsers}
                         />
                         <ConfirmUserDeleteDialog
                           userId={user.id}
                           username={user.username}
                           isAdmin={user.isAdmin}
+                          onSuccess={fetchUsers}
                         />
                       </div>
                     </td>

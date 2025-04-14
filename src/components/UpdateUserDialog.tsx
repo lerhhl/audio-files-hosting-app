@@ -9,11 +9,13 @@ export type UpdateUserDialogProps = {
     readonly id?: number;
     readonly username?: string;
   };
+  readonly onSuccess?: () => void;
 };
 
 export default function UpdateUserDialog({
   user,
   iconButton = true,
+  onSuccess,
 }: UpdateUserDialogProps) {
   const [state, action, pending] = useActionState<UpdateUserFormState>(
     // @ts-expect-error ignore type error
@@ -34,8 +36,11 @@ export default function UpdateUserDialog({
   useEffect(() => {
     if (state?.success) {
       closeDialog();
+      if (onSuccess) {
+        onSuccess();
+      }
     }
-  }, [state, closeDialog]);
+  }, [state, closeDialog, onSuccess]);
 
   return (
     <>

@@ -4,7 +4,11 @@ import { createUserAction } from "@/actions/user";
 import { CreateUserFormState } from "@/components/types";
 import { useActionState, useCallback, useEffect, useState } from "react";
 
-export default function CreateUserForm() {
+type CreateUserFormProps = {
+  readonly onSuccess: () => void;
+};
+
+export default function CreateUserForm({ onSuccess }: CreateUserFormProps) {
   const [state, action, pending] = useActionState<CreateUserFormState>(
     // @ts-expect-error ignore type error
     createUserAction,
@@ -24,8 +28,9 @@ export default function CreateUserForm() {
   useEffect(() => {
     if (state?.success) {
       closeDialog();
+      onSuccess();
     }
-  }, [state, closeDialog]);
+  }, [state, closeDialog, onSuccess]);
 
   return (
     <>

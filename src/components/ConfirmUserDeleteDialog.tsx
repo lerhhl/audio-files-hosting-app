@@ -6,12 +6,14 @@ type ConfirmUserDeleteDialogProps = {
   readonly userId: number;
   readonly username: string;
   readonly isAdmin: boolean;
+  readonly onSuccess: () => void;
 };
 
 export default function ConfirmUserDeleteDialog({
   userId,
   username,
   isAdmin,
+  onSuccess,
 }: ConfirmUserDeleteDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -34,11 +36,11 @@ export default function ConfirmUserDeleteDialog({
 
       if (success) {
         closeDialog();
+        onSuccess();
       } else {
         setDeleteUserError(message);
+        setIsDeleting(false);
       }
-
-      setIsDeleting(false);
     }
   };
 
@@ -53,6 +55,7 @@ export default function ConfirmUserDeleteDialog({
           }`}
         />
       </button>
+
       {isOpen && (
         <div
           className="fixed inset-0 flex items-center justify-center bg-opacity-50 z-100"

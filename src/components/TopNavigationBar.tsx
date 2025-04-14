@@ -74,16 +74,19 @@ export default function TopNavigationBar({ session }: TopNavigationBarProps) {
             </Link>
           )}
           {session.isAdmin && (
-            <Link
-              href={USERS_MANAGEMENT_PATH}
-              className={`font-bold ${
-                pathname === USERS_MANAGEMENT_PATH
-                  ? "text-blue-500 hover:text-blue-900"
-                  : "text-gray-500 hover:text-gray-900"
-              }`}
-            >
-              Users Management
-            </Link>
+            <>
+              <p>|</p>
+              <Link
+                href={USERS_MANAGEMENT_PATH}
+                className={`font-bold ${
+                  pathname === USERS_MANAGEMENT_PATH
+                    ? "text-blue-500 hover:text-blue-900"
+                    : "text-gray-500 hover:text-gray-900"
+                }`}
+              >
+                Users Management
+              </Link>
+            </>
           )}
         </div>
         <div className="relative" ref={dialogRef}>
@@ -95,7 +98,11 @@ export default function TopNavigationBar({ session }: TopNavigationBarProps) {
           </button>
           {isDropdownOpen && (
             <div className="absolute right-0 mt-2 w-35 bg-white border border-gray-200 rounded-md shadow-lg">
-              <UpdateUserDialog user={user} iconButton={false} />
+              <UpdateUserDialog
+                user={user}
+                iconButton={false}
+                onSuccess={() => {}}
+              />
               <button
                 onClick={handleLogout}
                 className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer"
