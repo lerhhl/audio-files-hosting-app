@@ -5,33 +5,26 @@ import { verifySession } from "@/lib/session";
 import fs from "fs";
 import { NextRequest, NextResponse } from "next/server";
 
+type validationSuccess = {
+  filePath: string;
+  fileType: string;
+};
+
+type validationError = {
+  error: string;
+  status: number;
+};
+
 export async function GET(req: NextRequest) {
-  const { userId, isAuth } = await verifySession();
+  const validationResult = await validation(req);
 
-  if (!isAuth || !userId) {
-    return NextResponse.json({ error: "Session expired" }, { status: 401 });
+  const { error, status } = validationResult as validationError;
+
+  if (error) {
+    return NextResponse.json({ error }, { status });
   }
 
-  const fileId = req.nextUrl.pathname.split("/").pop();
-
-  if (!fileId || !parseInt(fileId)) {
-    return NextResponse.json({ error: "Invalid File ID" }, { status: 400 });
-  }
-
-  const audioFile = await getAudioFileById(parseInt(fileId));
-
-  if (!audioFile) {
-    return NextResponse.json(
-      { error: "Audio file not found" },
-      { status: 404 }
-    );
-  }
-
-  const { createdBy, filePath, mimeType: fileType } = audioFile;
-
-  if (createdBy !== userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
-  }
+  const { filePath, fileType } = validationResult as validationSuccess;
 
   // Get the file from local storage with audioFile.filePath
   try {
@@ -96,4 +89,37 @@ export async function GET(req: NextRequest) {
     logger.error(error, "Error reading file:");
     return NextResponse.json({ error: "File not found" }, { status: 404 });
   }
+}
+
+async function validation(
+  req: NextRequest
+): Promise<validationSuccess | validationError> {
+  const { userId, isAuth } = await verifySession();
+
+  if (!isAuth || !userId) {
+    return { error: "Session expired", status: 401 };
+  }
+
+  const fileId = req.nextUrl.pathname.split("/").pop();
+
+  if (!fileId || !parseInt(fileId)) {
+    return { error: "Invalid File ID", status: 400 };
+  }
+
+  const audioFile = await getAudioFileById(parseInt(fileId));
+
+  if (!audioFile) {
+    return { error: "Audio file not found", status: 404 };
+  }
+
+  const { createdBy, filePath, mimeType: fileType } = audioFile;
+
+  if (createdBy !== userId) {
+    return { error: "Unauthorized", status: 403 };
+  }
+
+  return {
+    filePath,
+    fileType,
+  };
 }
