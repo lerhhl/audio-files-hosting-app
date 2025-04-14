@@ -9,6 +9,7 @@ To run this application, ensure you have the following software and configuratio
   Ensure Docker Desktop is installed on your system.
 * **Environment Configuration:**
   Create a `.env` file in the project root and populate it with the necessary environment variables based on the `.env.examples` file.
+  The PostgreSQL host is `postgresdb`.
 
 ### Running the Application
 1. **Build and Start Containers:**
@@ -26,7 +27,7 @@ To run this application, ensure you have the following software and configuratio
 * **PostgreSQL:**
   A local PostgreSQL database instance must be set up and running.
 * **Environment Configuration:**
-  Create a `.env` file in the root directory of the project and populate it with the necessary environment variables based on the `.env.examples` file.
+  Create a `.env` file in the root directory of the project and populate it with the necessary environment variables based on the `.env.examples` file. The PostgreSQL host is `localhost`.
 * **Database Connection String:**
   Update the `DATABASE_URL` variable within your `.env` file to reflect the connection details of your local PostgreSQL database. For example: `postgresql://postgres:mysecretpassword@localhost:5432/mydb?schema=public`. Adjust the username, password, host, port, and database name as required.
 
