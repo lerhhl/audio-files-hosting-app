@@ -1,13 +1,20 @@
 import { updateUserAction } from "@/actions/user";
-import { UpdateUserFormState, User } from "@/components/types";
+import { UpdateUserFormState } from "@/components/types";
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
 import { useActionState, useCallback, useEffect, useState } from "react";
 
-type UpdateUserDialogProps = {
-  readonly user: Omit<User, "createdAt">;
+export type UpdateUserDialogProps = {
+  readonly iconButton?: boolean;
+  readonly user: {
+    readonly id?: number;
+    readonly username?: string;
+  };
 };
 
-export default function UpdateUserDialog({ user }: UpdateUserDialogProps) {
+export default function UpdateUserDialog({
+  user,
+  iconButton = true,
+}: UpdateUserDialogProps) {
   const [state, action, pending] = useActionState<UpdateUserFormState>(
     // @ts-expect-error ignore type error
     updateUserAction,
@@ -32,9 +39,18 @@ export default function UpdateUserDialog({ user }: UpdateUserDialogProps) {
 
   return (
     <>
-      <button onClick={openDialog}>
-        <PencilSquareIcon className="size-5 cursor-pointer text-blue-400 hover:text-blue-500" />
-      </button>
+      {iconButton ? (
+        <button onClick={openDialog}>
+          <PencilSquareIcon className="size-5 cursor-pointer text-blue-400 hover:text-blue-500" />
+        </button>
+      ) : (
+        <button
+          onClick={openDialog}
+          className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer"
+        >
+          Update User
+        </button>
+      )}
 
       {isOpen && (
         <div
@@ -48,6 +64,7 @@ export default function UpdateUserDialog({ user }: UpdateUserDialogProps) {
             >
               &times;
             </button>
+
             <form className="flex flex-col gap-4" action={action}>
               <div className="mb-4">
                 <input

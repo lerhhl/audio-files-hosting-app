@@ -10,7 +10,6 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (state?.success) {
-      // Redirect to the home page on successful login
       redirect(DEFAULT_HOME_PATH);
     }
   }, [state]);

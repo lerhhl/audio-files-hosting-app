@@ -74,14 +74,14 @@ export async function createUserAction(
       hashedPassword,
     });
 
-    logger.info({ username }, "New user created");
-
     if (!newUser) {
       return {
         success: false,
         message: "Failed to create user",
       };
     }
+
+    logger.info({ username, userId: newUser.id }, "New user created");
 
     revalidatePath(USERS_MANAGEMENT_PATH);
 
@@ -101,25 +101,25 @@ export async function createUserAction(
   }
 }
 
-export async function deleteUserAction(username: string) {
+export async function deleteUserAction(userId: number) {
   try {
-    logger.info({ username }, "Deleting user:");
+    logger.info({ userId }, "Deleting user:");
 
-    await deleteUser(username);
+    await deleteUser(userId);
 
-    logger.info({ username }, "Deleted user:");
+    logger.info({ userId }, "Deleted user:");
 
     revalidatePath(USERS_MANAGEMENT_PATH);
 
     return {
       success: false,
-      message: `User ${username} deleted successfully`,
+      message: `User ${userId} deleted successfully`,
     };
   } catch (error) {
     logger.error(error, "Error deleting user:");
     return {
       success: false,
-      message: `Failed to delete user ${username}`,
+      message: `Failed to delete user ${userId}`,
     };
   }
 }
@@ -131,13 +131,10 @@ export async function updateUserAction(
   try {
     const userId = parseInt((formData.get("userId") as string) || "");
 
-    logger.info({ userId }, "updating user...");
-
     if (!userId) {
       throw new Error("User ID is required");
     }
 
-    // Check if the user already exists
     const existingUser = await findUserById(userId);
     if (!existingUser) {
       return {
@@ -148,12 +145,11 @@ export async function updateUserAction(
       };
     }
 
-    // if current username != username provided
-    // check if the new username already exists
+    // If current username != username provided, check if the new username already exists
     const currentUsername = existingUser.username;
     const username = formData.get("username") as string;
-    const isNewUsername = currentUsername !== username;
-    if (isNewUsername) {
+    const hasNewUsername = currentUsername !== username;
+    if (hasNewUsername) {
       const userWithSameUsername = await findUserByUsername(username);
       if (userWithSameUsername) {
         return {
@@ -167,15 +163,30 @@ export async function updateUserAction(
 
     // If new password is provided, check whether old password is correct
     const currentPassword = formData.get("currentPassword") as string;
-    const hashedCurrentPassword = await hashPassword(currentPassword);
     const newPassword = formData.get("newPassword") as string;
-    if (newPassword && existingUser.password !== hashedCurrentPassword) {
-      return {
-        success: false,
-        errors: {
-          currentPassword: ["Current password is incorrect"],
-        },
-      };
+    let hasNewPassword = false;
+    if (newPassword) {
+      if (!currentPassword) {
+        return {
+          success: false,
+          errors: {
+            currentPassword: ["Current password is required"],
+          },
+        };
+      }
+
+      // Check whether old password is correct
+      const hashedCurrentPassword = await hashPassword(currentPassword);
+      if (existingUser.password !== hashedCurrentPassword) {
+        return {
+          success: false,
+          errors: {
+            currentPassword: ["Current password is incorrect"],
+          },
+        };
+      }
+
+      hasNewPassword = true;
     }
 
     // Validate form fields
@@ -184,7 +195,7 @@ export async function updateUserAction(
       newPassword,
     });
 
-    // If any form fields are invalid, return early
+    // If any form fields are invalid, return
     if (!validatedFields.success) {
       const errors = validatedFields.error.flatten().fieldErrors;
       return {
@@ -193,21 +204,22 @@ export async function updateUserAction(
       };
     }
 
-    const hashedPassword = await hashPassword(newPassword);
-
-    logger.info({ userId }, "Updating user into database:");
-
-    if (!isNewUsername && !newPassword) {
+    if (!hasNewUsername && !hasNewPassword) {
       throw new Error("Either new username or new password is required");
     }
 
+    logger.info({ userId }, "Updating user into database:");
+
+    const hashedPassword = hasNewPassword
+      ? await hashPassword(newPassword)
+      : undefined;
+
     const updateUserInput: UpdateUserInput = {
       userId,
-      newUsername: isNewUsername ? username : undefined,
-      newPassword: newPassword ? hashedPassword : undefined,
+      newUsername: hasNewUsername ? username : undefined,
+      newPassword: hasNewPassword ? hashedPassword : undefined,
     };
 
-    // 3. Insert the user into the database
     const newUser = await updateUser(updateUserInput);
 
     logger.info({ userId }, "Updated user:");

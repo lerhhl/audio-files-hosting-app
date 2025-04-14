@@ -3,18 +3,15 @@ import { getAllUsersAction } from "@/actions/user";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import TopNavigationBarProps from "@/components/TopNavigationBar";
 import UsersManagementPage from "@/components/UsersManagementPage";
-import { verifySession } from "@/lib/session";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { DEFAULT_HOME_PATH } from "../constants";
 
 export default async function UsersManagementPageWrapper() {
-  await redirectToLoginIfSessionNotFound();
-  const session = await verifySession();
+  const session = await redirectToLoginIfSessionNotFound();
   const users = getAllUsersAction();
-  const isAdmin = session.isAdmin;
 
-  if (!isAdmin) {
+  if (!session.isAdmin) {
     redirect(DEFAULT_HOME_PATH);
   }
 

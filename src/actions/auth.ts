@@ -7,7 +7,7 @@ import {
 import { findUserByUsername } from "@/lib/database";
 import { logger } from "@/lib/logger";
 import { createSession, verifySession } from "@/lib/session";
-import { LoginFormState } from "@/lib/types";
+import { LoginFormState, SessionType } from "@/lib/types";
 import { hashPassword } from "@/lib/utils";
 import { redirect } from "next/navigation";
 
@@ -48,6 +48,7 @@ export async function login(
     }
 
     await createSession({
+      userId: user.id,
       username: user.username,
       isAdmin: user.isAdmin ?? false,
     });
@@ -65,7 +66,9 @@ export async function login(
   }
 }
 
-export async function redirectToLoginIfSessionNotFound() {
-  const { isAuth } = await verifySession();
-  if (!isAuth) redirect(LOGIN_PATH);
+export async function redirectToLoginIfSessionNotFound(): Promise<SessionType> {
+  const session = await verifySession();
+  if (!session.isAuth) redirect(LOGIN_PATH);
+
+  return session;
 }

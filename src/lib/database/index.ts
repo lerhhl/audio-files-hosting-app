@@ -53,9 +53,9 @@ export async function createUser({
   });
 }
 
-export async function deleteUser(username: string) {
+export async function deleteUser(userId: number) {
   return await db.user.delete({
-    where: { username },
+    where: { id: userId },
   });
 }
 

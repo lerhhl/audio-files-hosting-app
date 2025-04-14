@@ -45,8 +45,15 @@ export default function UsersManagementPage({ users }: UsersManagementProps) {
                 </td>
                 <td className="border border-gray-300 px-1 py-2 ">
                   <div className="flex justify-center space-x-8">
-                    <UpdateUserDialog user={user} />
+                    <UpdateUserDialog
+                      user={{
+                        id: user.id,
+                        username: user.username,
+                      }}
+                      iconButton={true}
+                    />
                     <ConfirmUserDeleteDialog
+                      userId={user.id}
                       username={user.username}
                       isAdmin={user.isAdmin}
                     />

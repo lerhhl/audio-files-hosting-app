@@ -3,11 +3,13 @@ import { TrashIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 
 type ConfirmUserDeleteDialogProps = {
+  readonly userId: number;
   readonly username: string;
   readonly isAdmin: boolean;
 };
 
 export default function ConfirmUserDeleteDialog({
+  userId,
   username,
   isAdmin,
 }: ConfirmUserDeleteDialogProps) {
@@ -26,9 +28,9 @@ export default function ConfirmUserDeleteDialog({
   };
 
   const confirmDeleteUser = async () => {
-    if (username) {
+    if (userId) {
       setIsDeleting(true);
-      const { success, message } = await deleteUserAction(username);
+      const { success, message } = await deleteUserAction(userId);
 
       if (success) {
         closeDialog();

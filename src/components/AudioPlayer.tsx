@@ -1,8 +1,9 @@
 "use client";
 
 import { AUDIO_FILES_PATH } from "@/app/constants";
+import { useOutsideClickHandler } from "@/app/hooks/useOutsideClickHandler";
 import { PlayCircleIcon } from "@heroicons/react/24/solid";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 type AudioPlayerProps = {
   readonly fileId: number;
@@ -21,25 +22,7 @@ export default function AudioPlayer({ fileId }: AudioPlayerProps) {
     setIsPlaying(false);
   };
 
-  // Close the audio player when clicking outside of it
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dialogRef.current &&
-        !dialogRef.current.contains(event.target as Node)
-      ) {
-        setIsPlaying(false);
-      }
-    };
-
-    if (isPlaying) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isPlaying]);
+  useOutsideClickHandler(dialogRef, setIsPlaying, isPlaying);
 
   return (
     <>
