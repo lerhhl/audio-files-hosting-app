@@ -24,17 +24,30 @@
    * To change this storage location, modify both the `AUDIO_UPLOAD_FOLDER` constant in the `./src/app/constants.ts/` file and the volume mount configuration within the `./docker-compose.yml` file.
 
 ## System Architecture
-```mermaid
-   graph TD
-      User[User] -->|Uploads/Downloads| WebServer[Web Server]
-      WebServer -->|Handles Requests| AppServer[Application Server]
-      AppServer -->|Stores/Retrieves Data| Database[PostgreSQL Database]
-      AppServer -->|Stores Audio Files| Storage[Audio File Storage]
-      Admin[Administrator] -->|Manages Users| AppServer
-```
 
-## API Definition
-Refer to the OpenAPI Spec
+![System Architecture Diagram](doc/system_architecture.png)
+
+The system architecture diagram provides a visual representation of the application's components and their interactions. It is located in the `doc/system_architecture.png`.
+
+## API Documentation
+
+The API definitions for this application are available in the `/doc/swagger.json` file.
+
+### Viewing the API Documentation
+
+#### Using Visual Studio Code
+1. Install the `OpenAPI (Swagger) Editor` extension.
+2. Open the `/doc/swagger.json` file in the editor.
+3. Click the **Show Preview** icon at the top of the editor or press `SHIFT + OPTION + P` to view the documentation.
+
+#### Using a Web Browser
+1. Start the application.
+2. Navigate to [http://localhost:3000/api-doc](http://localhost:3000/api-doc) in your browser to access the API documentation.
+
+#### Using the [Online Swagger Editor](https://editor.swagger.io/)
+1. Open the `/doc/swagger.json` file.
+2. Copy its content.
+3. Paste the content into the [online Swagger editor](https://editor.swagger.io/) to view the API documentation.
 
 ## 
 To run this application, ensure you have the following software and configurations in place, depending on your chosen execution method:
@@ -98,7 +111,7 @@ This command allows you to reset the application's database to its initial state
 ```bash
 npm run migrate:reset
 ```
-### Generating OpenAPI Documentation
+### Generating Swagger Documentation
 To generate the OpenAPI documentation for the application, execute the following command:
 
 ```bash
