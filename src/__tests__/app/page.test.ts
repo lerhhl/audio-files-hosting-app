@@ -1,9 +1,9 @@
-import { redirectToLoginIfSessionNotFound } from "@/actions/auth";
 import { DEFAULT_HOME_PATH, LOGIN_PATH } from "@/app/constants";
 import Root from "@/app/page";
+import { redirectToLoginIfSessionNotFound } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
-vi.mock("@/actions/auth", () => ({
+vi.mock("@/lib/auth", () => ({
   redirectToLoginIfSessionNotFound: vi.fn(),
 }));
 

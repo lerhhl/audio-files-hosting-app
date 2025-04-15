@@ -29,7 +29,7 @@ export default function UpdateUserDialog({
   };
 
   const closeDialog = useCallback(() => {
-    state.errors = undefined;
+    state.error = undefined;
     setIsOpen(false);
   }, [state]);
 
@@ -94,9 +94,9 @@ export default function UpdateUserDialog({
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                   required
                 />
-                {state?.errors?.username && (
+                {state?.error?.username && (
                   <p className="text-red-500 text-sm mt-1">
-                    {state.errors.username}
+                    {state.error.username}
                   </p>
                 )}
               </div>
@@ -114,9 +114,9 @@ export default function UpdateUserDialog({
                   type="password"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 />
-                {state?.errors?.currentPassword && (
+                {state?.error?.currentPassword && (
                   <p className="text-red-500 text-sm mt-1">
-                    {state.errors.currentPassword}
+                    {state.error.currentPassword}
                   </p>
                 )}
               </div>
@@ -134,9 +134,9 @@ export default function UpdateUserDialog({
                   type="password"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 />
-                {state?.errors?.newPassword && (
+                {state?.error?.newPassword && (
                   <p className="text-red-500 text-sm mt-1">
-                    {state.errors.newPassword}
+                    {state.error.newPassword}
                   </p>
                 )}
               </div>
@@ -147,8 +147,8 @@ export default function UpdateUserDialog({
               >
                 {pending ? "Updating user..." : "Update User"}
               </button>
-              {state?.errors?.server && (
-                <p className="text-red-500 text-sm">{state?.errors?.server}</p>
+              {state?.error?.server && (
+                <p className="text-red-500 text-sm">{state?.error?.server}</p>
               )}
             </form>
           </div>

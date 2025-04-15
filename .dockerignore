@@ -7,3 +7,4 @@ docker-compose.yml
 .gitignore
 .next/cache
 /**/*.test.*
+/audio_uploads/

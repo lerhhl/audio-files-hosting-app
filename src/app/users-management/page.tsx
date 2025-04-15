@@ -1,7 +1,7 @@
-import { redirectToLoginIfSessionNotFound } from "@/actions/auth";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import TopNavigationBarProps from "@/components/TopNavigationBar";
 import UsersManagementPage from "@/components/UsersManagementPage";
+import { redirectToLoginIfSessionNotFound } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { DEFAULT_HOME_PATH } from "../constants";

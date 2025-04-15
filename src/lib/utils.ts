@@ -1,3 +1,5 @@
+"use server";
+
 import { logger } from "@/lib/logger";
 import { SessionPayload, SessionType } from "@/lib/types";
 import { SignJWT, jwtVerify } from "jose";

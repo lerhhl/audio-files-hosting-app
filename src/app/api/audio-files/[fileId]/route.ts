@@ -15,6 +15,118 @@ type validationError = {
   status: number;
 };
 
+/**
+ * @swagger
+ * tags:
+ *   - Audio Files
+ * /api/audio-files/{fileId}:
+ *   get:
+ *     summary: Get an audio file by ID
+ *     description: Retrieve an audio file by its ID. Supports range requests for partial file downloads.
+ *     parameters:
+ *       - name: fileId
+ *         in: path
+ *         required: true
+ *         description: The ID of the audio file to retrieve.
+ *         schema:
+ *           type: integer
+ *           example: 123
+ *       - name: range
+ *         in: header
+ *         required: false
+ *         description: The range of bytes to retrieve (for partial downloads).
+ *         schema:
+ *           type: string
+ *           example: bytes=0-1023
+ *     responses:
+ *       200:
+ *         description: Returns the full audio file.
+ *         headers:
+ *           Content-Length:
+ *             description: The size of the file in bytes.
+ *             schema:
+ *               type: integer
+ *           Content-Type:
+ *             description: The MIME type of the file.
+ *             schema:
+ *               type: string
+ *         content:
+ *           application/octet-stream:
+ *             schema:
+ *               type: string
+ *               format: binary
+ *       206:
+ *         description: Returns a partial audio file (range request).
+ *         headers:
+ *           Content-Range:
+ *             description: The range of bytes returned.
+ *             schema:
+ *               type: string
+ *               example: bytes 0-1023/2048
+ *           Content-Length:
+ *             description: The size of the returned chunk in bytes.
+ *             schema:
+ *               type: integer
+ *           Content-Type:
+ *             description: The MIME type of the file.
+ *             schema:
+ *               type: string
+ *         content:
+ *           application/octet-stream:
+ *             schema:
+ *               type: string
+ *               format: binary
+ *       400:
+ *         description: Invalid request (e.g., invalid file ID or range).
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Invalid File ID
+ *       401:
+ *         description: Unauthorized (e.g., session expired).
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Session expired
+ *       403:
+ *         description: Forbidden (e.g., user does not own the file).
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Forbidden to retrieve the file
+ *       404:
+ *         description: File not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: File not found
+ *       416:
+ *         description: Range not satisfiable.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Range Not Satisfiable
+ */
 export async function GET(req: NextRequest) {
   const validationResult = await validation(req);
 
@@ -115,7 +227,7 @@ async function validation(
   const { createdBy, filePath, mimeType: fileType } = audioFile;
 
   if (createdBy !== userId) {
-    return { error: "Unauthorized", status: 403 };
+    return { error: "Forbidden to retrieve the file", status: 403 };
   }
 
   return {

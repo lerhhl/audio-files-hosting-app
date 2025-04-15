@@ -33,4 +33,4 @@ services:
     command: >
       sh -c "npm run db:seed && npm run start"
     volumes:
-      - ./audio-files:/app/audio-files
+      - ./audio_uploads:/app/audio_uploads

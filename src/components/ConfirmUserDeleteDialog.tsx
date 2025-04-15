@@ -1,4 +1,4 @@
-import { deleteUserAction } from "@/actions/user";
+import { APP_BASE_URL } from "@/app/config";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 
@@ -17,14 +17,14 @@ export default function ConfirmUserDeleteDialog({
 }: ConfirmUserDeleteDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [deleteUserError, setDeleteUserError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const openDialog = () => {
     setIsOpen(true);
   };
 
   const closeDialog = () => {
-    setDeleteUserError(null);
+    setError(null);
     setIsDeleting(false);
     setIsOpen(false);
   };
@@ -32,14 +32,24 @@ export default function ConfirmUserDeleteDialog({
   const confirmDeleteUser = async () => {
     if (userId) {
       setIsDeleting(true);
-      const { success, message } = await deleteUserAction(userId);
 
-      if (success) {
-        closeDialog();
-        onSuccess();
-      } else {
-        setDeleteUserError(message);
+      try {
+        const url = `${APP_BASE_URL}/api/users/${userId}`;
+
+        const response = await fetch(url, { method: "DELETE" });
+
+        if (response.ok) {
+          closeDialog();
+          onSuccess();
+        } else {
+          const body = await response.json();
+          setIsDeleting(false);
+          setError(body?.error);
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (error) {
         setIsDeleting(false);
+        setError("Failed to upload audio file. Please try again later.");
       }
     }
   };
@@ -84,10 +94,8 @@ export default function ConfirmUserDeleteDialog({
                 </div>
               </button>
             </div>
-            {deleteUserError && (
-              <p className="text-red-500 text-sm mt-2 text-right">
-                {deleteUserError}
-              </p>
+            {error && (
+              <p className="text-red-500 text-sm mt-2 text-right">{error}</p>
             )}
           </div>
         </div>

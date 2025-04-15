@@ -7,18 +7,14 @@ export type User = {
   createdAt: Date;
 };
 
-export type CreateUserFormState = {
-  errors?: {
-    username?: string[];
-    password?: string[];
-    server?: string;
-  };
-  message?: string;
-  success?: boolean;
+export type CreateUserFormErrors = {
+  username?: string[];
+  password?: string[];
+  server?: string;
 };
 
 export type UpdateUserFormState = {
-  errors?: {
+  error?: {
     username?: string[];
     currentPassword?: string[];
     newPassword?: string[];
@@ -36,13 +32,9 @@ export type AudioFiles = {
   createdAt: Date;
 };
 
-export type UploadVideoFormState = {
-  errors?: {
-    description?: string[];
-    category?: string[];
-    file?: string[];
-    server?: string;
-  };
-  message?: string;
-  success?: boolean;
+export type UploadVideoFormErrors = {
+  description?: string[];
+  category?: string[];
+  file?: string[];
+  server?: string;
 };

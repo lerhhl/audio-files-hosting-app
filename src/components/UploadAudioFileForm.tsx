@@ -1,13 +1,13 @@
 "use client";
 
-import { createAudioFileRecordAction } from "@/actions/audioFiles";
+import { APP_BASE_URL } from "@/app/config";
 import {
   ALLOWABLE_AUDIO_CATEGORIES,
   MAX_FILE_UPLOAD_SIZE,
 } from "@/app/constants";
-import { UploadVideoFormState } from "@/components/types";
+import { UploadVideoFormErrors } from "@/components/types";
 import { AUDIO_FILE_SPEC } from "@/lib/formDefinitions";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 
 type CreateAudioFileRecordFormProps = {
   readonly onSuccess: () => void;
@@ -17,44 +17,60 @@ export default function CreateAudioFileRecordForm({
   onSuccess,
 }: CreateAudioFileRecordFormProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [errors, setErrors] =
-    useState<UploadVideoFormState["errors"]>(undefined);
-  const [pending, setPending] = useState(false);
+  const [error, setError] = useState<UploadVideoFormErrors | undefined>(
+    undefined
+  );
+  const [updating, setUpdating] = useState(false);
 
   const openDialog = () => {
     setIsOpen(true);
   };
 
   const closeDialog = () => {
-    setErrors(undefined);
-    setPending(false);
+    setError(undefined);
+    setUpdating(false);
     setIsOpen(false);
   };
 
-  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setPending(true);
-    setErrors(undefined);
+    setUpdating(true);
+    setError(undefined);
     const formData = new FormData(e.currentTarget);
     const fileInput = formData.get("file") as File;
 
     if (fileInput?.size > MAX_FILE_UPLOAD_SIZE.bytes) {
-      setErrors((prev) => ({
+      setError((prev) => ({
         ...prev,
         file: [`File size must be less than ${MAX_FILE_UPLOAD_SIZE.mb}MB.`],
       }));
-      setPending(false);
+      setUpdating(false);
       return;
     }
 
-    const response = await createAudioFileRecordAction(formData);
+    try {
+      const url = `${APP_BASE_URL}/api/audio-files`;
 
-    if (!response.success) {
-      setErrors(response.errors);
-      setPending(false);
-    } else {
-      closeDialog();
-      onSuccess();
+      const response = await fetch(url, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (response.ok) {
+        setUpdating(false);
+        closeDialog();
+        onSuccess();
+      } else {
+        const body = await response.json();
+        setUpdating(false);
+        setError(body?.error);
+      }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      setUpdating(false);
+      setError({
+        server: "Failed to upload audio file. Please try again later.",
+      });
     }
   };
 
@@ -94,11 +110,12 @@ export default function CreateAudioFileRecordForm({
                   rows={4}
                   required
                 />
-                {errors?.description && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.description}
-                  </p>
-                )}
+                {error?.description?.length &&
+                  error.description.map((error) => (
+                    <p key={error} className="text-red-500 text-sm mt-1">
+                      {error}
+                    </p>
+                  ))}
               </div>
 
               <div className="mb-4">
@@ -124,9 +141,12 @@ export default function CreateAudioFileRecordForm({
                     </option>
                   ))}
                 </select>
-                {errors?.category && (
-                  <p className="text-red-500 text-sm mt-1">{errors.category}</p>
-                )}
+                {error?.category?.length &&
+                  error.category.map((error) => (
+                    <p key={error} className="text-red-500 text-sm mt-1">
+                      {error}
+                    </p>
+                  ))}
               </div>
 
               <div className="mb-4">
@@ -144,19 +164,22 @@ export default function CreateAudioFileRecordForm({
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                   required
                 />
-                {errors?.file && (
-                  <p className="text-red-500 text-sm mt-1">{errors.file}</p>
-                )}
+                {error?.file?.length &&
+                  error.file.map((error) => (
+                    <p key={error} className="text-red-500 text-sm mt-1">
+                      {error}
+                    </p>
+                  ))}
               </div>
 
               <button
                 type="submit"
                 className="bg-blue-500 text-white rounded-lg p-2 hover:bg-blue-600 disabled:opacity-50"
               >
-                {pending ? "Uploading..." : "Upload Audio File"}
+                {updating ? "Uploading..." : "Upload Audio File"}
               </button>
-              {errors?.server && (
-                <p className="text-red-500 text-sm">{errors?.server}</p>
+              {error?.server && (
+                <p className="text-red-500 text-sm">{error?.server}</p>
               )}
             </form>
           </div>

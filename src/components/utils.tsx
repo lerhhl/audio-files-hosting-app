@@ -8,10 +8,10 @@ export function getSessionCookie() {
   return sessionCookie;
 }
 
-export function generateHeaders() {
+export function generateHeaders(isMultipart = false) {
   const sessionCookie = getSessionCookie();
   return {
-    "Content-Type": "application/json",
+    "Content-Type": isMultipart ? "multipart/form-data" : "application/json",
     Cookie: `session=${sessionCookie}`,
   };
 }

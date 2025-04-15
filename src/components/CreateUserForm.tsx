@@ -1,18 +1,17 @@
 "use client";
 
-import { createUserAction } from "@/actions/user";
-import { CreateUserFormState } from "@/components/types";
-import { useActionState, useCallback, useEffect, useState } from "react";
+import { APP_BASE_URL } from "@/app/config";
+import { CreateUserFormErrors } from "@/components/types";
+import { useState } from "react";
 
 type CreateUserFormProps = {
   readonly onSuccess: () => void;
 };
 
 export default function CreateUserForm({ onSuccess }: CreateUserFormProps) {
-  const [state, action, pending] = useActionState<CreateUserFormState>(
-    // @ts-expect-error ignore type error
-    createUserAction,
-    { errors: undefined }
+  const [isCreating, setIsCreating] = useState(false);
+  const [error, setError] = useState<CreateUserFormErrors | undefined>(
+    undefined
   );
   const [isOpen, setIsOpen] = useState(false);
 
@@ -20,17 +19,46 @@ export default function CreateUserForm({ onSuccess }: CreateUserFormProps) {
     setIsOpen(true);
   };
 
-  const closeDialog = useCallback(() => {
-    state.errors = undefined;
+  const closeDialog = () => {
+    setError(undefined);
     setIsOpen(false);
-  }, [state]);
+  };
 
-  useEffect(() => {
-    if (state?.success) {
-      closeDialog();
-      onSuccess();
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsCreating(true);
+    setError(undefined);
+
+    try {
+      const form = e.currentTarget;
+      const url = `${APP_BASE_URL}/api/users`;
+      const formData = {
+        username: form.username.value,
+        password: form.password.value,
+      };
+
+      const response = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setIsCreating(false);
+        closeDialog();
+        onSuccess();
+      } else {
+        const body = await response.json();
+        setIsCreating(false);
+        setError(body?.error);
+      }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      setIsCreating(false);
+      setError({
+        server: "Failed to create user. Please try again later.",
+      });
     }
-  }, [state, closeDialog, onSuccess]);
+  };
 
   return (
     <>
@@ -53,7 +81,7 @@ export default function CreateUserForm({ onSuccess }: CreateUserFormProps) {
             >
               &times;
             </button>
-            <form className="flex flex-col gap-4" action={action}>
+            <form className="flex flex-col gap-4" onSubmit={handleFormSubmit}>
               <div className="mb-4">
                 <label
                   htmlFor="username"
@@ -68,11 +96,12 @@ export default function CreateUserForm({ onSuccess }: CreateUserFormProps) {
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                   required
                 />
-                {state?.errors?.username && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {state.errors.username}
-                  </p>
-                )}
+                {error?.username?.length &&
+                  error.username.map((error) => (
+                    <p key={error} className="text-red-500 text-sm mt-1">
+                      {error}
+                    </p>
+                  ))}
               </div>
 
               <div className="mb-4">
@@ -89,21 +118,22 @@ export default function CreateUserForm({ onSuccess }: CreateUserFormProps) {
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                   required
                 />
-                {state?.errors?.password && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {state.errors.password}
-                  </p>
-                )}
+                {error?.password?.length &&
+                  error.password.map((error) => (
+                    <p key={error} className="text-red-500 text-sm mt-1">
+                      {error}
+                    </p>
+                  ))}
               </div>
 
               <button
                 type="submit"
                 className="bg-blue-500 text-white rounded-lg p-2 hover:bg-blue-600 disabled:opacity-50"
               >
-                {pending ? "Creating User" : "Create User"}
+                {isCreating ? "Creating User" : "Create User"}
               </button>
-              {state?.errors?.server && (
-                <p className="text-red-500 text-sm">{state?.errors?.server}</p>
+              {error?.server && (
+                <p className="text-red-500 text-sm">{error?.server}</p>
               )}
             </form>
           </div>

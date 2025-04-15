@@ -1,18 +1,53 @@
 "use client";
 
-import { login } from "@/actions/auth";
+import { APP_BASE_URL } from "@/app/config";
 import { DEFAULT_HOME_PATH } from "@/app/constants";
 import { redirect } from "next/navigation";
-import { useActionState, useEffect } from "react";
+import { FormEvent, useEffect, useState } from "react";
 
 export default function LoginPage() {
-  const [state, action, pending] = useActionState(login, undefined);
+  const [isPending, setIsPending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+
+  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsPending(true);
+    setError(null);
+    setSuccess(false);
+
+    try {
+      const form = e.currentTarget;
+      const url = `${APP_BASE_URL}/api/login`;
+      const formData = {
+        username: form.username.value,
+        password: form.password.value,
+      };
+
+      const response = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setSuccess(true);
+      } else {
+        const body = await response.json();
+        setError(body.message ?? "An error occurred during login");
+      }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      setError("An error occurred during login");
+    } finally {
+      setIsPending(false);
+    }
+  };
 
   useEffect(() => {
-    if (state?.success) {
+    if (success) {
       redirect(DEFAULT_HOME_PATH);
     }
-  }, [state]);
+  }, [success]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-8 sm:p-20 bg-gray-100">
@@ -20,7 +55,7 @@ export default function LoginPage() {
         Welcome to Audio File Hosting App
       </h1>
       <form
-        action={action}
+        onSubmit={handleLogin}
         className="w-full max-w-sm bg-white p-6 rounded-lg shadow-md"
       >
         <div className="mb-4">
@@ -56,14 +91,12 @@ export default function LoginPage() {
 
         <button
           type="submit"
-          disabled={pending}
+          disabled={isPending}
           className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 cursor-pointer"
         >
           Login
         </button>
-        {!state?.success && (
-          <p className="text-red-500 text-sm mb-4">{state?.message}</p>
-        )}
+        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
       </form>
     </div>
   );

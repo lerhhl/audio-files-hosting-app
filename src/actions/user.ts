@@ -1,94 +1,18 @@
 "use server";
 
 import { USERS_MANAGEMENT_PATH } from "@/app/constants";
-import { CreateUserFormState, UpdateUserFormState } from "@/components/types";
+import { UpdateUserFormState } from "@/components/types";
 import {
-  createUser,
   deleteUser,
   findUserById,
   findUserByUsername,
   updateUser,
 } from "@/lib/database";
-import {
-  createUserFormSchema,
-  updateUserFormSchema,
-} from "@/lib/formDefinitions";
+import { updateUserFormSchema } from "@/lib/formDefinitions";
 import { logger } from "@/lib/logger";
 import { UpdateUserInput } from "@/lib/types";
 import { hashPassword } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
-
-export async function createUserAction(
-  _state: CreateUserFormState,
-  formData: FormData
-): Promise<CreateUserFormState> {
-  try {
-    logger.info("creating user...");
-    // Validate form fields
-    const validatedFields = createUserFormSchema.safeParse({
-      username: formData.get("username"),
-      password: formData.get("password"),
-    });
-
-    // If any form fields are invalid, return early
-    if (!validatedFields.success) {
-      const errors = validatedFields.error.flatten().fieldErrors;
-      return {
-        success: false,
-        errors,
-      };
-    }
-
-    // Prepare data for insertion into database
-    const { username, password } = validatedFields.data;
-
-    // Check if the user already exists
-    const existingUser = await findUserByUsername(username);
-    if (existingUser) {
-      return {
-        success: false,
-        errors: {
-          username: ["Username already exists"],
-        },
-      };
-    }
-
-    const hashedPassword = await hashPassword(password);
-
-    logger.info({ username }, "Inserting user into database:");
-
-    // 3. Insert the user into the database
-    const newUser = await createUser({
-      username,
-      hashedPassword,
-    });
-
-    if (!newUser) {
-      return {
-        success: false,
-        message: "Failed to create user",
-      };
-    }
-
-    logger.info({ username, userId: newUser.id }, "New user created");
-
-    revalidatePath(USERS_MANAGEMENT_PATH);
-
-    return {
-      success: true,
-      message: "User created successfully",
-    };
-  } catch (error) {
-    logger.error(error, "Error creating user:");
-
-    return {
-      success: false,
-      errors: {
-        server: "An error occurred while creating the user. Please try again.",
-      },
-    };
-  }
-}
 
 export async function deleteUserAction(userId: number) {
   try {
@@ -128,7 +52,7 @@ export async function updateUserAction(
     if (!existingUser) {
       return {
         success: false,
-        errors: {
+        error: {
           username: ["User does not exist"],
         },
       };
@@ -143,7 +67,7 @@ export async function updateUserAction(
       if (userWithSameUsername) {
         return {
           success: false,
-          errors: {
+          error: {
             username: ["Username already exists"],
           },
         };
@@ -158,7 +82,7 @@ export async function updateUserAction(
       if (!currentPassword) {
         return {
           success: false,
-          errors: {
+          error: {
             currentPassword: ["Current password is required"],
           },
         };
@@ -169,7 +93,7 @@ export async function updateUserAction(
       if (existingUser.password !== hashedCurrentPassword) {
         return {
           success: false,
-          errors: {
+          error: {
             currentPassword: ["Current password is incorrect"],
           },
         };
@@ -189,7 +113,7 @@ export async function updateUserAction(
       const errors = validatedFields.error.flatten().fieldErrors;
       return {
         success: false,
-        errors,
+        error: errors,
       };
     }
 
@@ -231,7 +155,7 @@ export async function updateUserAction(
 
     return {
       success: false,
-      errors: {
+      error: {
         server: "An error occurred while updating the user. Please try again.",
       },
     };

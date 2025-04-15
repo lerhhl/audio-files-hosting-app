@@ -1,13 +1,31 @@
 import { NextRequest, NextResponse } from "next/server";
 
 /**
- * Logout the user by clearing the session cookie.
- * @param req NextRequest
- * @returns
+ * @swagger
+ * tags:
+ *   - Authentication
+ * /api/logout:
+ *   post:
+ *     summary: User logout
+ *     description: Delete a user session
+ *     responses:
+ *       200:
+ *         description: Logout successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Logout successful
  */
 export async function POST(req: NextRequest) {
   const { value } = req.cookies.get("session") ?? {};
-  const response = NextResponse.json({ success: true });
+  const response = NextResponse.json(
+    { message: "Logout successful" },
+    { status: 200 }
+  );
 
   if (value) {
     response.cookies.set("session", "", { maxAge: 0 });
