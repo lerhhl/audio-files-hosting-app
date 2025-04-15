@@ -1,7 +1,9 @@
 import {
+  deleteAudioFilesByUserId,
   deleteUser,
   findUserById,
   findUserByUsername,
+  getAllAudioFilesByUserid,
   updateUser,
 } from "@/lib/database";
 import { updateUserFormSchema } from "@/lib/formDefinitions";
@@ -9,7 +11,9 @@ import { logger } from "@/lib/logger";
 import { verifySession } from "@/lib/session";
 import { UpdateUserInput } from "@/lib/types";
 import { hashPassword } from "@/lib/utils";
+import fs from "fs";
 import { NextRequest, NextResponse } from "next/server";
+import path from "path";
 
 /**
  * @swagger
@@ -76,25 +80,25 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ error: "Session expired" }, { status: 401 });
   }
 
-  // Only allow admin users to create new users
+  // Only allow admin users to delete user
   if (!isAdmin) {
     return NextResponse.json(
-      { error: "Forbidden to create new user" },
+      { error: "Forbidden to delete user" },
       { status: 403 }
     );
   }
 
   try {
     const userId = req.nextUrl.pathname.split("/").pop();
-    const parsedUserId = parseInt(userId as string);
+    const parsedUpdatedUserId = parseInt(userId as string);
 
-    if (!parsedUserId) {
-      return NextResponse.json({ error: "Invalid File ID" }, { status: 400 });
+    if (!parsedUpdatedUserId) {
+      return NextResponse.json({ error: "Invalid user ID" }, { status: 400 });
     }
 
     logger.info({ userId }, "Deleting user:");
 
-    const existingUser = await findUserById(parsedUserId);
+    const existingUser = await findUserById(parsedUpdatedUserId);
 
     if (!existingUser) {
       return NextResponse.json(
@@ -103,7 +107,22 @@ export async function DELETE(req: NextRequest) {
       );
     }
 
-    await deleteUser(parsedUserId);
+    // Get all audio files associated with the user
+    const audioFiles = await getAllAudioFilesByUserid(parsedUpdatedUserId);
+    if (audioFiles?.items.length > 0) {
+      // Delete all audio files from the storage associated with the user
+      audioFiles.items.forEach((audioFile) => {
+        const filePath = path.join(process.cwd(), audioFile.filePath);
+
+        // Check if the file exists before deleting
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath);
+        }
+      });
+      await deleteAudioFilesByUserId(parsedUpdatedUserId);
+    }
+
+    await deleteUser(parsedUpdatedUserId);
 
     logger.info({ userId }, "Deleted user:");
 
@@ -226,26 +245,26 @@ export async function PUT(req: NextRequest) {
     );
   }
 
-  // Only allow admin users to create new users
-  if (!isAdmin) {
+  const updatedUserId = req.nextUrl.pathname.split("/").pop();
+  const parsedUpdatedUserId = parseInt(updatedUserId as string);
+
+  if (!parsedUpdatedUserId) {
     return NextResponse.json(
-      { error: { server: "Forbidden to create new user" } },
+      { error: { server: "Invalid User ID" } },
+      { status: 400 }
+    );
+  }
+
+  // Allow only admin users or the user themselves to update the user's data
+  if (parsedUpdatedUserId !== userId && !isAdmin) {
+    return NextResponse.json(
+      { error: { server: "Forbidden to update user" } },
       { status: 403 }
     );
   }
 
   try {
-    const userId = req.nextUrl.pathname.split("/").pop();
-    const parsedUserId = parseInt(userId as string);
-
-    if (!parsedUserId) {
-      return NextResponse.json(
-        { error: { server: "Invalid File ID" } },
-        { status: 400 }
-      );
-    }
-
-    const existingUser = await findUserById(parsedUserId);
+    const existingUser = await findUserById(parsedUpdatedUserId);
 
     if (!existingUser) {
       return NextResponse.json(
@@ -321,7 +340,7 @@ export async function PUT(req: NextRequest) {
       : undefined;
 
     const updateUserInput: UpdateUserInput = {
-      userId: parsedUserId,
+      userId: parsedUpdatedUserId,
       newUsername: hasNewUsername ? username : undefined,
       newPassword: hasNewPassword ? hashedPassword : undefined,
     };

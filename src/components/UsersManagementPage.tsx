@@ -104,7 +104,7 @@ export default function UsersManagementPage() {
                 </tr>
               ) : (
                 users.map((user) => (
-                  <tr key={user.username} className="text-center">
+                  <tr key={user.id} className="text-center">
                     <td className="border border-gray-300 px-1 py-2">
                       {user.username}
                     </td>

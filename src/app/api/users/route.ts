@@ -75,7 +75,7 @@ import { NextRequest, NextResponse } from "next/server";
  *               properties:
  *                 error:
  *                   type: string
- *                   example: Failed to fetch users
+ *                   example: Failed to get users
  *       401:
  *         description: Unauthorized (e.g., session expired).
  *         content:
@@ -95,7 +95,7 @@ import { NextRequest, NextResponse } from "next/server";
  *               properties:
  *                 error:
  *                   type: string
- *                   example: "Forbidden to create new user"
+ *                   example: "Forbidden to get users"
  */
 export async function GET(req: NextRequest) {
   const { userId, isAuth, isAdmin } = await verifySession();
@@ -104,10 +104,10 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Session expired" }, { status: 401 });
   }
 
-  // Only allow admin users to create new users
+  // Only allow admin users to get users
   if (!isAdmin) {
     return NextResponse.json(
-      { error: { server: "Forbidden to create new user" } },
+      { error: { server: "Forbidden to get users" } },
       { status: 403 }
     );
   }
@@ -128,12 +128,9 @@ export async function GET(req: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    logger.error(error, "Error fetching users");
+    logger.error(error, "Error getting users");
 
-    return NextResponse.json(
-      { error: "Failed to fetch users" },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "Failed to get users" }, { status: 400 });
   }
 }
 

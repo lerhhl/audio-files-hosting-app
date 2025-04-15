@@ -106,6 +106,7 @@ export async function getAllAudioFilesByUserid(
       category: true,
       mimeType: true,
       createdAt: true,
+      filePath: true,
     },
   });
 
@@ -149,5 +150,11 @@ export async function getAudioFileById(id: number) {
       createdBy: true,
       createdAt: true,
     },
+  });
+}
+
+export async function deleteAudioFilesByUserId(userId: number) {
+  return await db.audioFile.deleteMany({
+    where: { createdBy: userId },
   });
 }

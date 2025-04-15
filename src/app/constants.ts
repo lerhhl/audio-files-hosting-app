@@ -20,7 +20,7 @@ export const MAX_FILE_UPLOAD_SIZE = {
   bytes: MAX_FILE_UPLOAD_SIZE_MB * 1024 * 1024,
 };
 
-export const AUDIO_UPLOAD_FOLDER = "./audio_uploads";
+export const AUDIO_UPLOAD_FOLDER = "audio_uploads";
 export const ALLOWABLE_AUDIO_CODECS = [
   "audio/mp3",
   "audio/ogg",
