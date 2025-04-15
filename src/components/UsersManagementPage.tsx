@@ -45,19 +45,23 @@ export default function UsersManagementPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error();
+        setError(data.error ?? "Failed to fetch users.");
+        setIsLoading(false);
+        setUsers([]);
+        setTotalPages(1);
+        return;
       }
 
       setUsers(data.items ?? []);
       setTotalPages(calculateTotalPages(data.totalCount, itemsPerPage));
+      setIsLoading(false);
+      setError(null);
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       setUsers([]);
       setTotalPages(1);
-      setError("Failed to fetch users. Please try again later.");
-      return;
-    } finally {
       setIsLoading(false);
+      setError("Failed to fetch users. Please try again later.");
     }
   }, [currentPage, itemsPerPage]);
 

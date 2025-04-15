@@ -8,7 +8,7 @@ import {
 } from "@/lib/database";
 import { updateUserFormSchema } from "@/lib/formDefinitions";
 import { logger } from "@/lib/logger";
-import { verifySession } from "@/lib/session";
+import { updateUsernameInSession, verifySession } from "@/lib/session";
 import { UpdateUserInput } from "@/lib/types";
 import { hashPassword } from "@/lib/utils";
 import fs from "fs";
@@ -345,15 +345,13 @@ export async function PUT(req: NextRequest) {
       newPassword: hasNewPassword ? hashedPassword : undefined,
     };
 
-    const newUser = await updateUser(updateUserInput);
+    await updateUser(updateUserInput);
 
-    logger.info({ userId }, "Updated user:");
+    logger.info({ userId }, "Updated user into database:");
 
-    if (!newUser) {
-      return NextResponse.json(
-        { error: { server: "Failed to update user" } },
-        { status: 400 }
-      );
+    // If the user is updating their own username, update the session
+    if (hasNewUsername && parsedUpdatedUserId === userId) {
+      await updateUsernameInSession(username);
     }
 
     return NextResponse.json(

@@ -9,7 +9,7 @@ export type UpdateUserDialogProps = {
     readonly id?: number;
     readonly username?: string;
   };
-  readonly onSuccess: () => void;
+  readonly onSuccess: (newUsername: string) => void;
 };
 
 export default function UpdateUserDialog({
@@ -55,7 +55,7 @@ export default function UpdateUserDialog({
 
       if (response.ok) {
         closeDialog();
-        onSuccess();
+        onSuccess(form.username.value);
       } else {
         const body = await response.json();
         setIsUpdating(false);
@@ -81,7 +81,7 @@ export default function UpdateUserDialog({
           onClick={openDialog}
           className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer"
         >
-          Update User
+          Update Profile
         </button>
       )}
 

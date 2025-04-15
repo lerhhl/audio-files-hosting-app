@@ -48,6 +48,14 @@ export default function TopNavigationBar({ session }: TopNavigationBarProps) {
     redirect(LOGIN_PATH);
   };
 
+  const onSuccess = (updatedUsername: string) => {
+    setIsDropdownOpen(false);
+    setUser((prev) => ({
+      ...prev,
+      username: updatedUsername,
+    }));
+  };
+
   useEffect(() => {
     setUser({
       id: session.userId,
@@ -94,14 +102,14 @@ export default function TopNavigationBar({ session }: TopNavigationBarProps) {
             onClick={toggleDropdown}
             className="text-gray-600 hover:text-gray-900 font-medium focus:outline-none cursor-pointer"
           >
-            {`Welcome ${session.username ?? "Guest"}`}
+            {`Welcome ${user.username ?? "Guest"}`}
           </button>
           {isDropdownOpen && (
             <div className="absolute right-0 mt-2 w-35 bg-white border border-gray-200 rounded-md shadow-lg">
               <UpdateUserDialog
                 user={user}
                 iconButton={false}
-                onSuccess={() => {}}
+                onSuccess={onSuccess}
               />
               <button
                 onClick={handleLogout}
