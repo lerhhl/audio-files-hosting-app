@@ -593,6 +593,141 @@
             }
           }
         }
+      },
+      "put": {
+        "summary": "Update a user by ID",
+        "description": "Update a user's username or password by their ID. Only admin users are allowed to perform this action.",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the user to update.",
+            "schema": {
+              "type": "integer",
+              "example": 123
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "description": "The new username for the user.",
+                    "example": "johndoe"
+                  },
+                  "currentPassword": {
+                    "type": "string",
+                    "description": "The current password of the user (required if updating the password).",
+                    "example": "oldpassword123"
+                  },
+                  "newPassword": {
+                    "type": "string",
+                    "description": "The new password for the user.",
+                    "example": "newsecurepassword123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User updated successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request or validation errors.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "username": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "example": "Username already exists"
+                          }
+                        },
+                        "currentPassword": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "example": "Current password is incorrect"
+                          }
+                        },
+                        "newPassword": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "example": "New password must be between 3 and 20 characters long."
+                          }
+                        },
+                        "server": {
+                          "type": "string",
+                          "example": "Failed to update user"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (e.g., session expired).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Session expired"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden (e.g., user is not an admin).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Forbidden to update user"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/users": {

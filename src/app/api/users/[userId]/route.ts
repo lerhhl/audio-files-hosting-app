@@ -1,6 +1,14 @@
-import { deleteUser, findUserById } from "@/lib/database";
+import {
+  deleteUser,
+  findUserById,
+  findUserByUsername,
+  updateUser,
+} from "@/lib/database";
+import { updateUserFormSchema } from "@/lib/formDefinitions";
 import { logger } from "@/lib/logger";
 import { verifySession } from "@/lib/session";
+import { UpdateUserInput } from "@/lib/types";
+import { hashPassword } from "@/lib/utils";
 import { NextRequest, NextResponse } from "next/server";
 
 /**
@@ -81,7 +89,7 @@ export async function DELETE(req: NextRequest) {
     const parsedUserId = parseInt(userId as string);
 
     if (!parsedUserId) {
-      return { error: "Invalid File ID", status: 400 };
+      return NextResponse.json({ error: "Invalid File ID" }, { status: 400 });
     }
 
     logger.info({ userId }, "Deleting user:");
@@ -108,6 +116,238 @@ export async function DELETE(req: NextRequest) {
 
     return NextResponse.json(
       { error: `Failed to delete user ${userId}` },
+      { status: 400 }
+    );
+  }
+}
+
+/**
+ * @swagger
+ * tags:
+ *   - Users
+ * /api/users/{userId}:
+ *   put:
+ *     summary: Update a user by ID
+ *     description: Update a user's username or password by their ID. Only admin users are allowed to perform this action.
+ *     parameters:
+ *       - name: userId
+ *         in: path
+ *         required: true
+ *         description: The ID of the user to update.
+ *         schema:
+ *           type: integer
+ *           example: 123
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 description: The new username for the user.
+ *                 example: johndoe
+ *               currentPassword:
+ *                 type: string
+ *                 description: The current password of the user (required if updating the password).
+ *                 example: oldpassword123
+ *               newPassword:
+ *                 type: string
+ *                 description: The new password for the user.
+ *                 example: newsecurepassword123
+ *     responses:
+ *       200:
+ *         description: User updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: User updated successfully
+ *       400:
+ *         description: Invalid request or validation errors.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: object
+ *                   properties:
+ *                     username:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *                         example: "Username already exists"
+ *                     currentPassword:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *                         example: "Current password is incorrect"
+ *                     newPassword:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *                         example: "New password must be between 3 and 20 characters long."
+ *                     server:
+ *                       type: string
+ *                       example: "Failed to update user"
+ *       401:
+ *         description: Unauthorized (e.g., session expired).
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Session expired
+ *       403:
+ *         description: Forbidden (e.g., user is not an admin).
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Forbidden to update user
+ */
+export async function PUT(req: NextRequest) {
+  const { userId, isAuth, isAdmin } = await verifySession();
+
+  if (!isAuth || !userId) {
+    return NextResponse.json(
+      { error: { server: "Session expired" } },
+      { status: 401 }
+    );
+  }
+
+  // Only allow admin users to create new users
+  if (!isAdmin) {
+    return NextResponse.json(
+      { error: { server: "Forbidden to create new user" } },
+      { status: 403 }
+    );
+  }
+
+  try {
+    const userId = req.nextUrl.pathname.split("/").pop();
+    const parsedUserId = parseInt(userId as string);
+
+    if (!parsedUserId) {
+      return NextResponse.json(
+        { error: { server: "Invalid File ID" } },
+        { status: 400 }
+      );
+    }
+
+    const existingUser = await findUserById(parsedUserId);
+
+    if (!existingUser) {
+      return NextResponse.json(
+        { error: { server: "User does not exist" } },
+        { status: 401 }
+      );
+    }
+
+    // If current username != username provided, check if the new username already exists
+    const currentUsername = existingUser.username;
+    const body = await req.json();
+    const { username } = body;
+    const hasNewUsername = currentUsername !== username;
+
+    if (hasNewUsername) {
+      const userWithSameUsername = await findUserByUsername(username);
+      if (userWithSameUsername) {
+        return NextResponse.json(
+          { error: { username: ["Username already exists"] } },
+          { status: 400 }
+        );
+      }
+    }
+
+    // If new password is provided, check whether old password is correct
+    const { currentPassword, newPassword } = body;
+    let hasNewPassword = false;
+    if (newPassword) {
+      if (!currentPassword) {
+        return NextResponse.json(
+          { error: { currentPassword: ["Current password is required"] } },
+          { status: 400 }
+        );
+      }
+
+      // Check whether old password is correct
+      const hashedCurrentPassword = await hashPassword(currentPassword);
+      if (existingUser.password !== hashedCurrentPassword) {
+        return NextResponse.json(
+          { error: { currentPassword: ["Current password is incorrect"] } },
+          { status: 400 }
+        );
+      }
+
+      hasNewPassword = true;
+    }
+
+    // Validate form fields
+    const validatedFields = updateUserFormSchema.safeParse({
+      username,
+      newPassword,
+    });
+
+    // If any form fields are invalid, return
+    if (!validatedFields.success) {
+      const error = validatedFields.error.flatten().fieldErrors;
+      return NextResponse.json({ error }, { status: 400 });
+    }
+
+    if (!hasNewUsername && !hasNewPassword) {
+      return NextResponse.json(
+        {
+          error: { server: "Either new username or new password is required" },
+        },
+        { status: 400 }
+      );
+    }
+
+    logger.info({ userId }, "Updating user into database:");
+
+    const hashedPassword = hasNewPassword
+      ? await hashPassword(newPassword)
+      : undefined;
+
+    const updateUserInput: UpdateUserInput = {
+      userId: parsedUserId,
+      newUsername: hasNewUsername ? username : undefined,
+      newPassword: hasNewPassword ? hashedPassword : undefined,
+    };
+
+    const newUser = await updateUser(updateUserInput);
+
+    logger.info({ userId }, "Updated user:");
+
+    if (!newUser) {
+      return NextResponse.json(
+        { error: { server: "Failed to update user" } },
+        { status: 400 }
+      );
+    }
+
+    return NextResponse.json(
+      { message: "User updated successfully" },
+      { status: 200 }
+    );
+  } catch (error) {
+    logger.error(error, "Error updating user:");
+
+    return NextResponse.json(
+      {
+        error: { server: "An error occurred while updating the user" },
+      },
       { status: 400 }
     );
   }

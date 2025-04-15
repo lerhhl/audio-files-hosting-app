@@ -13,15 +13,11 @@ export type CreateUserFormErrors = {
   server?: string;
 };
 
-export type UpdateUserFormState = {
-  error?: {
-    username?: string[];
-    currentPassword?: string[];
-    newPassword?: string[];
-    server?: string;
-  };
-  message?: string;
-  success?: boolean;
+export type UpdateUserFormErrors = {
+  username?: string[];
+  currentPassword?: string[];
+  newPassword?: string[];
+  server?: string;
 };
 
 export type AudioFiles = {

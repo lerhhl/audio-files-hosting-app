@@ -1,7 +1,7 @@
-import { updateUserAction } from "@/actions/user";
-import { UpdateUserFormState } from "@/components/types";
+import { APP_BASE_URL } from "@/app/config";
+import { UpdateUserFormErrors } from "@/components/types";
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
-import { useActionState, useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 
 export type UpdateUserDialogProps = {
   readonly iconButton?: boolean;
@@ -9,7 +9,7 @@ export type UpdateUserDialogProps = {
     readonly id?: number;
     readonly username?: string;
   };
-  readonly onSuccess?: () => void;
+  readonly onSuccess: () => void;
 };
 
 export default function UpdateUserDialog({
@@ -17,30 +17,58 @@ export default function UpdateUserDialog({
   iconButton = true,
   onSuccess,
 }: UpdateUserDialogProps) {
-  const [state, action, pending] = useActionState<UpdateUserFormState>(
-    // @ts-expect-error ignore type error
-    updateUserAction,
-    { errors: undefined }
-  );
   const [isOpen, setIsOpen] = useState(false);
+  const [error, setError] = useState<UpdateUserFormErrors | undefined>(
+    undefined
+  );
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const openDialog = () => {
     setIsOpen(true);
   };
 
-  const closeDialog = useCallback(() => {
-    state.error = undefined;
+  const closeDialog = () => {
+    setError(undefined);
+    setIsUpdating(false);
     setIsOpen(false);
-  }, [state]);
+  };
 
-  useEffect(() => {
-    if (state?.success) {
-      closeDialog();
-      if (onSuccess) {
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsUpdating(true);
+    setError(undefined);
+
+    try {
+      const form = e.currentTarget;
+      const url = `${APP_BASE_URL}/api/users/${user.id}`;
+      const formData = {
+        userId: user.id,
+        username: form.username.value,
+        currentPassword: form.currentPassword.value,
+        newPassword: form.newPassword.value,
+      };
+
+      const response = await fetch(url, {
+        method: "PUT",
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        closeDialog();
         onSuccess();
+      } else {
+        const body = await response.json();
+        setIsUpdating(false);
+        setError(body?.error);
       }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      setIsUpdating(false);
+      setError({
+        server: "Failed to update user. Please try again later.",
+      });
     }
-  }, [state, closeDialog, onSuccess]);
+  };
 
   return (
     <>
@@ -70,16 +98,8 @@ export default function UpdateUserDialog({
               &times;
             </button>
 
-            <form className="flex flex-col gap-4" action={action}>
+            <form className="flex flex-col gap-4" onSubmit={handleFormSubmit}>
               <div className="mb-4">
-                <input
-                  id="userId"
-                  name="userId"
-                  type="string"
-                  defaultValue={user.id}
-                  hidden
-                />
-
                 <label
                   htmlFor="username"
                   className="block text-sm font-medium text-gray-700"
@@ -94,11 +114,12 @@ export default function UpdateUserDialog({
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                   required
                 />
-                {state?.error?.username && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {state.error.username}
-                  </p>
-                )}
+                {error?.username?.length &&
+                  error.username.map((error) => (
+                    <p key={error} className="text-red-500 text-sm mt-1">
+                      {error}
+                    </p>
+                  ))}
               </div>
 
               <div className="mb-4">
@@ -114,11 +135,12 @@ export default function UpdateUserDialog({
                   type="password"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 />
-                {state?.error?.currentPassword && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {state.error.currentPassword}
-                  </p>
-                )}
+                {error?.currentPassword?.length &&
+                  error.currentPassword.map((error) => (
+                    <p key={error} className="text-red-500 text-sm mt-1">
+                      {error}
+                    </p>
+                  ))}
               </div>
 
               <div className="mb-4">
@@ -134,21 +156,22 @@ export default function UpdateUserDialog({
                   type="password"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 />
-                {state?.error?.newPassword && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {state.error.newPassword}
-                  </p>
-                )}
+                {error?.newPassword?.length &&
+                  error.newPassword.map((error) => (
+                    <p key={error} className="text-red-500 text-sm mt-1">
+                      {error}
+                    </p>
+                  ))}
               </div>
 
               <button
                 type="submit"
                 className="bg-blue-500 text-white rounded-lg p-2 hover:bg-blue-600 disabled:opacity-50"
               >
-                {pending ? "Updating user..." : "Update User"}
+                {isUpdating ? "Updating user..." : "Update User"}
               </button>
-              {state?.error?.server && (
-                <p className="text-red-500 text-sm">{state?.error?.server}</p>
+              {error?.server && (
+                <p className="text-red-500 text-sm">{error?.server}</p>
               )}
             </form>
           </div>

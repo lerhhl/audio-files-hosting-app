@@ -36,19 +36,19 @@ export default function CreateAudioFileRecordForm({
     e.preventDefault();
     setUpdating(true);
     setError(undefined);
-    const formData = new FormData(e.currentTarget);
-    const fileInput = formData.get("file") as File;
-
-    if (fileInput?.size > MAX_FILE_UPLOAD_SIZE.bytes) {
-      setError((prev) => ({
-        ...prev,
-        file: [`File size must be less than ${MAX_FILE_UPLOAD_SIZE.mb}MB.`],
-      }));
-      setUpdating(false);
-      return;
-    }
 
     try {
+      const formData = new FormData(e.currentTarget);
+      const fileInput = formData.get("file") as File;
+
+      if (fileInput?.size > MAX_FILE_UPLOAD_SIZE.bytes) {
+        setError((prev) => ({
+          ...prev,
+          file: [`File size must be less than ${MAX_FILE_UPLOAD_SIZE.mb}MB.`],
+        }));
+        setUpdating(false);
+        return;
+      }
       const url = `${APP_BASE_URL}/api/audio-files`;
 
       const response = await fetch(url, {
