@@ -28,9 +28,10 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    restart: on-failure
     env_file:
       - .env
     command: >
-      sh -c "npm run db:seed && npm run start"
+      sh -c "sleep 5 && npm run migrate:deploy && npm run db:seed && npm run start"
     volumes:
       - ./audio_uploads:/app/audio_uploads
