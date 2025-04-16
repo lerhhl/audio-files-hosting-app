@@ -25,6 +25,51 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+.list-page {
+  @apply flex flex-col items-center justify-start bg-gray-100 min-h-screen p-4;
+}
+
+.list-page-header{
+  @apply text-2xl font-bold mb-8 text-center text-gray-800;
+}
+
+.table {
+  @apply table-auto w-full border-collapse border border-gray-300;
+}
+
+.table-header-row-cell {
+  @apply bg-gray-200;
+}
+
+.table-row-cell-text {
+  @apply border border-gray-300 px-1 py-2;
+}
+
+.form-dialog-background {
+  @apply fixed inset-0 flex justify-center items-center z-50;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.form-dialog-body {
+  @apply relative bg-white opacity-100 rounded-lg p-6 w-full max-w-md z-10;
+}
+
+.form-label {
+  @apply block text-sm font-medium text-gray-700;
+}
+
+.form-input-text {
+  @apply mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500;
+}
+
+.form-input-error-text {
+  @apply text-red-500 text-sm mt-1;
+}
+
+.form-submit-button {
+  @apply bg-blue-500 text-white rounded-lg p-2 hover:bg-blue-600 disabled:opacity-50 w-full mb-4 cursor-pointer;
+}
+
 .loading-spinner {
   display: flex;
   justify-content: center;

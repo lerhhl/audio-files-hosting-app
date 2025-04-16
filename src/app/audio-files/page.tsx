@@ -1,4 +1,4 @@
-import AudioFilesList from "@/components/AudioFilesList";
+import AudioFilesManagement from "@/components/AudioFilesManagement";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import TopNavigationBarProps from "@/components/TopNavigationBar";
 import { redirectToLoginIfSessionNotFound } from "@/lib/auth";
@@ -11,7 +11,7 @@ export default async function AudioFilesWrapper() {
     <>
       <TopNavigationBarProps session={session} />
       <Suspense fallback={<LoadingSpinner />}>
-        <AudioFilesList />;
+        <AudioFilesManagement />;
       </Suspense>
     </>
   );

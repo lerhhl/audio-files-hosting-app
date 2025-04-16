@@ -1,6 +1,6 @@
 import LoadingSpinner from "@/components/LoadingSpinner";
 import TopNavigationBarProps from "@/components/TopNavigationBar";
-import UsersManagementPage from "@/components/UsersManagementPage";
+import UsersManagement from "@/components/UsersManagement";
 import { redirectToLoginIfSessionNotFound } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
@@ -17,7 +17,7 @@ export default async function UsersManagementPageWrapper() {
     <>
       <TopNavigationBarProps session={session} />
       <Suspense fallback={<LoadingSpinner />}>
-        <UsersManagementPage />;
+        <UsersManagement />;
       </Suspense>
     </>
   );

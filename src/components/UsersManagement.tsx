@@ -4,12 +4,13 @@ import { APP_BASE_URL } from "@/app/config";
 import ConfirmUserDeleteDialog from "@/components/ConfirmUserDeleteDialog";
 import CreateUserForm from "@/components/CreateUserForm";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import Pagination from "@/components/Pagination";
 import { User } from "@/components/types";
 import { calculateTotalPages, generateHeaders } from "@/components/utils";
 import { useCallback, useEffect, useState } from "react";
 import UpdateUserDialog from "./UpdateUserDialog";
 
-export default function UsersManagementPage() {
+export default function UsersManagement() {
   const itemsPerPage = 10;
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
@@ -70,10 +71,8 @@ export default function UsersManagementPage() {
   }, [currentPage, fetchUsers]);
 
   return (
-    <div className="flex flex-col items-center justify-start min-h-screen p-8 sm:p-20 bg-gray-100">
-      <h1 className="text-2xl font-bold mb-8 text-center text-gray-800">
-        Users Management Page
-      </h1>
+    <div className="list-page">
+      <h1 className="list-page-header">Users Management</h1>
 
       {isLoading && (
         <div className="flex items-center justify-center h-64">
@@ -86,39 +85,34 @@ export default function UsersManagementPage() {
           <div className="flex justify-end mb-1">
             <CreateUserForm onSuccess={fetchUsers} />
           </div>
-          <table className="table-auto w-full border-collapse border border-gray-300">
+          <table className="table">
             <thead>
-              <tr className="bg-gray-200">
-                <th className="border border-gray-300 px-1 py-2">Username</th>
-                <th className="border border-gray-300 px-1 py-2">Is Admin</th>
-                <th className="border border-gray-300 px-1 py-2">Created At</th>
-                <th className="border border-gray-300 px-1 py-2">Actions</th>
+              <tr className="table-header-row-cell">
+                <th className="table-row-cell-text">Username</th>
+                <th className="table-row-cell-text">Is Admin</th>
+                <th className="table-row-cell-text">Created At</th>
+                <th className="table-row-cell-text">Actions</th>
               </tr>
             </thead>
             <tbody>
               {users.length === 0 ? (
                 // If empty, display a message
                 <tr>
-                  <td
-                    colSpan={5}
-                    className="border border-gray-300 px-4 py-2 text-center"
-                  >
+                  <td colSpan={5} className="table-row-cell-text text-center">
                     {error ?? "No audio files found."}
                   </td>
                 </tr>
               ) : (
                 users.map((user) => (
                   <tr key={user.id} className="text-center">
-                    <td className="border border-gray-300 px-1 py-2">
-                      {user.username}
-                    </td>
-                    <td className="border border-gray-300 px-1 py-2">
+                    <td className="table-row-cell-text">{user.username}</td>
+                    <td className="table-row-cell-text">
                       {user.isAdmin ? "Yes" : "No"}
                     </td>
-                    <td className="border border-gray-300 px-1 py-2">
+                    <td className="table-row-cell-text">
                       {new Date(user.createdAt).toLocaleDateString()}
                     </td>
-                    <td className="border border-gray-300 px-1 py-2 ">
+                    <td className="table-row-cell-text ">
                       <div className="flex justify-center space-x-8">
                         <UpdateUserDialog
                           user={{
@@ -142,25 +136,12 @@ export default function UsersManagementPage() {
             </tbody>
           </table>
 
-          <div className="flex justify-between items-center mt-4">
-            <button
-              onClick={handlePreviousPage}
-              disabled={currentPage === 1}
-              className="px-2 py-1 bg-gray-300 text-gray-700 rounded disabled:opacity-50"
-            >
-              Previous
-            </button>
-            <span className="text-gray-700">
-              Page {currentPage} of {totalPages}
-            </span>
-            <button
-              onClick={handleNextPage}
-              disabled={currentPage === totalPages}
-              className="px-2 py-1 bg-gray-300 text-gray-700 rounded disabled:opacity-50"
-            >
-              Next
-            </button>
-          </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onNextPage={handleNextPage}
+            onPreviousPage={handlePreviousPage}
+          />
         </div>
       )}
     </div>

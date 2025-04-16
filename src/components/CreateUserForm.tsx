@@ -1,6 +1,7 @@
 "use client";
 
 import { APP_BASE_URL } from "@/app/config";
+import CloseDialogButton from "@/components/CloseDialogButton";
 import { CreateUserFormErrors } from "@/components/types";
 import { useState } from "react";
 
@@ -70,71 +71,56 @@ export default function CreateUserForm({ onSuccess }: CreateUserFormProps) {
       </button>
 
       {isOpen && (
-        <div
-          className="fixed inset-0 flex justify-center items-center z-50"
-          style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
-        >
-          <div className="relative bg-white opacity-100 rounded-lg p-6 w-full max-w-md z-10">
-            <button
-              onClick={closeDialog}
-              className="absolute top-1 right-2 text-gray-500 hover:text-gray-700 text-2xl"
-            >
-              &times;
-            </button>
+        <div className="form-dialog-background">
+          <div className="form-dialog-body">
+            <CloseDialogButton closeDialog={closeDialog} />
             <form className="flex flex-col gap-4" onSubmit={handleFormSubmit}>
               <div className="mb-4">
-                <label
-                  htmlFor="username"
-                  className="block text-sm font-medium text-gray-700"
-                >
+                <label htmlFor="username" className="form-label">
                   Username
                 </label>
                 <input
                   id="username"
                   name="username"
                   type="string"
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                  className="form-input-text"
                   required
                 />
                 {error?.username?.length &&
                   error.username.map((error) => (
-                    <p key={error} className="text-red-500 text-sm mt-1">
+                    <p key={error} className="form-input-error-text">
                       {error}
                     </p>
                   ))}
               </div>
 
               <div className="mb-4">
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-700"
-                >
+                <label htmlFor="password" className="form-label">
                   Password
                 </label>
                 <input
                   id="password"
                   name="password"
                   type="password"
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                  className="form-input-text"
                   required
                 />
                 {error?.password?.length &&
                   error.password.map((error) => (
-                    <p key={error} className="text-red-500 text-sm mt-1">
+                    <p key={error} className="form-input-error-text">
                       {error}
                     </p>
                   ))}
               </div>
 
-              <button
-                type="submit"
-                className="bg-blue-500 text-white rounded-lg p-2 hover:bg-blue-600 disabled:opacity-50"
-              >
-                {isCreating ? "Creating User" : "Create User"}
-              </button>
-              {error?.server && (
-                <p className="text-red-500 text-sm">{error?.server}</p>
-              )}
+              <div>
+                <button type="submit" className="form-submit-button">
+                  {isCreating ? "Creating User" : "Create User"}
+                </button>
+                {error?.server && (
+                  <p className="form-input-error-text">{error?.server}</p>
+                )}
+              </div>
             </form>
           </div>
         </div>

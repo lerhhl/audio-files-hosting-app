@@ -3,18 +3,19 @@
 import { APP_BASE_URL } from "@/app/config";
 import AudioPlayer from "@/components/AudioPlayer";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import { AudioFiles } from "@/components/types";
+import Pagination from "@/components/Pagination";
+import { AudioFile } from "@/components/types";
 import UploadAudioFileForm from "@/components/UploadAudioFileForm";
 import { calculateTotalPages, generateHeaders } from "@/components/utils";
 import { useCallback, useEffect, useState } from "react";
 
-export default function AudioFilesList() {
+export default function AudioFilesManagement() {
   const itemsPerPage = 10;
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [error, setError] = useState<string | null>(null);
-  const [audioFiles, setAudioFiles] = useState<AudioFiles[]>([]);
+  const [audioFiles, setAudioFiles] = useState<AudioFile[]>([]);
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
@@ -65,10 +66,8 @@ export default function AudioFilesList() {
   }, [currentPage, fetchAudioFiles]);
 
   return (
-    <div className="flex flex-col items-center justify-start bg-gray-100 min-h-screen p-4">
-      <h1 className="text-2xl font-bold mb-8 text-center text-gray-800">
-        Audio Files List
-      </h1>
+    <div className="list-page">
+      <h1 className="list-page-header">Audio Files Management</h1>
 
       {isLoading && (
         <div className="flex items-center justify-center h-64">
@@ -81,26 +80,21 @@ export default function AudioFilesList() {
           <div className="flex justify-end mb-1">
             <UploadAudioFileForm onSuccess={fetchAudioFiles} />
           </div>
-          <table className="table-auto w-full border-collapse border border-gray-300">
+          <table className="table">
             <thead>
-              <tr className="bg-gray-200">
-                <th className="border border-gray-300 px-1 py-2">
-                  Description
-                </th>
-                <th className="border border-gray-300 px-1 py-2">Category</th>
-                <th className="border border-gray-300 px-1 py-2">Mime Type</th>
-                <th className="border border-gray-300 px-1 py-2">Created At</th>
-                <th className="border border-gray-300 px-1 py-2">Actions</th>
+              <tr className="table-header-row-cell">
+                <th className="table-row-cell-text">Description</th>
+                <th className="table-row-cell-text">Category</th>
+                <th className="table-row-cell-text">Mime Type</th>
+                <th className="table-row-cell-text">Created At</th>
+                <th className="table-row-cell-text">Actions</th>
               </tr>
             </thead>
             <tbody>
               {audioFiles.length === 0 ? (
                 // If empty, display a message
                 <tr>
-                  <td
-                    colSpan={5}
-                    className="border border-gray-300 px-4 py-2 text-center"
-                  >
+                  <td colSpan={5} className="table-row-cell-text text-center">
                     {error ?? "No audio files found."}
                   </td>
                 </tr>
@@ -108,19 +102,19 @@ export default function AudioFilesList() {
                 // If not empty, map through the audioFilesList and display each audio file
                 audioFiles.map((audioFile) => (
                   <tr key={audioFile.id} className="text-center">
-                    <td className="border border-gray-300 px-4 py-2">
+                    <td className="table-row-cell-text">
                       {audioFile.description}
                     </td>
-                    <td className="border border-gray-300 px-4 py-2">
+                    <td className="table-row-cell-text">
                       {audioFile.category}
                     </td>
-                    <td className="border border-gray-300 px-4 py-2">
+                    <td className="table-row-cell-text">
                       {audioFile.mimeType}
                     </td>
-                    <td className="border border-gray-300 px-4 py-2">
+                    <td className="table-row-cell-text">
                       {new Date(audioFile.createdAt).toLocaleDateString()}
                     </td>
-                    <td className="border border-gray-300 px-4 py-2">
+                    <td className="table-row-cell-text">
                       <AudioPlayer fileId={audioFile.id} />
                     </td>
                   </tr>
@@ -129,25 +123,12 @@ export default function AudioFilesList() {
             </tbody>
           </table>
 
-          <div className="flex justify-between items-center mt-4">
-            <button
-              onClick={handlePreviousPage}
-              disabled={currentPage === 1}
-              className="px-2 py-1 bg-gray-300 text-gray-700 rounded disabled:opacity-50"
-            >
-              Previous
-            </button>
-            <span className="text-gray-700">
-              Page {currentPage} of {totalPages}
-            </span>
-            <button
-              onClick={handleNextPage}
-              disabled={currentPage === totalPages}
-              className="px-2 py-1 bg-gray-300 text-gray-700 rounded disabled:opacity-50"
-            >
-              Next
-            </button>
-          </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onNextPage={handleNextPage}
+            onPreviousPage={handlePreviousPage}
+          />
         </div>
       )}
     </div>

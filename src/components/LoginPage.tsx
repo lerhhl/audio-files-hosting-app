@@ -59,32 +59,26 @@ export default function LoginPage() {
         className="w-full max-w-sm bg-white p-6 rounded-lg shadow-md"
       >
         <div className="mb-4">
-          <label
-            htmlFor="username"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="username" className="form-label">
             Username
           </label>
           <input
             id="username"
             name="username"
             type="string"
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+            className="form-input-text"
             required
           />
         </div>
         <div className="mb-6">
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="password" className="form-label">
             Password
           </label>
           <input
             id="password"
             name="password"
             type="password"
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+            className="form-input-text"
             required
           />
         </div>
@@ -92,11 +86,11 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={isPending}
-          className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 cursor-pointer"
+          className="form-submit-button"
         >
           Login
         </button>
-        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+        {error && <p className="form-input-error-text">{error}</p>}
       </form>
     </div>
   );

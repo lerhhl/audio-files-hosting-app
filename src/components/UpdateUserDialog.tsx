@@ -1,4 +1,5 @@
 import { APP_BASE_URL } from "@/app/config";
+import CloseDialogButton from "@/components/CloseDialogButton";
 import { UpdateUserFormErrors } from "@/components/types";
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
@@ -86,24 +87,13 @@ export default function UpdateUserDialog({
       )}
 
       {isOpen && (
-        <div
-          className="fixed inset-0 flex justify-center items-center z-50 text-left"
-          style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
-        >
-          <div className="relative bg-white opacity-100 rounded-lg p-6 w-full max-w-md z-10">
-            <button
-              onClick={closeDialog}
-              className="absolute top-1 right-2 text-gray-500 hover:text-gray-700 text-2xl"
-            >
-              &times;
-            </button>
+        <div className="form-dialog-background">
+          <div className="form-dialog-body">
+            <CloseDialogButton closeDialog={closeDialog} />
 
             <form className="flex flex-col gap-4" onSubmit={handleFormSubmit}>
               <div className="mb-4">
-                <label
-                  htmlFor="username"
-                  className="block text-sm font-medium text-gray-700"
-                >
+                <label htmlFor="username" className="form-label">
                   Username
                 </label>
                 <input
@@ -111,68 +101,61 @@ export default function UpdateUserDialog({
                   name="username"
                   type="string"
                   defaultValue={user.username}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                  className="form-input-text"
                   required
                 />
                 {error?.username?.length &&
                   error.username.map((error) => (
-                    <p key={error} className="text-red-500 text-sm mt-1">
+                    <p key={error} className="form-input-error-text">
                       {error}
                     </p>
                   ))}
               </div>
 
               <div className="mb-4">
-                <label
-                  htmlFor="currentPassword"
-                  className="block text-sm font-medium text-gray-700"
-                >
+                <label htmlFor="currentPassword" className="form-label">
                   Current Password
                 </label>
                 <input
                   id="currentPassword"
                   name="currentPassword"
                   type="password"
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                  className="form-input-text"
                 />
                 {error?.currentPassword?.length &&
                   error.currentPassword.map((error) => (
-                    <p key={error} className="text-red-500 text-sm mt-1">
+                    <p key={error} className="form-input-error-text">
                       {error}
                     </p>
                   ))}
               </div>
 
               <div className="mb-4">
-                <label
-                  htmlFor="newPassword"
-                  className="block text-sm font-medium text-gray-700"
-                >
+                <label htmlFor="newPassword" className="form-label">
                   New Password
                 </label>
                 <input
                   id="newPassword"
                   name="newPassword"
                   type="password"
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                  className="form-input-text"
                 />
                 {error?.newPassword?.length &&
                   error.newPassword.map((error) => (
-                    <p key={error} className="text-red-500 text-sm mt-1">
+                    <p key={error} className="form-input-error-text">
                       {error}
                     </p>
                   ))}
               </div>
 
-              <button
-                type="submit"
-                className="bg-blue-500 text-white rounded-lg p-2 hover:bg-blue-600 disabled:opacity-50"
-              >
-                {isUpdating ? "Updating user..." : "Update User"}
-              </button>
-              {error?.server && (
-                <p className="text-red-500 text-sm">{error?.server}</p>
-              )}
+              <div>
+                <button type="submit" className="form-submit-button">
+                  {isUpdating ? "Updating user..." : "Update User"}
+                </button>
+                {error?.server && (
+                  <p className="form-input-error-text">{error?.server}</p>
+                )}
+              </div>
             </form>
           </div>
         </div>

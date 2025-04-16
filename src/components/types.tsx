@@ -20,7 +20,7 @@ export type UpdateUserFormErrors = {
   server?: string;
 };
 
-export type AudioFiles = {
+export type AudioFile = {
   id: number;
   description: string;
   category: string;
