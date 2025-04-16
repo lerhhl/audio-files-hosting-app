@@ -2,18 +2,14 @@ import { MAX_FILE_UPLOAD_SIZE } from "@/app/constants";
 import { getAudioFileById } from "@/lib/database";
 import { logger } from "@/lib/logger";
 import { verifySession } from "@/lib/session";
+import {
+  GetFileResponse,
+  GetFileValidationError,
+  GetFileValidationResult,
+  GetFileValidationSuccess,
+} from "@/lib/types";
 import fs from "fs";
 import { NextRequest, NextResponse } from "next/server";
-
-type validationSuccess = {
-  filePath: string;
-  fileType: string;
-};
-
-type validationError = {
-  error: string;
-  status: number;
-};
 
 /**
  * @swagger
@@ -127,16 +123,17 @@ type validationError = {
  *                   type: string
  *                   example: Range Not Satisfiable
  */
-export async function GET(req: NextRequest) {
-  const validationResult = await validation(req);
+export async function GET(req: NextRequest): Promise<GetFileResponse> {
+  const GetFileValidationResult = await validation(req);
 
-  const { error, status } = validationResult as validationError;
+  const { error, status } = GetFileValidationResult as GetFileValidationError;
 
   if (error) {
     return NextResponse.json({ error }, { status });
   }
 
-  const { filePath, fileType } = validationResult as validationSuccess;
+  const { filePath, fileType } =
+    GetFileValidationResult as GetFileValidationSuccess;
 
   // Get the file from local storage with audioFile.filePath
   try {
@@ -203,9 +200,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
-async function validation(
-  req: NextRequest
-): Promise<validationSuccess | validationError> {
+async function validation(req: NextRequest): Promise<GetFileValidationResult> {
   const { userId, isAuth } = await verifySession();
 
   if (!isAuth || !userId) {

@@ -1,3 +1,4 @@
+import { LogoutResponse } from "@/lib/types";
 import { NextRequest, NextResponse } from "next/server";
 
 /**
@@ -20,7 +21,9 @@ import { NextRequest, NextResponse } from "next/server";
  *                   type: string
  *                   example: Logout successful
  */
-export async function POST(req: NextRequest) {
+export async function POST(
+  req: NextRequest
+): Promise<NextResponse<LogoutResponse>> {
   const { value } = req.cookies.get("session") ?? {};
   const response = NextResponse.json(
     { message: "Logout successful" },

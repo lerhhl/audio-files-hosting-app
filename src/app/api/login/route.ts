@@ -2,6 +2,7 @@ import { INVALID_USERNAME_OR_PASSWORD_ERROR } from "@/app/constants";
 import { findUserByUsername } from "@/lib/database";
 import { logger } from "@/lib/logger";
 import { createSession } from "@/lib/session";
+import { LoginInput, LoginResponse } from "@/lib/types";
 import { hashPassword } from "@/lib/utils";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -53,8 +54,10 @@ import { NextRequest, NextResponse } from "next/server";
  *               required:
  *                 - message
  */
-export async function POST(req: NextRequest) {
-  const body = await req.json();
+export async function POST(
+  req: NextRequest
+): Promise<NextResponse<LoginResponse>> {
+  const body: LoginInput = await req.json();
   const { username, password } = body;
 
   if (!username || !password) {

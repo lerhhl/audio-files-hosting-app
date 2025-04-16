@@ -2,6 +2,7 @@ import { createUser, findUserByUsername, getAllUsers } from "@/lib/database";
 import { createUserFormSchema } from "@/lib/formDefinitions";
 import { logger } from "@/lib/logger";
 import { verifySession } from "@/lib/session";
+import { CreateUserResponse, GetUsersResponse } from "@/lib/types";
 import { hashPassword } from "@/lib/utils";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -97,7 +98,9 @@ import { NextRequest, NextResponse } from "next/server";
  *                   type: string
  *                   example: "Forbidden to get users"
  */
-export async function GET(req: NextRequest) {
+export async function GET(
+  req: NextRequest
+): Promise<NextResponse<GetUsersResponse>> {
   const { userId, isAuth, isAdmin } = await verifySession();
 
   if (!isAuth || !userId) {
@@ -107,7 +110,7 @@ export async function GET(req: NextRequest) {
   // Only allow admin users to get users
   if (!isAdmin) {
     return NextResponse.json(
-      { error: { server: "Forbidden to get users" } },
+      { error: "Forbidden to get users" },
       { status: 403 }
     );
   }
@@ -120,13 +123,7 @@ export async function GET(req: NextRequest) {
     const limit = pageSize;
     const { items, totalCount } = await getAllUsers(offset, limit);
 
-    return NextResponse.json(
-      {
-        items,
-        totalCount,
-      },
-      { status: 200 }
-    );
+    return NextResponse.json({ items, totalCount }, { status: 200 });
   } catch (error) {
     logger.error(error, "Error getting users");
 
@@ -246,7 +243,9 @@ export async function GET(req: NextRequest) {
  *                       type: string
  *                       example: "Forbidden to create new user"
  */
-export async function POST(req: NextRequest) {
+export async function POST(
+  req: NextRequest
+): Promise<NextResponse<CreateUserResponse>> {
   const { userId, isAuth, isAdmin } = await verifySession();
 
   if (!isAuth || !userId) {

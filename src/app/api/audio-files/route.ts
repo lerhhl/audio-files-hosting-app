@@ -6,7 +6,11 @@ import {
 import { createAudioFileRecordFormSchema } from "@/lib/formDefinitions";
 import { logger } from "@/lib/logger";
 import { verifySession } from "@/lib/session";
-import { CreateAudioFileInput } from "@/lib/types";
+import {
+  CreateAudioFileInput,
+  CreateAudioFileResponse,
+  GetAudioFilesResponse,
+} from "@/lib/types";
 import fs from "fs";
 import { NextRequest, NextResponse } from "next/server";
 import path from "path";
@@ -100,7 +104,9 @@ import path from "path";
  *               required:
  *                 - error
  */
-export async function GET(req: NextRequest) {
+export async function GET(
+  req: NextRequest
+): Promise<NextResponse<GetAudioFilesResponse>> {
   const { userId, isAuth } = await verifySession();
 
   if (!isAuth || !userId) {
@@ -225,7 +231,9 @@ export async function GET(req: NextRequest) {
  *                       type: string
  *                       example: Session expired
  */
-export async function POST(req: NextRequest) {
+export async function POST(
+  req: NextRequest
+): Promise<NextResponse<CreateAudioFileResponse>> {
   const { isAuth, userId } = await verifySession();
   if (!isAuth || !userId) {
     return NextResponse.json(

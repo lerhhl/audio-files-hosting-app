@@ -8,7 +8,11 @@ import {
 import { updateUserFormSchema } from "@/lib/formDefinitions";
 import { logger } from "@/lib/logger";
 import { updateUsernameInSession, verifySession } from "@/lib/session";
-import { UpdateUserInput } from "@/lib/types";
+import {
+  DeleteUserResponse,
+  UpdateUserInput,
+  UpdateUserResponse,
+} from "@/lib/types";
 import { hashPassword } from "@/lib/utils";
 import fs from "fs";
 import { NextRequest, NextResponse } from "next/server";
@@ -72,7 +76,9 @@ import path from "path";
  *                   type: string
  *                   example: Forbidden to delete user
  */
-export async function DELETE(req: NextRequest) {
+export async function DELETE(
+  req: NextRequest
+): Promise<NextResponse<DeleteUserResponse>> {
   const { userId, isAuth, isAdmin } = await verifySession();
 
   if (!isAuth || !userId) {
@@ -233,7 +239,9 @@ export async function DELETE(req: NextRequest) {
  *                   type: string
  *                   example: Forbidden to update user
  */
-export async function PUT(req: NextRequest) {
+export async function PUT(
+  req: NextRequest
+): Promise<NextResponse<UpdateUserResponse>> {
   const { userId, isAuth, isAdmin } = await verifySession();
 
   if (!isAuth || !userId) {
