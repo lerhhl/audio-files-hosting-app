@@ -1,5 +1,4 @@
 import {
-  deleteAudioFilesByUserId,
   deleteUser,
   findUserById,
   findUserByUsername,
@@ -119,7 +118,6 @@ export async function DELETE(req: NextRequest) {
           fs.unlinkSync(filePath);
         }
       });
-      await deleteAudioFilesByUserId(parsedUpdatedUserId);
     }
 
     await deleteUser(parsedUpdatedUserId);

@@ -229,7 +229,7 @@ export async function POST(req: NextRequest) {
   const { isAuth, userId } = await verifySession();
   if (!isAuth || !userId) {
     return NextResponse.json(
-      { success: false, error: { server: SESSION_EXPIRED_ERROR } },
+      { error: { server: SESSION_EXPIRED_ERROR } },
       { status: 401 }
     );
   }
@@ -239,7 +239,7 @@ export async function POST(req: NextRequest) {
     const formData = await req.formData();
     if (!formData) {
       return NextResponse.json(
-        { success: false, error: { server: "No form data provided" } },
+        { error: { server: "No form data provided" } },
         { status: 400 }
       );
     }
@@ -252,7 +252,7 @@ export async function POST(req: NextRequest) {
 
     if (!validatedFields.success) {
       const error = validatedFields.error.flatten().fieldErrors;
-      return NextResponse.json({ success: false, error }, { status: 400 });
+      return NextResponse.json({ error }, { status: 400 });
     }
 
     const { description, category } = validatedFields.data;
@@ -260,7 +260,7 @@ export async function POST(req: NextRequest) {
 
     if (!file) {
       return NextResponse.json(
-        { success: false, error: { file: ["No file uploaded"] } },
+        { error: { file: ["No file uploaded"] } },
         { status: 400 }
       );
     }
@@ -295,15 +295,12 @@ export async function POST(req: NextRequest) {
 
     logger.info(createAudioFileInput, "Inserted audio file into database");
 
-    return NextResponse.json({
-      success: true,
-      message: "Audio file uploaded successfully",
-    });
+    return NextResponse.json({ message: "Audio file uploaded successfully" });
   } catch (error) {
     logger.error(error, "Error uploading audio file:");
 
     return NextResponse.json(
-      { success: false, error: { server: "Failed to upload audio file" } },
+      { error: { server: "Failed to upload audio file" } },
       { status: 400 }
     );
   }

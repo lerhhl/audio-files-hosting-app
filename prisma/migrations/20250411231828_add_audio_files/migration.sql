@@ -13,7 +13,7 @@ CREATE TABLE "audio_files" (
 );
 
 -- AddForeignKey
-ALTER TABLE "audio_files" ADD CONSTRAINT "audio_files_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "audio_files" ADD CONSTRAINT "audio_files_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "users"("id") ON DELETE CASCADE;
 
 -- CreateIndex
 CREATE INDEX "audio_files_createdBy_index" ON "audio_files"("createdBy");

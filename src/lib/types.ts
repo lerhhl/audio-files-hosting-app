@@ -18,13 +18,6 @@ export type SessionType = {
   isAdmin: boolean;
 };
 
-export type LoginFormState =
-  | {
-      message?: string;
-      success?: boolean;
-    }
-  | undefined;
-
 export type UpdateUserInput = {
   userId: number;
   newUsername?: string;
