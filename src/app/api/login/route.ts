@@ -83,7 +83,7 @@ export async function POST(
   }
 
   // Verify the password
-  const hashedPassword = await hashPassword(password as string);
+  const hashedPassword = await hashPassword(password);
   if (user.password !== hashedPassword) {
     logger.info({ username }, "Password mismatch for user:");
     return NextResponse.json(

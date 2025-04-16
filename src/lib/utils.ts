@@ -27,19 +27,19 @@ export async function hashPassword(password: string) {
 /**
  * Encrypts the payload using the provided key and expiration time.
  * @param encodedKey - The key used for encryption.
- * @param expirationTimeInDays - The expiration time in days for the token.
+ * @param expiration - The expiration time in seconds for the token.
  * @param payload - The payload to be encrypted.
  * @returns A promise resolving to the encrypted token as a string.
  */
 export async function encrypt(
   encodedKey: Uint8Array<ArrayBufferLike>,
-  expirationTimeInDays: number,
+  expiration: number,
   payload: SessionPayload
 ) {
   return new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setExpirationTime(`${expirationTimeInDays}d`)
+    .setExpirationTime(expiration)
     .sign(encodedKey);
 }
 
@@ -59,6 +59,8 @@ export async function decrypt(
     username: undefined,
     isAuth: false,
     isAdmin: false,
+    iat: undefined,
+    exp: undefined,
   };
 
   if (!session) {
@@ -75,13 +77,12 @@ export async function decrypt(
     }
 
     return {
-      userId: payload.userId,
-      username: payload.username,
+      ...payload,
       isAuth: true,
-      isAdmin: payload.isAdmin ?? false,
     };
   } catch (error) {
     logger.error(error, "Session decryption failed:");
+
     return invalidSession;
   }
 }

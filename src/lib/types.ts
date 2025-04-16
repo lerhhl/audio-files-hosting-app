@@ -17,6 +17,8 @@ export type SessionType = {
   username?: string;
   isAuth: boolean;
   isAdmin: boolean;
+  iat?: number;
+  exp?: number;
 };
 
 export type LoginInput = {
