@@ -6,18 +6,25 @@ The **Audio File Hosting App** allows users to upload, manage, and play audio fi
 ---
 
 ## Features
-1. **User Management (Administrator Access Only):**
+
+1. **Secure Authentication:**
+   - Users can securely log in using a username and password.
+   - A session is established upon successful authentication, maintaining user context.
+   - All passwords are hashed before being stored in the database.
+   
+2. **User Management (Administrator Access Only):**
    - Administrators can create, update, and delete user accounts.
 
-2. **Audio File Management (Accessible to All Registered Users):**
+3. **Audio File Management (Accessible to All Registered Users):**
    - Registered users can:
      - Upload audio files of supported types, as specified in the `ALLOWABLE_AUDIO_CODECS` configuration.
      - Play back their uploaded audio files.
-     - View only their own uploaded files.
-
+     - View only their uploaded audio files.
+   
 ---
 
 ## Limitations
+
 1. **Support PostgresSQL only**
    - To change the database connection string, modify the `DATABASE_URL` variable in the `.env` file.
   
@@ -44,6 +51,7 @@ The system architecture diagram provides a visual representation of the applicat
 The API definitions are available in the `/doc/swagger.json` file.
 
 ### Viewing the API Documentation
+
 #### Using Visual Studio Code
 1. Install the `OpenAPI (Swagger) Editor` extension.
 2. Open the `/doc/swagger.json` file in the editor.
@@ -63,6 +71,7 @@ The API definitions are available in the `/doc/swagger.json` file.
 ## Running the Application
 
 ### Option 1: Running with Docker
+
 #### Pre-requisites
 * **Docker Desktop:**
   Ensure Docker Desktop is installed.
@@ -79,7 +88,13 @@ The API definitions are available in the `/doc/swagger.json` file.
 2. **Access the application:**
    Open [http://localhost:3000](http://localhost:3000) in your browser.
 
+3. **Login the application:**
+   Use the following default credentials:
+   - **Username:** `admin`
+   - **Password:** `admin123`
+
 ### Option 2: Running Locally
+
 #### Prerequisites
 - **Node.js**: Version 20 or higher.
 - **PostgreSQL**: A local PostgreSQL instance must be running.
@@ -105,9 +120,15 @@ The API definitions are available in the `/doc/swagger.json` file.
 3. **Access the application:**
    Open [http://localhost:3000](http://localhost:3000) in your browser.
 
+3. **Login the application:**
+   Use the following default credentials:
+   - **Username:** `admin`
+   - **Password:** `admin123`
+
 ---
 
 ## Other commands
+
 ### Seeding the Database
 To create an initial administrator user in the database:
 

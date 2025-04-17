@@ -53,10 +53,10 @@ describe("encrypt", () => {
 
 describe("decrypt", () => {
   it("should return invalid session if session is empty", async () => {
-    const encodedKey = new TextEncoder().encode("validKey");
+    const encodedSecretKey = new TextEncoder().encode("validKey");
     const session = "";
 
-    const result = await decrypt(encodedKey, session);
+    const result = await decrypt(encodedSecretKey, session);
     expect(result).toEqual({
       username: undefined,
       isAuth: false,
@@ -65,10 +65,10 @@ describe("decrypt", () => {
   });
 
   it("should return invalid session if payload is missing username", async () => {
-    const encodedKey = new TextEncoder().encode("validKey");
+    const encodedSecretKey = new TextEncoder().encode("validKey");
     const session = "invalidSession";
 
-    const result = await decrypt(encodedKey, session);
+    const result = await decrypt(encodedSecretKey, session);
     expect(result).toEqual({
       username: undefined,
       isAuth: false,

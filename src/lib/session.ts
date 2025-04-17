@@ -5,7 +5,7 @@ import { decrypt, encrypt } from "@/lib/utils";
 import { cookies } from "next/headers";
 import "server-only";
 
-export const encodedKey = new TextEncoder().encode(SECRET_KEY);
+export const encodedSecretKey = new TextEncoder().encode(SECRET_KEY);
 
 export async function createSession({
   userId,
@@ -13,7 +13,7 @@ export async function createSession({
   isAdmin = false,
 }: CreateSessionPayload) {
   const { iat, exp, expiresAt } = generateSessionTimestamps();
-  const jwtToken = await encrypt(encodedKey, exp, {
+  const jwtToken = await encrypt(encodedSecretKey, exp, {
     userId,
     username,
     isAdmin,
@@ -26,14 +26,14 @@ export async function createSession({
 
 export async function updateUsernameInSession(newUsername: string) {
   const cookie = (await cookies()).get("session")?.value;
-  const { isAdmin, isAuth, userId } = await decrypt(encodedKey, cookie);
+  const { isAdmin, isAuth, userId } = await decrypt(encodedSecretKey, cookie);
 
   if (!isAuth || !userId || !newUsername) {
     return;
   }
 
   const { iat, exp, expiresAt } = generateSessionTimestamps();
-  const jwtToken = await encrypt(encodedKey, exp, {
+  const jwtToken = await encrypt(encodedSecretKey, exp, {
     userId,
     username: newUsername,
     isAdmin,
@@ -46,7 +46,7 @@ export async function updateUsernameInSession(newUsername: string) {
 
 export async function verifySession(): Promise<SessionType> {
   const cookie = (await cookies()).get("session")?.value;
-  const session = await decrypt(encodedKey, cookie);
+  const session = await decrypt(encodedSecretKey, cookie);
   const invalidSession = {
     userId: undefined,
     username: undefined,
