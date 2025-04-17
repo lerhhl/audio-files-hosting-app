@@ -126,7 +126,7 @@ npm run migrate:reset
 To generate or update the OpenAPI documentation:
 
 ```bash
-npx next-swagger-doc-cli next-swagger-doc.json
+npm run generate:swagger
 ```
 This updates the `doc/swagger.json` file with the latest API definitions.
 

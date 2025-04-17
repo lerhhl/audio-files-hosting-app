@@ -818,7 +818,7 @@
                   "properties": {
                     "error": {
                       "type": "string",
-                      "example": "Failed to fetch users"
+                      "example": "Failed to get users"
                     }
                   }
                 }
@@ -850,7 +850,7 @@
                   "properties": {
                     "error": {
                       "type": "string",
-                      "example": "Forbidden to create new user"
+                      "example": "Forbidden to get users"
                     }
                   }
                 }

@@ -13,7 +13,8 @@
     "migrate:apply": "prisma migrate dev",
     "migrate:deploy": "prisma migrate deploy",
     "migrate:reset": "prisma migrate reset",
-    "db:seed": "prisma db seed"
+    "db:seed": "prisma db seed",
+    "generate:swagger": "next-swagger-doc-cli next-swagger-doc.json --output doc/swagger.json"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
