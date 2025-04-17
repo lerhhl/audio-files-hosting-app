@@ -12,7 +12,7 @@ services:
       - "5432"
     volumes:
       - ./postgres:/var/lib/postgresql/data
-  audio-file-hosting-app:
+  audio-files-hosting-app:
     build:
       context: .
       dockerfile: ./local/Dockerfile
